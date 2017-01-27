@@ -22,7 +22,7 @@ rules is assumed; Fire and Maneuver will not make much sense without a grasp of 
   > 
   > **Exchange** -- A set of three **Volleys** executed sequentially using a pre-plotted script.
   > 
-  > **Formation** -- one or more Units assigned to move, fire and defend together. Orders are given to Formations rather than to Units. Hits against Formations are assigned by a probability roll based on the mass of each Unit, but Commanders can adjust this to put some ships in harm's way to spare others.
+  > **Formation** -- one or more Units assigned to move, fire and defend together. Orders are given to Formations rather than to Units. Hits against Formations are assigned by a probability roll based on the mass of each Unit, but Commanders can adjust this to put some ships in harm's way to spare others (See "[Formation Targeting](#formation-targeting)").
   > 
   > **Maneuver** -- a choice of action by a Formation representing attempted movement within space relative to other Formations: either to **Close**, **Maintain** or **Withdraw** relative to a target Formation.
   > 
