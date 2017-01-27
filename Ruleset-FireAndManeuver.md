@@ -164,7 +164,7 @@ After resolving all Weapon Attacks, apply damage *simultaneously* to each Unit. 
 ## Formation Targeting
 If a Formation under fire has more than one Unit in it, then each Weapon Attack typically resolves against exactly one of those Units:  a Salvo Missile, Heavy Missile, Pulse Torpedo, or set of Beam Weapon attack dice will hit (or miss) *one Unit* in the Formation.
 
-*Attacks by Fighters, Gunboats, and precision weaponry like Needle Beams **are** scripted against specific enemy Units instead.*
+> Attacks by Fighters, Gunboats, and precision weaponry like Needle Beams **are** scripted against specific Units instead.
 
 To determine which Unit is under fire for a given Weapon:
   1. Calculate the total Mass of the Formation.
