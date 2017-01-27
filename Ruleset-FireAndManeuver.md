@@ -36,7 +36,7 @@ rules is assumed; Fire and Maneuver will not make much sense without a grasp of 
   > 
   > **Unit** -- a single Ship, Station, or squadron of Fighters or Gunboats. Anything that would have its own SSD and model(s) in traditional Full Thrust.
   > 
-  > **Volley** -- A short time-span during which all Formations simultaneously resolve their scripted Maneuver actions, then resolve their scripted Fire actions. See [*Volley Procedure*](#Volley-Procedure).
+  > **Volley** -- A short time-span during which all Formations simultaneously resolve their scripted Maneuver actions, then resolve their scripted Fire actions. See [*Volley Procedure*](#volley-procedure).
 
 # Sequence of Play #
 ## Starting Positions ##
@@ -68,13 +68,13 @@ Script three Volleys: orders for each Formation to *Fire and Maneuver*
 ## Execute Volley 1. ##
 > Replaces Phases 3 through 15 of the Full Thrust Continuum Sequence of Play.
 
-> See [*Volley Procedure*](#Volley-Procedure).
+> See [*Volley Procedure*](#volley-procedure).
 
 ## Execute Volley 2. ##
-> See [*Volley Procedure*](#Volley-Procedure).
+> See [*Volley Procedure*](#volley-procedure).
 
 ## Execute Volley 2. ##
-> See [*Volley Procedure*](#Volley-Procedure).
+> See [*Volley Procedure*](#volley-procedure).
 
 ## Wrap up the Exchange.
 1. Update records to show destroyed, crippled, or surrendered Units or Formations.
