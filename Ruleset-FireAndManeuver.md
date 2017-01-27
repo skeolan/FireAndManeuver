@@ -8,24 +8,35 @@ Instead of plotting exact movements on a tabletop, F&M records only the relative
 
 The Fire and Maneuver rules also focus on being electronically resolvable, to eventually require only an input datafile of orders and ship/formation data to present the simulated outcome of an Exchange.
 
+> Note: Familiarity with the 
+[Full Thrust Continuum](https://emeraldcoastskunkworks.files.wordpress.com/2014/12/full-thrust-project-continuum-version-1-1-3-jan-2016.pdf) 
+(or at minimum [Full Thrust Lite](http://downloads.groundzerogames.co.uk/FT0916_UK.pdf)) 
+rules is assumed; Fire and Maneuver will not make much sense without a grasp of the underlying Full Thrust mechanics to which they "plug in."
+
 # Definitions #
-  > **Commander** -- a player in control of one or more Units.
+  > **Commander** -- a player in control of one or more **Formations** of **Units**.
   > 
-  > **Evasion** -- the portion of a Formation's Thrust pool assigned to avoiding enemy attacks. Rolls of 4-5 grant one Evasion Point, rolls of 6 grant two Evasion Points.
+  > **Evasion** -- the portion of a Formation's Thrust pool assigned to avoiding enemy attacks. Rolls of 4-5 grant one **Evasion Point**, rolls of 6 grant two **Evasion Points**.
   > 
   > **Evasion Point** -- a value indicating increasing difficulty landing a solid hit against a Formation: each point of Evasion adds -1 DRM to direct-fire weapon attacks, like Pulse Torpedoes and Beams; and permits rerolling one failed PD die against Missile weapons.
   > 
-  > **Exchange** -- A set of three Volleys executed sequentially using a pre-plotted script.
+  > **Exchange** -- A set of three **Volleys** executed sequentially using a pre-plotted script.
   > 
   > **Formation** -- one or more Units assigned to move, fire and defend together. Orders are given to Formations rather than to Units. Hits against Formations are assigned by a probability roll based on the mass of each Unit, but Commanders can adjust this to put some ships in harm's way to spare others.
   > 
-  > **Range Interval** -- multiples of 6 MU used to provide an approximate distance between two Formations.
+  > **Maneuver** -- a choice of action by a Formation representing attempted movement within space relative to other Formations: either to **Close**, **Maintain** or **Withdraw** relative to a target Formation.
+  > 
+  > **Range Interval** -- multiples of 6 MU used to provide an approximate distance between two Formations; also, the current number of 6-MU intervals between two Formations, i.e. "*Formations X and Y are at a Range Interval of 36, so weapons with a range of 24 are ineffective.*"
+  > 
+  > **Speed** -- the portion of a Formation's Thrust pool assigned to succeeding at a Maneuver. Rolls of 4-5 grant one Speed Point, rolls of 6 grant two Speed Points.
+  >
+  > **Speed Point** -- a value indicating 6 MU (one Range Interval) worth of Maneuvering by a Formation, with an effect on the final Range Interval.
   > 
   > **Success** -- a roll of 4 or 5 on 1D counts as one Success; a roll of 6 counts as two Successes.
   > 
   > **Unit** -- a single Ship, Station, or squadron of Fighters or Gunboats. Anything that would have its own SSD and model(s) in traditional Full Thrust.
   > 
-  > **Volley** -- A short time-span during which all Formations simultaneously resolve their scripted Maneuver actions, then resolve their scripted Fire actions.
+  > **Volley** -- A short time-span during which all Formations simultaneously resolve their scripted Maneuver actions, then resolve their scripted Fire actions. See [*Volley Procedure*](#Volley-Procedure).
 
 # Sequence of Play #
 ## Starting Positions ##
@@ -57,13 +68,13 @@ Script three Volleys: orders for each Formation to *Fire and Maneuver*
 ## Execute Volley 1. ##
 > Replaces Phases 3 through 15 of the Full Thrust Continuum Sequence of Play.
 
-> See *Volley Procedure*.
+> See [*Volley Procedure*](#Volley-Procedure).
 
 ## Execute Volley 2. ##
-> See *Volley Procedure*.
+> See [*Volley Procedure*](#Volley-Procedure).
 
 ## Execute Volley 2. ##
-> See *Volley Procedure*.
+> See [*Volley Procedure*](#Volley-Procedure).
 
 ## Wrap up the Exchange.
 1. Update records to show destroyed, crippled, or surrendered Units or Formations.
