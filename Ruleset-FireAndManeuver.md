@@ -26,11 +26,9 @@ rules is assumed; Fire and Maneuver will not make much sense without a grasp of 
   > 
   > **Maneuver** -- a choice of action by a Formation representing attempted movement within space relative to other Formations: either to **Close**, **Maintain** or **Withdraw** relative to a target Formation.
   > 
-  > **Range Interval** -- multiples of 6 MU used to provide an approximate distance between two Formations; also, the current number of 6-MU intervals between two Formations, i.e. "*Formations X and Y are at a Range Interval of 36, so weapons with a range of 24 are ineffective.*"
-  > 
   > **Speed** -- the portion of a Formation's Thrust pool assigned to succeeding at a Maneuver. Rolls of 4-5 grant one Speed Point, rolls of 6 grant two Speed Points.
   >
-  > **Speed Point** -- Successes on Speed Dice. a value indicating 6 MU (one Range Interval) worth of Maneuvering by a Formation, with an effect on the final Range Interval.
+  > **Speed Point** -- Successes on Speed Dice. a value indicating 6 MU worth of Maneuvering by a Formation relative to its target.
   > 
   > **Success** -- unless specific rules dictate otherwise, a roll of 4 or 5 on 1D counts as one Success; a roll of 6 counts as two Successes.
   > 
@@ -56,9 +54,9 @@ Script three Volleys: orders for each Formation to *Fire and Maneuver*
     1. Designate a Primary Maneuver target.
     1. Designate one or more Secondary Maneuver targets, if desired.
     1. Specify one Maneuver against each Maneuver Target:
-        * **Close**: Try to decrease the range to target by one or more Range Intervals.
-        * **Maintain**: Try to hold the target within the current Range Interval.
-        * **Withdraw**: Try to increase the range to target by one or more Range Intervals.
+        * **Close**: Try to decrease the range to target.
+        * **Maintain**: Try to hold the target at the current range.
+        * **Withdraw**: Try to increase the range to target.
 1. All commanders scripts Fire Orders for each of their Formations in all three Volleys of the coming Exchange.
     1. Designate as many Fire targets as desired, according to normal Full Thrust rules (i.e. limited by Fire Controls etc.)
     1. Specify which weapons are firing at which target Formation.
@@ -99,11 +97,11 @@ All commanders *simultaneously* execute each Maneuver phase for all their Format
 	1. Record Evasion Successes as Evasion Points.
 	1. For each pair of Formations maneuvering against each other, determine the outcome based on their starting Range, chosen Maneuvers, and Speed Points:
 		1. Record the starting Range between the two Formations.
-		1. First, every Speed Point for a **Close** decreases the Range by one Interval (-6 MU). Record the new Range.
-		1. Next, every Speed Point for a **Withdraw** increases the Range by one Interval (+6 MU). Record the new Range.
-		1. Finally, every Speed Point for a **Maintain** moves the Range one Interval (+/- 6 MU) *back toward the starting Range for the Volley*. 
+		1. First, every Speed Point for a **Close** decreases the Range (-6 MU). Record the new Range.
+		1. Next, every Speed Point for a **Withdraw** increases the Range (+6 MU). Record the new Range.
+		1. Finally, every Speed Point for a **Maintain** moves the Range 6 MU *back toward the starting Range for the Volley* (+/- 6 MU). 
 		1. The final value is the new Range between the two Formations.
-	1. If (due to a lot of Close successes) the Range drops *below zero*, the two Formations have overshot one another and ended up at a new Range Interval equal to the "negative distance." Accidental collisions in space combat are vanishingly rare.
+	1. If (due to a lot of Close successes) the Range drops *below zero*, the two Formations have overshot one another and ended up at a new range equal to the "negative distance." Accidental collisions in space combat are vanishingly rare.
 	1. Treat Speed Points as one lower for any Secondary Maneuver target(s).
 	1. If a Formation did not script against another Formation, treat it as a Secondary Maneuver (Maintain) and apply the required -1 Speed Point.
  1. **Secondary fighter/gunboat Maneuvers** -- Formations with only Fighter/Gunboat Units may, if desired, make a secondary Maneuver in this phase. See "[Fighters and Gunboats](#fighters-and-gunboats)" in the Appendix.
@@ -127,7 +125,7 @@ PD **resolves as normal for Full Thrust**, except as follows.
 #### Weapon Attack Phase
 > This covers phase 8 (Fighters against Fighters), and phases 10, 11 and 12 of the Full Thrust Continuum Sequence of Play; however, damage incurred during this phase does not take effect until the Apply Damage phase
 
-All weapons fire **resolves as normal for Full Thrust at the current Range Interval**, except as follows.
+All weapons fire **resolves as normal for Full Thrust at the current range**, except as follows.
   1. All commanders *simultaneously* roll applicable Missile, Projectile and Beam attacks for each Formation.
   1. For each firing Weapon, randomly determine which Unit within the target Formation is under fire: 
   	1. See "[Formation Targeting](#formation-targeting)" in the Appendix for details
@@ -195,7 +193,7 @@ The Reserve is a single "off-board" Formation which can never directly enter or 
 
 During scripting for an Exchange, a commander may designate a new Formation composed of Reserve Units.
 
-Such a Formation starts at "off-board" range, and must script "Enter Combat" for the upcoming three Volleys of the Exchange. In the Conclusion Phase, those Formations arrive at Range Interval 60MU to all enemy Formations; they can then be scripted normally in the subsequent Exchange.
+Such a Formation starts at "off-board" range, and must script "Enter Combat" for the upcoming three Volleys of the Exchange. In the Conclusion Phase, those Formations arrive at range 60MU to all enemy Formations; they can then be scripted normally in the subsequent Exchange.
 
 ## Fighters and Gunboats
 ```C#
