@@ -170,7 +170,8 @@ To determine which Unit is under fire for a given Weapon:
   1. Calculate the total Mass of the Formation.
   1. Calculate the percentile range "covered" by the mass of each Unit, from largest to smallest.
   1. Generate a random number between 1 and 100 to determine which Unit is under fire.
-  1. Units with higher Thrust than the Formation Thrust value can increase or decrease their "share" of the percentile spread by 5 percentile points per surplus Thrust, shifting points to or from other Units as desired.
+  1. Units with higher Thrust than the Formation Thrust value can increase or decrease their "share" of the percentile spread by up to 5 percentile points per surplus Thrust, shifting points to or from other Units as desired.
+  1. After all percentile adjustments, a Unit cannot have a lower than 1 percent chance of being under fire.
 
 > For example, if a Formation contains a 44-Mass Destroyer and a 22-Mass Frigate, then the Destroyer (2/3 total mass) occupies percentiles 01-67 and the Frigate occupies percentiles 68-100.
 
