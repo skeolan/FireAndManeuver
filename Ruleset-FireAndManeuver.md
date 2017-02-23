@@ -4,7 +4,7 @@
 
 This rules system is meant to replace the tabletop minis-and-rulers approach to Full Thrust combat with an abstract system which permits fast resolution of small-to-medium sized battles without needing much input from players after the initial setup. Exact position and facing are not tracked. SSDs for ships, stations, fighters, guboats, etc. from Full Thrust should be 100% compatible as-is with the F&M rules, although some systems may necessarily work slightly differently due to the abstract spatial representation.
 
-Instead of plotting exact movements on a tabletop, F&M records only the relative distance between formations in range intervals of 6MU, since that controls what weaponry they can bring to bear in a given firing solution. Ships utilize their Thrust ratings as a dice pool split into Speed, to attempt to increase, decrease or maintain distance to their maneuvering target(s); and Evasion, to avoid incoming fire, decreasing or eliminating its effectiveness.
+Units utilize their Thrust ratings as a dice pool split into Speed, to attempt to increase, decrease or maintain distance to their maneuvering target(s); and Evasion, to avoid incoming fire, decreasing or eliminating its effectiveness. Units also organize into Formations for maneuver and attack, lending each other mutual support and providing an opportunity for nimbler escorts to shield (or hide behind) larger comrades.
 
 The Fire and Maneuver rules also focus on being electronically resolvable, to eventually require only an input datafile of orders and ship/formation data to present the simulated outcome of an Exchange.
 
@@ -20,7 +20,7 @@ rules is assumed; Fire and Maneuver will not make much sense without a grasp of 
   > 
   > **Evasion Point** -- **Successes** on Evasion dice. a value indicating increasing difficulty landing a solid hit against a Formation: each point of Evasion adds -1 DRM to direct-fire weapon attacks, like Pulse Torpedoes and Beams; and permits rerolling one failed PD die against Missile weapons.
   > 
-  > **Exchange** -- A set of three **Volleys** executed sequentially using a pre-plotted script.
+  > **Exchange** -- A set of three **Volleys** executed sequentially using a pre-written plot.
   > 
   > **Formation** -- one or more Units assigned to move, fire and defend together. Orders are given to Formations rather than to Units. Hits against Formations are assigned by a probability roll based on the mass of each Unit, but Commanders can adjust this to put some ships in harm's way to spare others (See "[Formation Targeting](#formation-targeting)").
   > 
@@ -28,26 +28,26 @@ rules is assumed; Fire and Maneuver will not make much sense without a grasp of 
   > 
   > **Speed** -- the portion of a Formation's Thrust pool assigned to succeeding at a Maneuver. Rolls of 4-5 grant one Speed Point, rolls of 6 grant two Speed Points.
   >
-  > **Speed Point** -- Successes on Speed Dice. a value indicating 6 MU worth of Maneuvering by a Formation relative to its target.
+  > **Speed Point** -- Successes on Speed Dice. a value indicating 3 MU worth of Maneuvering by a Formation relative to its target.
   > 
   > **Success** -- unless specific rules dictate otherwise, a roll of 4 or 5 on 1D counts as one Success; a roll of 6 counts as two Successes.
   > 
-  > **Under Fire** -- a single Unit within a Formation, determined (usually randomly) to be in the line of fire of a single Weapon Attack. *A Weapon Attack against a Formation will place a single Unit Under Fire (exceptions probably exist).*
+  > **Under Fire** -- a single Unit within a Formation, determined (usually randomly) to be acquired by a Fire Control. *Each Fire Control targeting a Formation will place a single Unit Under Fire (exceptions probably exist).*
   > 
   > **Unit** -- a single Ship, Station, or squadron of Fighters or Gunboats. *Anything that would have its own SSD and counter or model-base in traditional Full Thrust is a Unit.*
   > 
-  > **Volley** -- A short time-span during which all Formations simultaneously resolve their scripted Maneuver actions, then resolve their scripted Fire actions. See [*Volley Procedure*](#volley-procedure).
+  > **Volley** -- A short time-span during which all Formations simultaneously resolve their plotted Maneuver actions, then resolve their plotted Fire actions. See [*Volley Procedure*](#volley-procedure).
 
 # Sequence of Play #
 ## Starting Positions ##
 Record the distance between all Formations as 60MU. Space is big and hard to hide in, so battles usually start beyond firing range unless agreed otherwise.
 
-## Script the Exchange
+## Plot the Exchange
 > Replaces Phase 1 "Write Orders" and Phase 2 "Roll for Initiative" of the Full Thrust Continuum Sequence of Play, and only occurs once per Exchange.
 
-Script three Volleys: orders for each Formation to *Fire and Maneuver*
+Plot three Volleys: orders for each Formation to *Fire and Maneuver*
 
-1. All commanders script Maneuver Orders for each of their Formations in all three Volleys of the coming Exchange.
+1. All commanders plot Maneuver Orders for each of their Formations in all three Volleys of the coming Exchange.
     1. Divide Formation Thrust into Speed and Evasion. Maximum Evasion is half Formation Thrust, unless Advanced Drives are in use.
     1. Specify Formation Thrust rating for the Volley -- this equals the *lowest* Thrust rating of any Unit in the Formation.
     1. Specify Formation Targeting percentiles, as described under "Formation Targeting."
@@ -57,13 +57,16 @@ Script three Volleys: orders for each Formation to *Fire and Maneuver*
         * **Close**: Try to decrease the range to target.
         * **Maintain**: Try to hold the target at the current range.
         * **Withdraw**: Try to increase the range to target.
-1. All commanders scripts Fire Orders for each of their Formations in all three Volleys of the coming Exchange.
+    1. Note: a single Formation must not plot **Close** and **Withdraw** Maneuvers against different Maneuver Targets during a single Volley.
+1. All commanders plot Fire Orders for each of their Formations in all three Volleys of the coming Exchange.
     1. Designate as many Fire targets as desired, according to normal Full Thrust rules (i.e. limited by Fire Controls etc.)
-    1. Specify which weapons are firing at which target Formation.
+    1. For each Fire Control per Unit in a Formation: 
+       1. Specify a target Formation if the FireCon is active, or "inactive" otherwise.
+       1. Specify all weapons assigned to the FireCon (Default is "all").
     1. Specify any weapons firing in PD mode instead.
     1. Specify any other special actions, system activations, etc.
     1. Ignore firing arcs for purposes of weapon targeting.
-1. No need to roll for initiative: Formations' scripted actions are resolved simultaneously in all Volley phases.
+1. No need to roll for initiative: Formations' plotted actions are resolved simultaneously in all Volley phases.
 
 ## Execute Volley 1. ##
 > Replaces Phases 3 through 15 of the Full Thrust Continuum Sequence of Play.
@@ -88,8 +91,8 @@ Script three Volleys: orders for each Formation to *Fire and Maneuver*
 
 All commanders *simultaneously* execute each Maneuver phase for all their Formations.
 #### Launch Phase
- 1. **Launch fighter groups or gunboats** -- these arrive as members of their parent Formation **or** as one or more new Formation(s) of their own. (If the latter, they need to have been scripted as such in the Scripting Phase.) See "Fighters and Gunboats" in the Appendix for details.
- 1. **Launch Ordnance** -- any weapon scripted as Firing this turn, regardless of whether its action will turn out to be valid, does indeed fire. Mark off rack-mounted ordnance, magazine ammunition, etc at this time.
+ 1. **Launch fighter groups or gunboats** -- these arrive as members of their parent Formation **or** as one or more new Formation(s) of their own. (If the latter, they need to have been noted as such in the Plotting Phase.) See "Fighters and Gunboats" in the Appendix for details.
+ 1. **Launch Ordnance** -- any weapon plotted as Firing this turn, regardless of whether its action will turn out to be valid, does indeed fire. Mark off rack-mounted ordnance, magazine ammunition, etc at this time.
 
 #### Movement Phase
  1. **Maneuver Formations** -- Roll Formations' Speed and Evasion assignments as separate dice pools. 
@@ -97,13 +100,13 @@ All commanders *simultaneously* execute each Maneuver phase for all their Format
 	1. Record Evasion Successes as Evasion Points.
 	1. For each pair of Formations maneuvering against each other, determine the outcome based on their starting Range, chosen Maneuvers, and Speed Points:
 		1. Record the starting Range between the two Formations.
-		1. First, every Speed Point for a **Close** decreases the Range (-6 MU). Record the new Range.
-		1. Next, every Speed Point for a **Withdraw** increases the Range (+6 MU). Record the new Range.
-		1. Finally, every Speed Point for a **Maintain** moves the Range 6 MU *back toward the starting Range for the Volley* (+/- 6 MU). 
+		1. First, every Speed Point for a **Close** decreases the Range (-3 MU). Record the new Range.
+		1. Next, every Speed Point for a **Withdraw** increases the Range (+3 MU). Record the new Range.
+		1. Finally, every Speed Point for a **Maintain** moves the Range 3 MU *back toward the starting Range for the Volley* (+/- 3 MU). 
 		1. The final value is the new Range between the two Formations.
 	1. If (due to a lot of Close successes) the Range drops *below zero*, the two Formations have overshot one another and ended up at a new range equal to the "negative distance." Accidental collisions in space combat are vanishingly rare.
 	1. Treat Speed Points as one lower for any Secondary Maneuver target(s).
-	1. If a Formation did not script against another Formation, treat it as a Secondary Maneuver (Maintain) and apply the required -1 Speed Point.
+	1. If a Formation did not plot against another Formation, treat it as a Secondary Maneuver (Maintain) and apply the required -1 Speed Point.
  1. **Secondary fighter/gunboat Maneuvers** -- Formations with only Fighter/Gunboat Units may, if desired, make a secondary Maneuver in this phase. See "[Fighters and Gunboats](#fighters-and-gunboats)" in the Appendix.
 
 ### Fire ###
@@ -119,7 +122,7 @@ All commanders *simultaneously* execute each Fire phase for all their Formations
 PD **resolves as normal for Full Thrust**, except as follows.
 
   1. All commanders *simultaneously* roll applicable Point Defense dice for each Formation.
-  1. Only dedicated PD systems, and PD-capable weapons *explicitly* scripted as firing in PD mode, contribute to Point Defense.
+  1. Only dedicated PD systems, and PD-capable weapons *explicitly* plotted as firing in PD mode, contribute to Point Defense.
   1. For each Evasion Point a Formation has, reroll one PD die that resulted in a miss.
 
 #### Weapon Attack Phase
@@ -129,7 +132,7 @@ All weapons fire **resolves as normal for Full Thrust at the current range**, ex
   1. All commanders *simultaneously* roll applicable Missile, Projectile and Beam attacks for each Formation.
   1. For each firing Weapon, randomly determine which Unit within the target Formation is under fire: 
   	1. See "[Formation Targeting](#formation-targeting)" in the Appendix for details
-	1. Attacks by Fighters, Gunboats, and precision weaponry like Needle Beams are scripted against specific enemy Units instead.
+	1. Attacks by Fighters, Gunboats, and precision weaponry like Needle Beams are plotted against specific enemy Units instead.
   1. Missile Attacks:
   	1. A Missile weapon's maximum range in F&M includes its "final approach" length, e.g. 24MU + 6MU for standard Salvo Missiles.
   	1. If a Missile attack is a Salvo-style group, roll as normal to see how many are on target.
@@ -154,17 +157,17 @@ After resolving all Weapon Attacks, apply damage *simultaneously* to each Unit. 
   1. Roll and resolve Threshold Checks.
   1. Make any Damage Control repair rolls.
     1. Default assumption is the following order: Core Systems (Reactors, then Life Support, then Command); Drives; Screens; at least one functional Fire Control; then weaponry in order of die count; then other systems.
-    1. Optionally, commanders can script an overriding Damage Control ordering if certain systems or components should be prioritized.
+    1. Optionally, commanders can plot an overriding Damage Control ordering if certain systems or components should be prioritized.
   1. Check for Reactor explosions.
   1. Damage control and Reactor explosions **resolve as normal for Full Thrust.**
 
 # Appendices
 ## Formation Targeting
-If a Formation under fire has more than one Unit in it, then each Weapon Attack typically resolves against exactly one of those Units:  a Salvo Missile, Heavy Missile, Pulse Torpedo, or set of Beam Weapon attack dice will hit (or miss) *one Unit* in the Formation.
+If a Formation under fire has more than one Unit in it, then each Weapon Attack typically resolves against exactly one of those Units:  a Salvo Missile, Heavy Missile, Pulse Torpedo, or set of Beam Weapon attack dice will hit (or miss) *one Unit* in the Formation. Which weapons get aimed at which target Units is determined by randomly rolling for target acquisition *per Fire Control*.
 
-> Attacks by Fighters, Gunboats, and precision weaponry like Needle Beams **are** scripted against specific Units instead.
+> Attacks by Fighters, Gunboats, and precision weaponry like Needle Beams **are** plotted against specific Units instead.
 
-To determine which Unit is under fire for a given Weapon:
+To determine which Unit is under fire for a given Fire Control:
   1. Calculate the total Mass of the Formation.
   1. Calculate the percentile range "covered" by the mass of each Unit, from largest to smallest.
   1. Generate a random number between 1 and 100 to determine which Unit is under fire.
@@ -173,7 +176,7 @@ To determine which Unit is under fire for a given Weapon:
 
 > For example, if a Formation contains a 44-Mass Destroyer and a 22-Mass Frigate, then the Destroyer (2/3 total mass) occupies percentiles 01-67 and the Frigate occupies percentiles 68-100.
 
-> If the attacker targeting the Formation rolls a 75 for one weapon's percentile result, then the Frigate is under fire by that weapon.
+> If the attacker targeting the Formation rolls a 75 for one Fire Control's percentile result, then the Frigate is under fire by that FireCon's assigned weapons.
 
 > If the Frigate has Thrust 8 while the Destroyer has Thrust 6, the Frigate can either increase or decrease its percentile "share" by 2x5=10 percentile points:
 
@@ -191,9 +194,9 @@ In some scenarios, Formations have to be FTL-capable to move to Reserves.
 
 The Reserve is a single "off-board" Formation which can never directly enter or affect F&M combat, but can engage in Damage Control and other repair/salvage activities each Volley.
 
-During scripting for an Exchange, a commander may designate a new Formation composed of Reserve Units.
+During plotting for an Exchange, a commander may designate a new Formation composed of Reserve Units.
 
-Such a Formation starts at "off-board" range, and must script "Enter Combat" for the upcoming three Volleys of the Exchange. In the Conclusion Phase, those Formations arrive at range 60MU to all enemy Formations; they can then be scripted normally in the subsequent Exchange.
+Such a Formation starts at "off-board" range, and must plot "Enter Combat" - no maneuvering, no fire - for the upcoming three Volleys of the Exchange. In the Conclusion Phase, those Formations arrive at range 60MU to all enemy Formations; they can then be plotted normally in the subsequent Exchange.
 
 ## Fighters and Gunboats
 ```C#
