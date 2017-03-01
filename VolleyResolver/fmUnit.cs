@@ -24,8 +24,12 @@ namespace FireAndManeuver.Units
         [XmlElement("Electronics")] public List<ElectronicsSystem> electronics { get; set; }
         [XmlElement("Defenses")] public List<DefenseSystem> defenses { get; set; }
         [XmlElement("Holds")] public List<HoldSystem> holds { get; set; }
-        [XmlElement("Weapons")] public List<WeaponSystem> weapons { get; set; }
         */
+        [XmlArray("Weapons")] 
+        [XmlArrayItem("PointDefense", Type=typeof(PointDefenseSystem))]
+        [XmlArrayItem("BeamBattery", Type=typeof(BeamBatterySystem))]
+        [XmlArrayItem("AntiMatterTorpedoLauncher", Type=typeof(AntiMatterTorpedoLauncherSystem))]
+        public List<WeaponSystem> weapons { get; set; }
 
         public Unit()
         {
@@ -117,8 +121,40 @@ namespace FireAndManeuver.Units
 
     }
 
-    public class WeaponSystem : unitSystem
+    public abstract class WeaponSystem : unitSystem
     {
+        protected string weaponName;
+        public WeaponSystem() {
+            weaponName =  "BaseWeaponSystem Class";
+        }
+        
+        public override string ToString()
+        {
+            return string.Format("{0} ({1},{2})", weaponName, xSSD, ySSD);
+        }
+    }
 
+    public class PointDefenseSystem : WeaponSystem
+    {
+        public PointDefenseSystem()
+        {
+            this.weaponName = "Point Defense System";
+        }
+    }
+
+    public class BeamBatterySystem : WeaponSystem
+    {
+        public BeamBatterySystem()
+        {
+            this.weaponName = "Beam Battery";
+        }
+    }
+
+    public class AntiMatterTorpedoLauncherSystem : WeaponSystem
+    {
+        public AntiMatterTorpedoLauncherSystem()
+        {
+            this.weaponName = "Antimatter Torpedo Launcher";
+        }
     }
 }

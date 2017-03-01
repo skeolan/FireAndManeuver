@@ -13,16 +13,24 @@ namespace ConsoleApplication
 
             var myUnit = loadNewUnit("..\\Example-ShipData\\UNSC_DD_Lake.xml");
 
-            Console.WriteLine("{0, -20} : {1}", "Race", myUnit.race);
-            Console.WriteLine("{0, -20} : {1}", "ClassAbbrev", myUnit.classAbbrev);
-            Console.WriteLine("{0, -20} : {1}", "ClassName", myUnit.className);
-            Console.WriteLine("{0, -20} : {1}", "ShipClass", myUnit.shipClass);
-            Console.WriteLine("{0, -20} : {1}", "Mass", myUnit.mass);
-            Console.WriteLine("{0, -20} : {1}", "PointValue", myUnit.pointValue);
-            Console.WriteLine("{0, -20} : {1}", "MainDrive", myUnit.mainDrive.ToString());
-            Console.WriteLine("{0, -20} : {1}", "FTLDrive", myUnit.ftlDrive);
-            Console.WriteLine("{0, -20} : {1}", "Armor", myUnit.armor.ToString());
-            Console.WriteLine("{0, -20} : {1}", "Hull", myUnit.hull.ToString());
+            var outputFormat = "{0, -20} : {1}";
+
+            Console.WriteLine(outputFormat, "Race", myUnit.race);
+            Console.WriteLine(outputFormat, "ClassAbbrev", myUnit.classAbbrev);
+            Console.WriteLine(outputFormat, "ClassName", myUnit.className);
+            Console.WriteLine(outputFormat, "ShipClass", myUnit.shipClass);
+            Console.WriteLine(outputFormat, "Mass", myUnit.mass);
+            Console.WriteLine(outputFormat, "PointValue", myUnit.pointValue);
+            Console.WriteLine(outputFormat, "MainDrive", myUnit.mainDrive.ToString());
+            Console.WriteLine(outputFormat, "FTLDrive", myUnit.ftlDrive);
+            Console.WriteLine(outputFormat, "Armor", myUnit.armor.ToString());
+            Console.WriteLine(outputFormat, "Hull", myUnit.hull.ToString());
+            Console.WriteLine("");
+            Console.WriteLine(outputFormat, "Weapons ("+myUnit.weapons.Count.ToString()+")", "");
+            foreach (var ws in myUnit.weapons)
+            {
+                Console.WriteLine(outputFormat, "", ws.ToString() );
+            }
         }
 
         private static Unit loadNewUnit(string sourceFile)
