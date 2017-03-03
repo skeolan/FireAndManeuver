@@ -1,0 +1,72 @@
+Ship        
+	(string) Name
+	(string) Status
+	(???)    Orders
+	(flag?)  DamageControl
+	(cplx)   Position    {decimal x, decimal y}
+	(cplx)   Heading     {int heading}
+	(cplx)   Speed       {decimal speed}
+	(cplx)   VectorSpeed {decimal speed}
+	(cplx)   Course      {decimal course}
+
+	(string) Race
+	(string) ClassAbbrev
+	(string) ClassName
+	(string) ShipClass
+	(string) CrewQuality [First Rate, ...]
+	(string) Designer
+	(int)    Mass
+	(int)    PointValue
+	(cplx) MainDrive {string type [Standard, Advanced], int initialThrust}
+	(flag) FTLDrive
+	(cplx) Armor {["int,int,int,int"] totalArmor}
+	(cplx) Hull {int value, string type [Fragile, Weak, Average, Strong, Super, Custom], string class [Military, ...], int stealth, int totalHullBoxes, int rows}
+
+(all non-collection objects below are "systems" and have at least xSSD and ySSD int properties)	
+(arcSpec properties are strings e.g. "(all arcs)" or "(FP/F/FS)", presumed "(all arcs)" for Beams if absent; may vary for other weapons)
+	(collection) Electronics
+		AreaDefenseFireControl
+		FireControl
+
+	(collection) Defenses
+		Screen
+		VapourShroud
+
+	(collection) Holds
+		CargoHold (string type e.g. "Cargo Hold, Troop Transport, ...", int totalSize)
+		
+	(collection) Weapons
+		AntiMatterTorpedoLauncher
+		FighterBay
+		PointDefense
+		Scattergun
+
+		BeamBattery (int rating, arcSpec arcs)
+		Graser (int rating, arcSpec arcs)
+		KineticGun (int rating, arcSpec arcs)
+		PlasmaBoltLauncher (int rating, arcSpec arcs)
+		
+		PulseTorpedo (arcSpec arcs)
+		ShortRangePulseTorpedo (arcSpec arcs)
+		LongRangePulseTorpedo (arcSpec arcs)
+		MultipleKineticPenetratorPack (arcSpec arcs)
+		Pulser (arcSpec arcs)
+		SubmunitionPack (arcSpec arcs)
+
+		SalvoMissileLauncher (int smmId, arcSpec arcs)
+		SalvoMissileMagazine (int id, int maxInRow, int capacity, list<Salvo> contents)
+			Salvo (string type[Standard Salvo, Extended Range Salvo], string status e.g. "Available")
+		SalvoMissileRack (arcSpec arcs)
+	
+FighterGroup
+	(cplx)   Position    {decimal x, decimal y}
+	(cplx)   Heading     {int heading}
+		
+	(string) Race
+	(string) Type         {e.g. Standard, ... }
+	(int)    Count
+	(int)    Endurance
+	(string) PilotQuality {e.g. Normal, ...   }
+
+	
+	

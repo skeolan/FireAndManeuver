@@ -20,11 +20,18 @@ namespace FireAndManeuver.Units
         [XmlElement("Hull")]                public HullSystem hull { get; set; }
 
         /* Collections of systems */
-        /*
-        [XmlElement("Electronics")] public List<ElectronicsSystem> electronics { get; set; }
-        [XmlElement("Defenses")] public List<DefenseSystem> defenses { get; set; }
-        [XmlElement("Holds")] public List<HoldSystem> holds { get; set; }
-        */
+        [XmlArray("Electronics")]
+        [XmlArrayItem("FireControl", Type=typeof(FireControl))]
+        public List<ElectronicsSystem> electronics { get; set; }
+
+        [XmlArray("Defenses")] 
+        [XmlArrayItemAttribute("Screen", Type=typeof(ScreenSystem))]
+        public List<DefenseSystem> defenses { get; set; }
+        
+        [XmlArray("Holds")] 
+        [XmlArrayItemAttribute("CargoHold", Type=typeof(CargoHoldSystem))]
+        public List<unitSystem> holds { get; set; }
+        
         [XmlArray("Weapons")] 
         [XmlArrayItem("PointDefense", Type=typeof(PointDefenseSystem))]
         [XmlArrayItem("BeamBattery", Type=typeof(BeamBatterySystem))]
@@ -37,12 +44,21 @@ namespace FireAndManeuver.Units
         }
     }
 
-    public class unitSystem
+    public abstract class unitSystem
     {
-        [XmlAttribute("xSSD")]
-        public int xSSD { get; set; }
-        [XmlAttribute("ySSD")]
-        public int ySSD { get; set; }
+        [XmlAttribute("xSSD")] public int xSSD { get; set; }
+        [XmlAttribute("ySSD")] public int ySSD { get; set; }
+        [XmlIgnore] public string systemName { get; protected set; }
+
+        public unitSystem()
+        {
+            systemName = "Universal unitSystem class";
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} ({1},{2})", systemName, xSSD, ySSD);
+        }
     }
 
     [XmlRoot("MainDrive")]
@@ -90,63 +106,113 @@ namespace FireAndManeuver.Units
 
         public HullSystem()
         {
-
+            rows=4;
         }
 
         public override string ToString()
         {
-            return string.Format("{0} ({1} rows)", totalHullBoxes, rows);
+            string typeSuffix = type=="Average" ? "" : " ("+type+")";
+            return string.Format("{0} ({1} rows){2}", totalHullBoxes, rows, typeSuffix);
         }
 
     }
 
-    public class ElectronicsSystem : unitSystem
+    public abstract class ElectronicsSystem : unitSystem
     {
 
+        public override string ToString()
+        {
+            return string.Format("{0} ({1},{2})", systemName, xSSD, ySSD);
+        }
     }
 
     [XmlRoot("FireControl")]
     public class FireControl : ElectronicsSystem
     {
-
+        public FireControl()
+        {
+            systemName = "Fire Control System";
+        }
     }
 
     public class DefenseSystem : unitSystem
     {
+        public DefenseSystem()
+        {
 
+        }
     }
 
-    public class HoldSystem : unitSystem
+    public class ScreenSystem : DefenseSystem
     {
+        public ScreenSystem()
+        {
+            systemName = "Screen";
+        }
+    }
+
+    public class CargoHoldSystem : unitSystem
+    {
+        [XmlAttribute] public string type;
+
+        [XmlAttribute] public int totalSize;
+
+        public CargoHoldSystem() : base()
+        {
+            systemName = "Cargo Hold";
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} [Total Size {1}]", type, totalSize);
+        }
 
     }
 
     public abstract class WeaponSystem : unitSystem
     {
-        protected string weaponName;
-        public WeaponSystem() {
-            weaponName =  "BaseWeaponSystem Class";
-        }
-        
-        public override string ToString()
+        public WeaponSystem() : base()
         {
-            return string.Format("{0} ({1},{2})", weaponName, xSSD, ySSD);
+            systemName =  "BaseWeaponSystem Class";
         }
     }
 
     public class PointDefenseSystem : WeaponSystem
     {
-        public PointDefenseSystem()
+        public PointDefenseSystem() : base()
         {
-            this.weaponName = "Point Defense System";
+            this.systemName = "Point Defense System";
         }
     }
 
-    public class BeamBatterySystem : WeaponSystem
+    public abstract class ArcWeaponSystem : WeaponSystem
     {
-        public BeamBatterySystem()
+        [XmlAttribute] public string arcs { get; set; }
+        public ArcWeaponSystem() : base()
         {
-            this.weaponName = "Beam Battery";
+            this.systemName = "Arc-Firing Weapon System";
+            this.arcs = "(F)";
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1}", systemName, arcs);
+        }
+    }
+    
+    public class BeamBatterySystem : ArcWeaponSystem
+    {
+        [XmlAttribute] public int rating { get; set; }
+
+        public BeamBatterySystem() : base()
+        {
+            this.systemName = "Beam Battery";
+            this.rating     = 1;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Class-{0} {1} {2,-10} ({3,3},{4,3})", rating, systemName, arcs, xSSD, ySSD);
         }
     }
 
@@ -154,7 +220,7 @@ namespace FireAndManeuver.Units
     {
         public AntiMatterTorpedoLauncherSystem()
         {
-            this.weaponName = "Antimatter Torpedo Launcher";
+            this.systemName = "Antimatter Torpedo Launcher";
         }
     }
 }
