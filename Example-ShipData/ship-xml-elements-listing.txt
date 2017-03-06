@@ -1,3 +1,10 @@
+HullType {string typeName, int massRatio}
+	Fragile	10
+	Weak	20
+	Average	30
+	Strong	40
+	Super	50
+
 Ship        
 	(string) Name
 	(string) Status
@@ -19,54 +26,107 @@ Ship
 	(int)    PointValue
 	(cplx) MainDrive {string type [Standard, Advanced], int initialThrust}
 	(flag) FTLDrive
-	(cplx) Armor {["int,int,int,int"] totalArmor}
-	(cplx) Hull {int value, string type [Fragile, Weak, Average, Strong, Super, Custom], string class [Military, ...], int stealth, int totalHullBoxes, int rows}
+	(flag) AdvancedFTLDrive
+	(cplx) TugFTLDrive { int transferCapacity, flag advanced }
+	(cplx) Armor {["int,int,int,int,int"] totalArmor}
+	(cplx) RegenerativeArmor {["int,int,int,int,int"] totalArmor}
+	(cplx) Hull {int value, hullType type, string class [Military, ...], int stealth, int totalHullBoxes, int rows}
 
 (all non-collection objects below are "systems" and have at least xSSD and ySSD int properties)	
 (arcSpec properties are strings e.g. "(all arcs)" or "(FP/F/FS)", presumed "(all arcs)" for Beams if absent; may vary for other weapons)
 	(collection) Electronics
-		AreaDefenseFireControl
 		FireControl
+		AdvancedFireControl
+		AreaDefenseFireControl
+		AdvancedAreaDefenseFireControl
+		*EnhancedSensors
+		*SuperiorSensors
 
 	(collection) Defenses
 		Screen
-		VapourShroud
+		AdvancedScreen
+		*AreaScreen
+		*AdvancedAreaScreen
+		*VapourShroud
+		*StealthField
+		*HoloField
+		*ECMSuite
+		*AreaECMSuite
+		*CloakingDevice
+		*CloakingField
 
 	(collection) Holds
-		CargoHold (string type e.g. "Cargo Hold, Troop Transport, ...", int totalSize)
+		CargoHold (string type [Cargo Hold, Troop Transport, Passenger Transport], int totalSize)
+		DamageControlParty
+		MarineParty
 		
 	(collection) Weapons
-		AntiMatterTorpedoLauncher
-		FighterBay
-		PointDefense
-		Scattergun
 
-		BeamBattery (int rating, arcSpec arcs)
-		Graser (int rating, arcSpec arcs)
-		KineticGun (int rating, arcSpec arcs)
-		PlasmaBoltLauncher (int rating, arcSpec arcs)
-		
-		PulseTorpedo (arcSpec arcs)
-		ShortRangePulseTorpedo (arcSpec arcs)
-		LongRangePulseTorpedo (arcSpec arcs)
-		MultipleKineticPenetratorPack (arcSpec arcs)
-		Pulser (arcSpec arcs)
-		SubmunitionPack (arcSpec arcs)
+		//Direct-Fire-Type (arcSpec arcs, pdCapability PDMode=null)
+			//PD-Type (arcs="(All Arcs)" unless noted otherwise)
+				PointDefense (PDMode=StandardPDSCapability)
+				*AreaDefensePDS (PDMode=AreaDefensePDSCapability)
+				*Scattergun (PDMode=...)
+				*Grapeshot (PDMode=...)
+			//Beam-Type (int rating, int rangeIncrement=12, int rangeStep=-1, damageType dType=Penetrating)
+				BeamBattery (PDMode=Class1Only)
+				NeedleBeam
+				Graser
+				*EMPProjector
+				*SubmunitionPack (rating=3 always)
+				*Pulser (string rangeSetting=[L,M,S])
+				*PlasmaCannon
+				*HeavyGraser
+				*HighIntensityGraser
+				*TransporterBeam
+				*GatlingBattery (rating=6 always)
+				*TwinParticleArray (rating=2 always)
+				*MesonProjector (rating=1 always)
+				*Phaser (probably shouldn't implement this one, they are absurd.)
+			//Projectile-Type (arcSpec arcs, int rangeIncrement=6, int startingTN, int TNStep, damageType dType=SAP)
+				PulseTorpedo
+				*RocketPod
+				*ShortRangePulseTorpedo
+				*LongRangePulseTorpedo
+				*VariablePulseTorpedo
+				*KineticGun (dType=AP, flag flakLoaded)
+				*MultipleKineticPenetratorPack (dType=AP, startingTN=4, TNStep=99, rangeIncrement=12)
+		//Missile-Type (arcSpec arcs) -- always 3 arcs unless noted otherwise
+			MissileLauncher (Missile ordnanceType)
+			AntiMatterTorpedoLauncher (AntimatterTorpedo ordnanceType)
+			SalvoMissileRack (Salvo ordnanceType)
+			SalvoMissileLauncher (int smmId->SalvoMissileMagazine)
+			PlasmaBoltLauncher (int boltRating)
+		//OrdnanceType (string type, string status [Available,...], dType=SAP, int fireRange=24, int finalApproachRange=6, int damageDice, int damageReceived, int diceLostPerDamage=1)
+			Salvo (type=[Standard], damageDice=6)
+			Salvo (type=[ExtendedRangeSalvo], fireRange=36)
+			PlasmaBolt (int areaEffectRange=6)
+			StandardHeavyMissile (damageDice=3, diceLostPerDamage=3)
+			HeavyMissile (type=[Extended Range], fireRange=36)
+			AntimatterTorpedo (fireRange=18, damageDice=3, int areaEffectRange={damageDice})
 
-		SalvoMissileLauncher (int smmId, arcSpec arcs)
-		SalvoMissileMagazine (int id, int maxInRow, int capacity, list<Salvo> contents)
-			Salvo (string type[Standard Salvo, Extended Range Salvo], string status e.g. "Available")
-		SalvoMissileRack (arcSpec arcs)
+		//Other
+			FighterBay
+			SalvoMissileMagazine (int id, int maxInRow, int capacity, list<Salvo> contents)
+			*FighterLaunchTube
+			*AntimatterSuicideCharge
+			*Minesweeper
+			*Ortillery
+
+
 	
 FighterGroup
 	(cplx)   Position    {decimal x, decimal y}
 	(cplx)   Heading     {int heading}
 		
 	(string) Race
-	(string) Type         {e.g. Standard, ... }
+	(string) Type         {e.g. Standard,Heavy,Fast,LongRange,Interceptor,Attack,Torpedo,Graser,Plasma,MKP,Missile,MultiRole,Light,AssaultShuttle }
+	(flag)   FTL
+	(flag)   Robot
 	(int)    Count
 	(int)    Endurance
-	(string) PilotQuality {e.g. Normal, ...   }
+	(string) PilotQuality {e.g. Normal,Ace,Turkey}
+	(cplx)   Carrier { int id }
 
 	
 	
