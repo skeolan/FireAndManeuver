@@ -26,6 +26,15 @@ namespace ConsoleApplication
 
             List<string> readout = new List<string>();
 
+            readout.Add("Hull Types:");
+            foreach (var ht in Enum.GetNames( typeof(HullTypeLookup) ) )
+            {
+                readout.Add( String.Format("     {0,-10} - {1}", ht, (int)Enum.Parse(typeof(HullTypeLookup), ht) ) );
+            }
+
+            readout.Add("");
+            readout.Add("Unit:");
+            readout.Add("-----");
             readout.Add(String.Format(outputFormat, "Race", myUnit.race) );
             readout.Add(String.Format(outputFormat, "ClassAbbrev", myUnit.classAbbrev) );
             readout.Add(String.Format(outputFormat, "ClassName", myUnit.className) );

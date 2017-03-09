@@ -3,6 +3,16 @@ using System.Xml.Serialization;
 
 namespace FireAndManeuver.Units
 {
+    public enum HullTypeLookup
+    {
+        Fragile = 10,
+        Weak    = 20,
+        Average = 30,
+        Strong  = 40,
+        Super   = 50,
+        Custom  = 100
+    };
+    
     [XmlRoot("Ship")]
     public class Unit
     {
@@ -100,8 +110,27 @@ namespace FireAndManeuver.Units
     public class HullSystem : unitSystem
     {
         [XmlAttribute] public int value { get; set; }
-        [XmlAttribute] public string type { get; set; }
-        [XmlAttribute] public int totalHullBoxes { get; set; }
+        [XmlAttribute] public HullTypeLookup type { get; set; }
+        [XmlAttribute] public int totalHullBoxes
+        {
+            get
+            {
+                if(type == HullTypeLookup.Custom) return _totalHullBoxes;
+                else 
+                {
+                    
+                    //Automatically rounds DOWN?
+                    return (int)(this.value * this.hullTypeMultiplier);
+                }
+            }
+            set {
+                this._totalHullBoxes = value;
+            }
+        }
+
+        private int _totalHullBoxes;
+        
+        [XmlIgnore] private decimal hullTypeMultiplier { get { return (int)type / (decimal)100.0; } }
         [XmlAttribute] public int rows { get; set; }
 
         public HullSystem()
@@ -111,8 +140,8 @@ namespace FireAndManeuver.Units
 
         public override string ToString()
         {
-            string typeSuffix = type=="Average" ? "" : " ("+type+")";
-            return string.Format("{0} ({1} rows){2}", totalHullBoxes, rows, typeSuffix);
+            string typeSuffix = type==HullTypeLookup.Custom? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
+            return string.Format("{0} ({1} rows) {2}", totalHullBoxes, rows, typeSuffix);
         }
 
     }
