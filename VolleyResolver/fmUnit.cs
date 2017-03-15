@@ -99,7 +99,9 @@ namespace FireAndManeuver.Units
     {
         public ArmorSystem() {}
 
-        [XmlAttribute] public int totalArmor { get; set; }
+        [XmlAttribute] public string totalArmor { get; set; }
+
+        //public int[] armorLayers { get { return new List<string>(totalArmor.Split(",")).ForEach() } }
 
         public override string ToString()
         {
