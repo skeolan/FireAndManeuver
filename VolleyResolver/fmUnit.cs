@@ -6,52 +6,61 @@ namespace FireAndManeuver.Units
     public enum HullTypeLookup
     {
         Fragile = 10,
-        Weak    = 20,
+        Weak = 20,
         Average = 30,
-        Strong  = 40,
-        Super   = 50,
-        Custom  = 100
+        Strong = 40,
+        Super = 50,
+        Custom = 100
     };
-    
+
     [XmlRoot("Ship")]
     public class Unit
     {
-        [XmlElement("id")]                  public string id { get; set; }
-        [XmlElement("Race")]                public string race { get; set; }
-        [XmlElement("ClassAbbrev")]         public string classAbbrev { get; set; }
-        [XmlElement("ClassName")]           public string className { get; set; }
-        [XmlElement("ShipClass")]           public string shipClass { get; set; }
-        [XmlElement("Mass")]                public int mass { get; set; }
-        [XmlElement("PointValue")]          public int pointValue { get; set; }
-        [XmlElement("MainDrive")]           public DriveSystem mainDrive { get; set; }
-        [XmlElement("FTLDrive")]            public FTLDriveSystem ftlDriveSystem { get; set; }
-        [XmlIgnore]                         public bool ftlDrive { get { return this.ftlDriveSystem != null; } }
-        [XmlElement("Armor")]               public ArmorSystem armor { get; set; }
-        [XmlElement("Hull")]                public HullSystem hull { get; set; }
+        [XmlElement("id")] public string id { get; set; }
+        [XmlElement("Race")] public string race { get; set; }
+        [XmlElement("ClassAbbrev")] public string classAbbrev { get; set; }
+        [XmlElement("ClassName")] public string className { get; set; }
+        [XmlElement("ShipClass")] public string shipClass { get; set; }
+        [XmlElement("Mass")] public int mass { get; set; }
+        [XmlElement("PointValue")] public int pointValue { get; set; }
+        [XmlElement("MainDrive")] public DriveSystem mainDrive { get; set; } = new DriveSystem();
+        [XmlElement("FTLDrive")] public FTLDriveSystem ftlDriveSystem { get; set; }
+        [XmlIgnore] public bool ftlDrive { get { return this.ftlDriveSystem != null; } }
+        [XmlElement("Armor")] public ArmorSystem armor { get; set; }
+        [XmlElement("Hull")] public HullSystem hull { get; set; }
+        [XmlIgnore] public string sourceFile {get; set; }
 
         /* Collections of systems */
         [XmlArray("Electronics")]
-        [XmlArrayItem("FireControl", Type=typeof(FireControl))]
+        [XmlArrayItem("FireControl", Type = typeof(FireControl))]
         public List<ElectronicsSystem> electronics { get; set; }
 
-        [XmlArray("Defenses")] 
-        [XmlArrayItemAttribute("Screen", Type=typeof(ScreenSystem))]
+        [XmlArray("Defenses")]
+        [XmlArrayItemAttribute("Screen", Type = typeof(ScreenSystem))]
         public List<DefenseSystem> defenses { get; set; }
-        
-        [XmlArray("Holds")] 
-        [XmlArrayItemAttribute("CargoHold", Type=typeof(CargoHoldSystem))]
+
+        [XmlArray("Holds")]
+        [XmlArrayItemAttribute("CargoHold", Type = typeof(CargoHoldSystem))]
         public List<unitSystem> holds { get; set; }
-        
-        [XmlArray("Weapons")] 
-        [XmlArrayItem("PointDefense", Type=typeof(PointDefenseSystem))]
-        [XmlArrayItem("BeamBattery", Type=typeof(BeamBatterySystem))]
-        [XmlArrayItem("AntiMatterTorpedoLauncher", Type=typeof(AntiMatterTorpedoLauncherSystem))]
+
+        [XmlArray("Weapons")]
+        [XmlArrayItem("PointDefense", Type = typeof(PointDefenseSystem))]
+        [XmlArrayItem("BeamBattery", Type = typeof(BeamBatterySystem))]
+        [XmlArrayItem("AntiMatterTorpedoLauncher", Type = typeof(AntiMatterTorpedoLauncherSystem))]
         public List<WeaponSystem> weapons { get; set; }
 
         public Unit()
         {
 
         }
+
+        public override string ToString()
+        {
+            //return string.Format("{0} {1}-class {2} ({3}) -- TMF:{4} / NPV:{5}", this.race, this.className, this.shipClass, this.classAbbrev, this.mass, this.pointValue);
+            //e.g. "Ranger CA (Terran Heavy Cruiser) -- TMF:45 / NPV:500"
+            return string.Format("{0} {1} ({2} {3}) -- TMF:{4} / NPV:{5}", className, classAbbrev, race, shipClass, mass, pointValue);
+        }
+
     }
 
     public abstract class unitSystem
@@ -78,8 +87,8 @@ namespace FireAndManeuver.Units
         [XmlAttribute] public int initialThrust { get; set; }
         public DriveSystem()
         {
-            type="";
-            initialThrust=0;
+            type = "";
+            initialThrust = 0;
         }
 
         public override string ToString()
@@ -91,13 +100,13 @@ namespace FireAndManeuver.Units
     [XmlRoot("FTLDrive")]
     public class FTLDriveSystem : unitSystem
     {
-        public FTLDriveSystem(){}
+        public FTLDriveSystem() { }
     }
 
     [XmlRoot("Armor")]
     public class ArmorSystem : unitSystem
     {
-        public ArmorSystem() {}
+        public ArmorSystem() { }
 
         [XmlAttribute] public string totalArmor { get; set; }
 
@@ -113,36 +122,38 @@ namespace FireAndManeuver.Units
     {
         [XmlAttribute] public int value { get; set; }
         [XmlAttribute] public HullTypeLookup type { get; set; }
-        [XmlAttribute] public int totalHullBoxes
+        [XmlAttribute]
+        public int totalHullBoxes
         {
             get
             {
-                if(type == HullTypeLookup.Custom) return _totalHullBoxes;
-                else 
+                //if (type == HullTypeLookup.Custom) return _totalHullBoxes;
+                if (_totalHullBoxes != -1) return _totalHullBoxes;
+                else
                 {
-                    
                     //Automatically rounds DOWN?
                     return (int)(this.value * this.hullTypeMultiplier);
                 }
             }
-            set {
+            set
+            {
                 this._totalHullBoxes = value;
             }
         }
 
-        private int _totalHullBoxes;
-        
+        private int _totalHullBoxes=-1;
+
         [XmlIgnore] private decimal hullTypeMultiplier { get { return (int)type / (decimal)100.0; } }
         [XmlAttribute] public int rows { get; set; }
 
         public HullSystem()
         {
-            rows=4;
+            rows = 4;
         }
 
         public override string ToString()
         {
-            string typeSuffix = type==HullTypeLookup.Custom? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
+            string typeSuffix = type == HullTypeLookup.Custom ? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
             return string.Format("{0} ({1} rows) {2}", totalHullBoxes, rows, typeSuffix);
         }
 
@@ -204,7 +215,7 @@ namespace FireAndManeuver.Units
     {
         public WeaponSystem() : base()
         {
-            systemName =  "BaseWeaponSystem Class";
+            systemName = "BaseWeaponSystem Class";
         }
     }
 
@@ -230,7 +241,7 @@ namespace FireAndManeuver.Units
             return string.Format("{0} {1}", systemName, arcs);
         }
     }
-    
+
     public class BeamBatterySystem : ArcWeaponSystem
     {
         [XmlAttribute] public int rating { get; set; }
@@ -238,7 +249,7 @@ namespace FireAndManeuver.Units
         public BeamBatterySystem() : base()
         {
             this.systemName = "Beam Battery";
-            this.rating     = 1;
+            this.rating = 1;
         }
 
         public override string ToString()
