@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.IO;
 
-namespace FireAndManeuver.Units
+namespace FireAndManeuver.GameEngine
 {
     public enum HullTypeLookup
     {
@@ -16,7 +18,7 @@ namespace FireAndManeuver.Units
     [XmlRoot("Ship")]
     public class Unit
     {
-        [XmlElement("id")] public string id { get; set; }
+        [XmlAttribute("id")] public string id { get; set; }
         [XmlElement("Race")] public string race { get; set; }
         [XmlElement("ClassAbbrev")] public string classAbbrev { get; set; }
         [XmlElement("ClassName")] public string className { get; set; }
@@ -56,9 +58,39 @@ namespace FireAndManeuver.Units
 
         public override string ToString()
         {
-            //return string.Format("{0} {1}-class {2} ({3}) -- TMF:{4} / NPV:{5}", this.race, this.className, this.shipClass, this.classAbbrev, this.mass, this.pointValue);
             //e.g. "Ranger CA (Terran Heavy Cruiser) -- TMF:45 / NPV:500"
             return string.Format("{0} {1} ({2} {3}) -- TMF:{4} / NPV:{5}", className, classAbbrev, race, shipClass, mass, pointValue);
+        }
+
+        public static Unit loadNewUnit(string sourceFile)
+        {
+            XmlSerializer srz = new XmlSerializer(typeof(Unit));
+
+            FileStream fs;
+            Unit myNewUnit = null;
+
+            try
+            {
+                fs = new FileStream(sourceFile, FileMode.Open);
+                //Console.WriteLine("Loaded XML {0} successfully", sourceFile);
+            }
+            catch (FileNotFoundException ex)
+            {
+                throw ex;
+            }
+
+            try
+            {
+                myNewUnit = (Unit)srz.Deserialize(fs);
+                myNewUnit.sourceFile = sourceFile;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.Error.WriteLine("XML {0} is not a supported Unit design: {1} -- {2}", sourceFile, ex.Message, ex.InnerException.Message ?? "");
+                //throw ex;
+            }
+
+            return myNewUnit;
         }
 
     }

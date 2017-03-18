@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Xml.Serialization;
-using FireAndManeuver.Units;
+using FireAndManeuver.GameEngine;
 
 namespace VolleyResolver
 {
@@ -12,15 +12,27 @@ namespace VolleyResolver
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("shipDataSources-small.json")
-                .Build();
+            if(args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")) )
+            {
+                //Print help
+                Console.WriteLine("Call program with one or more paths to json configs and/or xml unit designs.");
+                Console.WriteLine("{0} <\\path\\to\\foo.json> <\\path\\to\\bar.json> <\\path\\to\\design.xml> <\\path\\to\\otherDesign.xml>", "[ProgramName]");
+                //Exit early
+                return;
+            }
+            
+            var configBuilder      = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+            foreach(var jsonConfig in args.Where(a => a.EndsWith(".json")))
+            {
+                configBuilder.AddJsonFile(jsonConfig);
+            }
+            var config = configBuilder.Build();
 
+            var srcFilesFromArgs   = args.Where(x => x.EndsWith(".xml") ).ToArray();
             var srcFilesFromConfig = (config["srcFiles"]       == null ? new string[0] : config["srcFiles"]      .Split(',') );
             var srcDirsFromConfig  = (config["srcDirectories"] == null ? new string[0] : config["srcDirectories"].Split(',') );
-            var unitXMLFiles = getXMLFileList(args, srcFilesFromConfig, srcDirsFromConfig);
-            List<Unit> unitSet = loadUnitsFromXMLFiles(unitXMLFiles);
+            var unitXMLFiles = getXMLFileList(srcFilesFromArgs, srcFilesFromConfig, srcDirsFromConfig);
+            List<Unit> unitSet = LoadDesignXML(unitXMLFiles);
 
             //... and list their stats    
             //unitSet.ForEach(myUnit => generateUnitReadout(myUnit).ForEach(l => Console.WriteLine(l) ) );
@@ -33,14 +45,14 @@ namespace VolleyResolver
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
         }
 
-        private static List<Unit> loadUnitsFromXMLFiles(HashSet<FileInfo> unitXMLFiles)
+        private static List<Unit> LoadDesignXML(HashSet<FileInfo> unitXMLFiles)
         {
             var unitSet = new List<Unit>();
 
             //... load them all up
             foreach (var x in unitXMLFiles)
             {
-                var newU = loadNewUnit(x);
+                var newU = Unit.loadNewUnit(x.FullName);
                 if (newU != null)
                 {
                     unitSet.Add(newU);
@@ -69,7 +81,9 @@ namespace VolleyResolver
             //Add ship files from commandline arguments and config
             List<string> fileArgSet = new List<string>(args);
             fileArgSet.AddRange(fileSet);
-            foreach (var x in fileArgSet)
+
+            //quietly drop any non-xml files from fileArgSet
+            foreach (var x in fileArgSet.Where( x => x.EndsWith("xml")) )
             {
                 Console.WriteLine("xml: [\"{0}\"]", x);
                 if (!string.IsNullOrEmpty(x))
@@ -167,41 +181,6 @@ namespace VolleyResolver
             }
 
             return outputLines;
-        }
-
-        private static Unit loadNewUnit(FileInfo f)
-        {
-            return loadNewUnit(f.FullName);
-        }
-        private static Unit loadNewUnit(string sourceFile)
-        {
-            XmlSerializer srz = new XmlSerializer(typeof(Unit));
-
-            FileStream fs;
-            Unit myNewUnit = null;
-
-            try
-            {
-                fs = new FileStream(sourceFile, FileMode.Open);
-                //Console.WriteLine("Loaded XML {0} successfully", sourceFile);
-            }
-            catch (FileNotFoundException ex)
-            {
-                throw ex;
-            }
-
-            try
-            {
-                myNewUnit = (Unit)srz.Deserialize(fs);
-                myNewUnit.sourceFile = sourceFile;
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.Error.WriteLine("XML {0} is not a supported Unit design: {1} -- {2}", sourceFile, ex.Message, ex.InnerException.Message ?? "");
-                //throw ex;
-            }
-
-            return myNewUnit;
         }
     }
 
