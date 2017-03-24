@@ -18,19 +18,32 @@ namespace FireAndManeuver.GameEngine
     [XmlRoot("Ship")]
     public class Unit
     {
-        [XmlAttribute("id")] public string id { get; set; }
-        [XmlElement("Race")] public string race { get; set; }
-        [XmlElement("ClassAbbrev")] public string classAbbrev { get; set; }
-        [XmlElement("ClassName")] public string className { get; set; }
-        [XmlElement("ShipClass")] public string shipClass { get; set; }
-        [XmlElement("Mass")] public int mass { get; set; }
-        [XmlElement("PointValue")] public int pointValue { get; set; }
+        //Instance properties
+        [XmlAttribute("id")] public string id { get; set; } = "001";
+        [XmlElement("Name")] public string name { get; set; } = "";
+        [XmlElement("Status")] public string status { get; set; } = "Ok";
+        //[XmlElement("Orders")] public string orders { get; set; }
+        //[XmlElement("DamageControl")] public string damageControl { get; set; }
+        //[XmlElement("Position")] public string position { get; set; }
+        //[XmlElement("Heading")] public string heading { get; set; }
+        //[XmlElement("Speed")] public string speed { get; set; }
+        //[XmlElement("VectorSpeed")] public string vectorSpeed { get; set; }
+        //[XmlElement("Course")] public string course { get; set; }
+        [XmlElement("CrewQuality")] public string crewQuality { get; set; } = "Average";
+
+
+        // Class+instance properties
+        [XmlElement("Race")] public string race { get; set; } = "Generic";
+        [XmlElement("ClassAbbrev")] public string classAbbrev { get; set; } = "XX";
+        [XmlElement("ClassName")] public string className { get; set; } = "Unit";
+        [XmlElement("ShipClass")] public string shipClass { get; set; } = "Unnamed";
+        [XmlElement("Mass")] public int mass { get; set; } = 0;
+        [XmlElement("PointValue")] public int pointValue { get; set; } = 0;
         [XmlElement("MainDrive")] public DriveSystem mainDrive { get; set; } = new DriveSystem();
-        [XmlElement("FTLDrive")] public FTLDriveSystem ftlDriveSystem { get; set; }
-        [XmlIgnore] public bool ftlDrive { get { return this.ftlDriveSystem != null; } }
-        [XmlElement("Armor")] public ArmorSystem armor { get; set; }
-        [XmlElement("Hull")] public HullSystem hull { get; set; }
-        [XmlIgnore] public string sourceFile {get; set; }
+        [XmlElement("FTLDrive")] public FTLDriveSystem ftlDrive { get; set; } = null;
+        [XmlElement("Armor")] public ArmorSystem armor { get; set; } = null;
+        [XmlElement("Hull")] public HullSystem hull { get; set; } = null;
+        [XmlIgnore] public string sourceFile { get; set; } = null;
 
         /* Collections of systems */
         [XmlArray("Electronics")]
@@ -56,10 +69,19 @@ namespace FireAndManeuver.GameEngine
 
         }
 
+        public string InstanceName
+        {
+
+            get
+            {
+                return string.IsNullOrWhiteSpace(name + id) ? "" : string.Format("{0} {1}-{2}", name, classAbbrev, id);
+            }
+        }
+
         public override string ToString()
         {
-            //e.g. "Ranger CA (Terran Heavy Cruiser) -- TMF:45 / NPV:500"
-            return string.Format("{0} {1} ({2} {3}) -- TMF:{4} / NPV:{5}", className, classAbbrev, race, shipClass, mass, pointValue);
+            //e.g. "Aragorn CA-001 -- Terran Ranger-class Heavy Cruiser -- TMF:45 / NPV:500"
+            return string.Format("{0} -- {1} {2}-class {3} -- TMF:{4} / NPV:{5}", InstanceName, race, className, shipClass, mass, pointValue);
         }
 
         public static Unit loadNewUnit(string sourceFile)
@@ -97,9 +119,11 @@ namespace FireAndManeuver.GameEngine
 
     public abstract class unitSystem
     {
+        [XmlAttribute("id")] public int id { get; set; }
         [XmlAttribute("xSSD")] public int xSSD { get; set; }
         [XmlAttribute("ySSD")] public int ySSD { get; set; }
-        [XmlIgnore] public string systemName { get; protected set; }
+        [XmlIgnore] public virtual string systemName { get; protected set; }
+        [XmlAttribute] public string status { get; set; } = "Operational";
 
         public unitSystem()
         {
@@ -108,31 +132,46 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            return string.Format("{0} ({1},{2})", systemName, xSSD, ySSD);
+            return string.Format("{0} - {1}", systemName, status);
         }
     }
 
     [XmlRoot("MainDrive")]
     public class DriveSystem : unitSystem
     {
-        [XmlAttribute] public string type { get; set; }
-        [XmlAttribute] public int initialThrust { get; set; }
+        private int? _currentThrust = null;
+        [XmlAttribute] public string type { get; set; } = "Standard";
+        [XmlAttribute] public int initialThrust { get; set; } = 0;
+        
+        [XmlAttribute] public int currentThrust { 
+            get { return _currentThrust ?? initialThrust; } 
+            set { _currentThrust = value; } 
+        }
+        [XmlAttribute] public bool active { get; set; } = false;
         public DriveSystem()
+        {        }
+
+        [XmlIgnore] public override string systemName
         {
-            type = "";
-            initialThrust = 0;
+            get { return string.Format("{0} Drive", this.type); }
+            protected set {}
         }
 
         public override string ToString()
         {
-            return string.Format("{0} ({1})", this.initialThrust, this.type);// == "Standard" ? "" : " ("+this.type+")");
+            return string.Format("{0} - {1}/{2} - {3}", base.ToString(), this.initialThrust, this.currentThrust, this.active ? "Active" : "Inactive");
         }
     }
 
     [XmlRoot("FTLDrive")]
     public class FTLDriveSystem : unitSystem
     {
-        public FTLDriveSystem() { }
+        [XmlAttribute] public bool active { get; set; } = false;
+        public FTLDriveSystem() { systemName = "FTL Drive"; }
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", base.ToString(), this.active ? "Active" : "Inactive");
+        }
     }
 
     [XmlRoot("Armor")]
@@ -141,12 +180,14 @@ namespace FireAndManeuver.GameEngine
         public ArmorSystem() { }
 
         [XmlAttribute] public string totalArmor { get; set; }
+        [XmlAttribute] public string remainingArmor { get; set; }
 
         //public int[] armorLayers { get { return new List<string>(totalArmor.Split(",")).ForEach() } }
 
         public override string ToString()
         {
-            return string.Format("{0}", this.totalArmor);
+            string remArmorStr = string.IsNullOrWhiteSpace(remainingArmor) ? "" : String.Format(" ({0} remaining)", remainingArmor) ;
+            return string.Format("{0}{1}", this.totalArmor, remArmorStr);
         }
     }
 
@@ -154,6 +195,7 @@ namespace FireAndManeuver.GameEngine
     {
         [XmlAttribute] public int value { get; set; }
         [XmlAttribute] public HullTypeLookup type { get; set; }
+        [XmlAttribute("class")] public string hullClass { get; set; }
         [XmlAttribute]
         public int totalHullBoxes
         {
@@ -173,10 +215,23 @@ namespace FireAndManeuver.GameEngine
             }
         }
 
-        private int _totalHullBoxes=-1;
+        private int _totalHullBoxes = -1;
+        private int _remainingHullBoxes = -1;
 
         [XmlIgnore] private decimal hullTypeMultiplier { get { return (int)type / (decimal)100.0; } }
         [XmlAttribute] public int rows { get; set; }
+        [XmlAttribute] public int remainingHullBoxes 
+        { 
+            get
+            {
+                if(_remainingHullBoxes != -1) return _remainingHullBoxes;
+                else return _totalHullBoxes;
+            } 
+            set
+            {
+                _remainingHullBoxes = value;
+            }
+        }
 
         public HullSystem()
         {
@@ -186,7 +241,7 @@ namespace FireAndManeuver.GameEngine
         public override string ToString()
         {
             string typeSuffix = type == HullTypeLookup.Custom ? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
-            return string.Format("{0} ({1} rows) {2}", totalHullBoxes, rows, typeSuffix);
+            return string.Format("{0}/{1} ({2} rows) {3} {4}", remainingHullBoxes, totalHullBoxes, rows, typeSuffix, hullClass);
         }
 
     }
@@ -194,10 +249,6 @@ namespace FireAndManeuver.GameEngine
     public abstract class ElectronicsSystem : unitSystem
     {
 
-        public override string ToString()
-        {
-            return string.Format("{0} ({1},{2})", systemName, xSSD, ySSD);
-        }
     }
 
     [XmlRoot("FireControl")]
@@ -238,7 +289,7 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            return string.Format("{0} [Total Size {1}]", type, totalSize);
+            return string.Format("{0} [Total Size {1}]", base.ToString(), totalSize);
         }
 
     }
@@ -270,23 +321,22 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", systemName, arcs);
+            return string.Format("{0} {1}", base.ToString(), arcs);
         }
     }
 
     public class BeamBatterySystem : ArcWeaponSystem
     {
-        [XmlAttribute] public int rating { get; set; }
+        [XmlAttribute] public int rating { get; set; }=1;
+        [XmlIgnore] public override string systemName
+        {
+            get { return string.Format("Class-{0} Beam Battery", this.rating); }
+            protected set {}
+        }
 
         public BeamBatterySystem() : base()
         {
-            this.systemName = "Beam Battery";
-            this.rating = 1;
-        }
 
-        public override string ToString()
-        {
-            return string.Format("Class-{0} {1} {2,-10} ({3,3},{4,3})", rating, systemName, arcs, xSSD, ySSD);
         }
     }
 

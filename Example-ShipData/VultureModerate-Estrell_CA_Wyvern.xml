@@ -1,0 +1,71 @@
+<Ship id="1">
+	<Name>Vulture</Name>
+	<IconFamily value="Generic\Echo"/>
+	<Status>Moderate</Status>
+	<Orders>0</Orders>
+	<DamageControl/>
+	<Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
+	<Heading heading="3" pastHeading="3" />
+	<Speed speed="6"/>
+	<VectorSpeed speed="6.0"/>
+	<Course course="3.0"/>
+
+	<Race>Estrell Empire</Race>
+	<ClassAbbrev>CA</ClassAbbrev>
+	<ClassName>Wyvern</ClassName>
+	<ShipClass>Heavy Cruiser</ShipClass>
+	<CrewQuality>First Rate</CrewQuality>
+	<Mass>80</Mass>
+	<PointValue>266</PointValue>
+	<MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
+	<FTLDrive id="4" status="Operational" active="false"/>
+	<Armor totalArmor="0" remainingArmor="0"/>
+	<Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="18"/>
+	<Electronics>
+		<FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+		<FireControl id="6" xSSD="90" ySSD="180" status="Damaged"/>
+	</Electronics>
+	<Defenses>
+		<Screen id="7" xSSD="80" ySSD="160" status="Damaged"/>
+	</Defenses>
+	<Holds>
+	</Holds>
+	<Weapons>
+		<BeamBattery  id="8" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Damaged"/>
+		<BeamBattery  id="9" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational"/>
+		<BeamBattery  id="10" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational"/>
+		<BeamBattery  id="11" xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)" status="Operational"/>
+		<BeamBattery  id="12" xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+		<PointDefense id="13" xSSD="60" ySSD="140" targetId="0" status="Operational"/>
+		<PointDefense id="14" xSSD="100" ySSD="140" targetId="0" status="Operational"/>
+	</Weapons>
+	<Log>
+		<Record turn="2" event="Attack" priority="Medium">
+			Brazen missed with a class 3 beam battery.
+		</Record>
+		<Record turn="2" event="Attack" priority="Medium">
+			Brazen missed with a class 2 beam battery.
+		</Record>
+		<Record turn="2" event="Attack" priority="Medium">
+			Brazen missed with a class 2 beam battery.
+		</Record>
+		<Record turn="2" event="Attack" priority="High">
+			Brazen hit for four points with a class 3 beam battery.
+		</Record>
+		<Record turn="2" event="Attack" priority="Medium">
+			Brazen missed with a class 2 beam battery.
+		</Record>
+		<Record turn="2" event="Attack" priority="Medium">
+			Broadsword missed with a pulse torpedo.
+		</Record>
+		<Record turn="2" event="Attack" priority="High">
+			Bar Maid hit for one point with a class 3 beam battery.
+		</Record>
+		<Record turn="2" event="Attack" priority="High">
+			Bar Maid hit for one point with a class 3 beam battery.
+		</Record>
+		<Record turn="2" event="Damage" priority="Medium">
+			First threshold check.
+		</Record>
+	</Log>
+</Ship>

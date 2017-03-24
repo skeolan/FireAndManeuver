@@ -1,0 +1,391 @@
+<?xml version="1.0" standalone="yes" ?>
+<GameEngine id="184" name="Estrell Academy Duel - Frat Attack" turn="2" combat="false">
+    <Briefing>
+        The Friday night Estrell Naval Academy Duels in the SIMONA simulation 
+        system has been a popular way for cadets and instructors to spar against
+        each other after a long week of classes.
+        
+        In this match, the Alpha Kappa Rho and Kappa Delta Psi fraternities have
+        challenged each other to a match.  The loser buys the beer! 
+    </Briefing>
+
+    <GameOptions>
+        <Variant                            value="Standard"/>
+        <Deadline                           value="14"/>
+
+        <AftArcFire                         value="true"/>
+        <CinematicMovement                  value="true"/>
+        <CoreSystems                        value="false"/>
+        <PenetratingDamage                  value="true"/>
+
+        <SensorRules                        value="0"/>
+        <SensorLevel                        value="4"/>
+        <SensorRangeBand                    value="18.0"/>
+        <SensorBlipBands                    value="10.0"/>
+        <ShipRoll                           value="false"/>
+        <SimultaneousFire                   value="true"/>
+        <TargetResolution                   value="1"/>
+        <ThresholdDamagedSystems            value="true"/>
+        <PDSFireAtShips                     value="true"/>
+        <FighterMorale                      value="false"/>
+
+        <AreaDefenseActivationRange         value="6.0"/>
+        <BeamRangeBand                      value="12.0"/>
+        <KineticGunRangeBand                value="6.0"/>
+        <PointDefenseRange                  value="6.0"/>
+        <PulseTorpedoRangeBand              value="6.0"/>
+        <MultipleKineticPenetratorPackRange value="12.0"/>
+        <NeedleBeamRange                    value="12.0"/>
+        <SalvoMissileRange                  value="24.0"/>
+        <SalvoMissileExtendedRange          value="36.0"/>
+        <SalvoMissileLockOn                 value="6.0"/>
+        <MissileLockOnRange                 value="6.0"/>
+        <ScattergunRange                    value="6.0"/>
+        <SubmunitionPackRangeBand           value="6.0"/>
+
+        <FighterRange                       value="6.0"/>
+        <FighterMovementRange               value="24.0"/>
+        <FighterFastMovementRange           value="36.0"/>
+        <FighterSecondaryRange              value="12.0"/>
+
+        <PulserRangeBand                    value="12.0"/>
+        <PlasmaBoltRange                    value="30.0"/>
+        <PlasmaBoltBlastRange               value="6.0"/>
+
+        <GraserRangeBand                    value="18.0"/>
+        <AntiMatterTorpedoRange             value="18.0"/>
+        <AntiMatterTorpedoLockOnRange       value="6.0"/>
+        <AntiMatterTorpedoBlastRange        value="3.0"/>
+
+        <ActiveExtent                       value="true"/>
+        <XMinExtent                         value="-500.0"/>
+        <XMaxExtent                         value="500.0"/>
+        <YMinExtent                         value="-500.0"/>
+        <YMaxExtent                         value="500.0"/>
+
+        <DebugMode                          value="true"/>
+        <TestingMode                        value="true"/>
+        <PlayTest                           value="false"/>
+    </GameOptions>
+
+    <Report>
+    </Report>
+
+    <Player id="1"
+            name="[Seaman] skeolan -- virtutis.umbra@gmail.com"
+            email="virtutis.umbra@gmail.com"
+            team="Alpha Kappa Rho" key="662249">
+
+        <Objectives>
+            Defeat your fraternity opponent for free beer!
+        </Objectives>
+
+
+        <Ship id="1">
+            <Name>Vulture</Name>
+            <IconFamily value="Generic\Echo"/>
+            <Status>Moderate</Status>
+            <Orders>0</Orders>
+            <DamageControl/>
+            <Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
+            <Heading heading="3" pastHeading="3" />
+            <Speed speed="6"/>
+            <VectorSpeed speed="6.0"/>
+            <Course course="3.0"/>
+
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Wyvern</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <CrewQuality>First Rate</CrewQuality>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
+            <FTLDrive id="4" status="Operational" active="false"/>
+            <Armor totalArmor="0" remainingArmor="0"/>
+            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="18"/>
+            <Electronics>
+                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+                <FireControl id="6" xSSD="90" ySSD="180" status="Damaged"/>
+            </Electronics>
+            <Defenses>
+                <Screen id="7" xSSD="80" ySSD="160" status="Damaged"/>
+            </Defenses>
+            <Holds>
+            </Holds>
+            <Weapons>
+                <BeamBattery  id="8" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Damaged"/>
+                <BeamBattery  id="9" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational"/>
+                <BeamBattery  id="10" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational"/>
+                <BeamBattery  id="11" xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)" status="Operational"/>
+                <BeamBattery  id="12" xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+                <PointDefense id="13" xSSD="60" ySSD="140" targetId="0" status="Operational"/>
+                <PointDefense id="14" xSSD="100" ySSD="140" targetId="0" status="Operational"/>
+            </Weapons>
+            <Log>
+                <Record turn="2" event="Attack" priority="Medium">
+                    Brazen missed with a class 3 beam battery.
+                </Record>
+                <Record turn="2" event="Attack" priority="Medium">
+                    Brazen missed with a class 2 beam battery.
+                </Record>
+                <Record turn="2" event="Attack" priority="Medium">
+                    Brazen missed with a class 2 beam battery.
+                </Record>
+                <Record turn="2" event="Attack" priority="High">
+                    Brazen hit for four points with a class 3 beam battery.
+                </Record>
+                <Record turn="2" event="Attack" priority="Medium">
+                    Brazen missed with a class 2 beam battery.
+                </Record>
+                <Record turn="2" event="Attack" priority="Medium">
+                    Broadsword missed with a pulse torpedo.
+                </Record>
+                <Record turn="2" event="Attack" priority="High">
+                    Bar Maid hit for one point with a class 3 beam battery.
+                </Record>
+                <Record turn="2" event="Attack" priority="High">
+                    Bar Maid hit for one point with a class 3 beam battery.
+                </Record>
+                <Record turn="2" event="Damage" priority="Medium">
+                    First threshold check.
+                </Record>
+            </Log>
+        </Ship>
+
+        <Ship id="2">
+            <Name>Vampire</Name>
+            <IconFamily value="Generic\Echo"/>
+            <Status>Ok</Status>
+            <Orders>0</Orders>
+            <DamageControl/>
+            <Position x="7.0" y="23.0" pastX="1.0" pastY="23.0" />
+            <Heading heading="3" pastHeading="3" />
+            <Speed speed="6"/>
+            <VectorSpeed speed="6.0"/>
+            <Course course="3.0"/>
+
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Rhino</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <CrewQuality>First Rate</CrewQuality>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
+            <FTLDrive id="4" status="Operational" active="false"/>
+            <Armor totalArmor="0" remainingArmor="0"/>
+            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
+            <Electronics>
+                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+                <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
+            </Electronics>
+            <Defenses>
+                <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
+            </Defenses>
+            <Holds>
+            </Holds>
+            <Weapons>
+                <PulseTorpedo id="8" xSSD="80" ySSD="40" arcs="(FP/F/FS)" status="Operational"/>
+                <BeamBattery  id="9" xSSD="80" ySSD="90" rating="2" arcs="(FP/F/FS)" status="Operational"/>
+                <BeamBattery  id="10" xSSD="40" ySSD="90" rating="2" arcs="(AP/FP/F)" status="Operational"/>
+                <BeamBattery  id="11" xSSD="20" ySSD="120" rating="2" arcs="(AP/FP/F)" status="Operational"/>
+                <BeamBattery  id="12" xSSD="120" ySSD="90" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+                <BeamBattery  id="13" xSSD="140" ySSD="120" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+                <PointDefense id="14" xSSD="60" ySSD="140" targetId="0" status="Operational"/>
+                <PointDefense id="15" xSSD="100" ySSD="140" targetId="0" status="Operational"/>
+            </Weapons>
+        </Ship>
+
+        <Ship id="3">
+            <Name>Vixen</Name>
+            <IconFamily value="Generic\Echo"/>
+            <Status>Ok</Status>
+            <Orders>0</Orders>
+            <DamageControl/>
+            <Position x="7.0" y="7.0" pastX="1.0" pastY="7.0" />
+            <Heading heading="3" pastHeading="3" />
+            <Speed speed="6"/>
+            <VectorSpeed speed="6.0"/>
+            <Course course="3.0"/>
+
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Scorpion</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <CrewQuality>First Rate</CrewQuality>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
+            <FTLDrive id="4" status="Operational" active="false"/>
+            <Armor totalArmor="0" remainingArmor="0"/>
+            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
+            <Electronics>
+                <FireControl id="11" xSSD="70" ySSD="180" status="Operational"/>
+                <FireControl id="12" xSSD="90" ySSD="180" status="Operational"/>
+            </Electronics>
+            <Defenses>
+                <Screen id="13" xSSD="80" ySSD="160" status="Operational"/>
+            </Defenses>
+            <Holds>
+            </Holds>
+            <Weapons>
+                <BeamBattery  id="14" xSSD="60" ySSD="100" rating="3" arcs="(FP/F)" status="Operational"/>
+                <BeamBattery  id="15" xSSD="100" ySSD="100" rating="3" arcs="(F/FS)" status="Operational"/>
+                <SubmunitionPack  id="16" xSSD="80" ySSD="20" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="17" xSSD="40" ySSD="20" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="18" xSSD="120" ySSD="20" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="19" xSSD="80" ySSD="60" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="20" xSSD="40" ySSD="60" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="21" xSSD="120" ySSD="60" arcs="(F)" status="Operational"/>
+                <PointDefense id="22" xSSD="60" ySSD="135" targetId="0" status="Operational"/>
+                <PointDefense id="23" xSSD="100" ySSD="135" targetId="0" status="Operational"/>
+            </Weapons>
+        </Ship>
+
+    </Player>
+
+
+    <Player id="2"
+            name="Bot Delta"
+            email=""
+            team="Kappa Delta Psi">
+
+        <Ship id="4">
+            <Name>Brazen</Name>
+            <IconFamily value="Generic\Alpha"/>
+            <Status>Ok</Status>
+            <Orders>Z1+4</Orders>
+            <DamageControl/>
+            <Position x="33.1" y="21.0" pastX="48.0" pastY="25.0" />
+            <Heading heading="9" pastHeading="9" />
+            <Speed speed="16"/>
+            <VectorSpeed speed="6.0"/>
+            <Course course="9.0"/>
+
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Wyvern</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <CrewQuality>First Rate</CrewQuality>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="true" />
+            <FTLDrive id="4" status="Operational" active="false"/>
+            <Armor totalArmor="0" remainingArmor="0"/>
+            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
+            <Electronics>
+                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+                <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
+            </Electronics>
+            <Defenses>
+                <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
+            </Defenses>
+            <Holds>
+            </Holds>
+            <Weapons>
+                <BeamBattery  id="18" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Operational" recharge="1"/>
+                <BeamBattery  id="19" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational" recharge="1"/>
+                <BeamBattery  id="20" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational" recharge="1"/>
+                <BeamBattery  id="21" xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)" status="Operational" recharge="1"/>
+                <BeamBattery  id="22" xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)" status="Operational" recharge="1"/>
+                <PointDefense id="23" xSSD="60" ySSD="140" status="Operational"/>
+                <PointDefense id="24" xSSD="100" ySSD="140" status="Operational"/>
+            </Weapons>
+        </Ship>
+
+        <Ship id="5">
+            <Name>Broadsword</Name>
+            <IconFamily value="Generic\Alpha"/>
+            <Status>Ok</Status>
+            <Orders>P1+5</Orders>
+            <DamageControl/>
+            <Position x="37.1" y="28.7" pastX="53.0" pastY="33.0" />
+            <Heading heading="8" pastHeading="9" />
+            <Speed speed="17"/>
+            <VectorSpeed speed="6.0"/>
+            <Course course="9.0"/>
+
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Rhino</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <CrewQuality>First Rate</CrewQuality>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="true" />
+            <FTLDrive id="4" status="Operational" active="false"/>
+            <Armor totalArmor="0" remainingArmor="0"/>
+            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
+            <Electronics>
+                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+                <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
+            </Electronics>
+            <Defenses>
+                <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
+            </Defenses>
+            <Holds>
+            </Holds>
+            <Weapons>
+                <PulseTorpedo id="8" xSSD="80" ySSD="40" arcs="(FP/F/FS)" status="Operational" recharge="1"/>
+                <BeamBattery  id="9" xSSD="80" ySSD="90" rating="2" arcs="(FP/F/FS)" status="Operational"/>
+                <BeamBattery  id="10" xSSD="40" ySSD="90" rating="2" arcs="(AP/FP/F)" status="Operational"/>
+                <BeamBattery  id="11" xSSD="20" ySSD="120" rating="2" arcs="(AP/FP/F)" status="Operational"/>
+                <BeamBattery  id="12" xSSD="120" ySSD="90" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+                <BeamBattery  id="13" xSSD="140" ySSD="120" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+                <PointDefense id="7" xSSD="60" ySSD="140" status="Operational"/>
+                <PointDefense id="12" xSSD="100" ySSD="140" status="Operational"/>
+            </Weapons>
+        </Ship>
+
+        <Ship id="6">
+            <Name>Bar Maid</Name>
+            <IconFamily value="Generic\Alpha"/>
+            <Status>Ok</Status>
+            <Orders>6</Orders>
+            <DamageControl/>
+            <Position x="35.0" y="17.0" pastX="53.0" pastY="17.0" />
+            <Heading heading="9" pastHeading="9" />
+            <Speed speed="18"/>
+            <VectorSpeed speed="6.0"/>
+            <Course course="9.0"/>
+
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Scorpion</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <CrewQuality>First Rate</CrewQuality>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="true" />
+            <FTLDrive id="4" status="Operational" active="false"/>
+            <Armor totalArmor="0" remainingArmor="0"/>
+            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
+            <Electronics>
+                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+                <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
+            </Electronics>
+            <Defenses>
+                <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
+            </Defenses>
+            <Holds>
+            </Holds>
+            <Weapons>
+                <BeamBattery  id="8" xSSD="60" ySSD="100" rating="3" arcs="(FP/F)" status="Operational" recharge="1"/>
+                <BeamBattery  id="9" xSSD="100" ySSD="100" rating="3" arcs="(F/FS)" status="Operational" recharge="1"/>
+                <SubmunitionPack  id="10" xSSD="80" ySSD="20" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="11" xSSD="40" ySSD="20" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="12" xSSD="120" ySSD="20" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="13" xSSD="80" ySSD="60" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="14" xSSD="40" ySSD="60" arcs="(F)" status="Operational"/>
+                <SubmunitionPack  id="15" xSSD="120" ySSD="60" arcs="(F)" status="Operational"/>
+                <PointDefense id="16" xSSD="60" ySSD="135" status="Operational"/>
+                <PointDefense id="17" xSSD="100" ySSD="135" status="Operational"/>
+            </Weapons>
+        </Ship>
+
+    </Player>
+
+
+</GameEngine>
+

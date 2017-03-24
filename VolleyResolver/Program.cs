@@ -145,10 +145,11 @@ namespace VolleyResolver
 
             List<string> readout = new List<string>();
 
+            readout.Add("");
             readout.Add(myUnit.ToString());
-            readout.Add("--------------------------------------------------------------");
+            readout.Add("-----------------------------------------------------------------------------");
             readout.Add(String.Format(outputFormat, "MainDrive", myUnit.mainDrive.ToString()));
-            readout.Add(String.Format(outputFormat, "FTLDrive", myUnit.ftlDrive));
+            readout.Add(String.Format(outputFormat, "FTLDrive", myUnit.ftlDrive.ToString()));
             readout.Add(String.Format(outputFormat, "Armor", myUnit.armor.ToString()));
             readout.Add(String.Format(outputFormat, "Hull", myUnit.hull.ToString()));
             readout.Add("");
@@ -156,7 +157,7 @@ namespace VolleyResolver
             readout.AddRange(printSystemCollection("Defenses", myUnit.defenses, outputFormat));
             readout.AddRange(printSystemCollection("Holds", myUnit.holds, outputFormat));
             readout.AddRange(printSystemCollection("Weapons", myUnit.weapons, outputFormat));
-            readout.Add("--------------------------------------------------------------");
+            readout.Add("-----------------------------------------------------------------------------");
 
             return readout;
         }
