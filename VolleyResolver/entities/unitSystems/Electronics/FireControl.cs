@@ -3,9 +3,9 @@ using System.Xml.Serialization;
 namespace FireAndManeuver.GameEngine
 {
     [XmlRoot("FireControl")]
-    public class FireControl : ElectronicsSystem
+    public class FireControlSystem : ElectronicsSystem
     {
-        public FireControl()
+        public FireControlSystem()
         {
             systemName = "Fire Control System";
         }

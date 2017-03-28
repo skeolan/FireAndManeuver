@@ -158,6 +158,8 @@ namespace VolleyResolver
             readout.AddRange(printSystemCollection("Holds", myUnit.holds, outputFormat));
             readout.AddRange(printSystemCollection("Weapons", myUnit.weapons, outputFormat));
             readout.Add("-----------------------------------------------------------------------------");
+            readout.Add(String.Format(outputFormat, "Orders", myUnit.Orders.ToString()));
+            readout.Add("-----------------------------------------------------------------------------");
 
             return readout;
         }

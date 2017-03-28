@@ -37,7 +37,7 @@ namespace FireAndManeuver.GameEngine
 
         /* Collections of systems */
         [XmlArray("Electronics")]
-        [XmlArrayItem("FireControl", Type = typeof(FireControl))]
+        [XmlArrayItem("FireControl", Type = typeof(FireControlSystem))]
         public List<ElectronicsSystem> electronics { get; set; }
 
         [XmlArray("Defenses")]
@@ -53,6 +53,9 @@ namespace FireAndManeuver.GameEngine
         [XmlArrayItem("BeamBattery", Type = typeof(BeamBatterySystem))]
         [XmlArrayItem("AntiMatterTorpedoLauncher", Type = typeof(AntiMatterTorpedoLauncherSystem))]
         public List<WeaponSystem> weapons { get; set; }
+
+        [XmlElement("FM.Orders")]
+        public Orders Orders { get; set; } = new Orders();
 
         public Unit()
         {
@@ -84,7 +87,6 @@ namespace FireAndManeuver.GameEngine
             try
             {
                 fs = new FileStream(sourceFile, FileMode.Open);
-                //Console.WriteLine("Loaded XML {0} successfully", sourceFile);
             }
             catch (FileNotFoundException ex)
             {
