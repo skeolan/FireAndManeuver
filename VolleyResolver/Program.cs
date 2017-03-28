@@ -73,7 +73,7 @@ namespace VolleyResolver
             Console.WriteLine("{0} args, {1} files, {2} dirs", args.Length, fileSet.Length, dirSet.Length);
             if (args.Length + fileSet.Length + dirSet.Length == 0) 
             {
-                var defaultXML = "..\\Example-ShipData\\UNSC_DD_Lake.xml";
+                var defaultXML = ".\\Example-ShipData\\UNSC_DD_Lake-UNS_Nam_Lolwe.xml";
                 Console.WriteLine("Defaulting to {0}", defaultXML);
                 args = new string[] { defaultXML };
             }
