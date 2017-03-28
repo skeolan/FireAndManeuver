@@ -1,11 +1,13 @@
 namespace FireAndManeuver.GameEngine
 {
 
-    public class AntiMatterTorpedoLauncherSystem : WeaponSystem
+    public class AntiMatterTorpedoLauncherSystem : ArcWeaponSystem
     {
         public AntiMatterTorpedoLauncherSystem()
         {
             this.systemName = "Antimatter Torpedo Launcher";
+            //Unless set otherwise, AMTs are 3-arc weapons bearing forward
+            this.arcs       = "(FP/F/FS)";
         }
     }
 
