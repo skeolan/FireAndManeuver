@@ -6,7 +6,7 @@ namespace FireAndManeuver.GameEngine
     {
         [XmlAttribute] public int value { get; set; }
         [XmlAttribute] public HullTypeLookup type { get; set; }
-        [XmlAttribute("class")] public string hullClass { get; set; }
+        [XmlAttribute("class")] public string hullClass { get; set; }="Military";
         [XmlAttribute]
         public int totalHullBoxes
         {
@@ -51,8 +51,8 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            string typeSuffix = type == HullTypeLookup.Custom ? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
-            return string.Format("{0}/{1} ({2} rows) {3} {4}", remainingHullBoxes, totalHullBoxes, rows, typeSuffix, hullClass);
+            string typeDetail = type == HullTypeLookup.Custom ? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
+            return string.Format("{0, 3} / {1, 3} - {2} {3} Hull ({4} rows)", remainingHullBoxes, totalHullBoxes, typeDetail, hullClass, rows);
         }
 
     }

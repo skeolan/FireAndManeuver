@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes" ?>
 <Ship id="1">
-	<Name>Vulture</Name>
+	<Name>EES Vulture</Name>
 	<IconFamily value="Generic\Echo"/>
 	<Status>Moderate</Status>
 	<Orders>0</Orders>

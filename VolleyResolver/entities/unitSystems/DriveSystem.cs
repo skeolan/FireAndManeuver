@@ -19,13 +19,13 @@ namespace FireAndManeuver.GameEngine
 
         [XmlIgnore] public override string systemName
         {
-            get { return string.Format("{0} Drive", this.type); }
+            get { return $"{this.type} Drive {this.currentThrust}/{this.initialThrust}"; }
             protected set {}
         }
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}/{2} - {3}", base.ToString(), this.initialThrust, this.currentThrust, this.active ? "Active" : "Inactive");
+            return $"{base.ToString()} - {(this.active ? "Active" : "Inactive")}";
         }
     }
 

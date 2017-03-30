@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using System.IO;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace FireAndManeuver.GameEngine
 {
@@ -9,7 +10,7 @@ namespace FireAndManeuver.GameEngine
     public class Unit
     {
         //Instance properties
-        [XmlAttribute("id")] public string id { get; set; } = "001";
+        [XmlAttribute("id")] public int id { get; set; } = 1;
         [XmlElement("Name")] public string name { get; set; } = "";
         [XmlElement("Status")] public string status { get; set; } = "Ok";
         //[XmlElement("Orders")] public string orders { get; set; }
@@ -67,14 +68,14 @@ namespace FireAndManeuver.GameEngine
 
             get
             {
-                return string.IsNullOrWhiteSpace(name + id) ? "" : string.Format("{0} {1}-{2}", name, classAbbrev, id);
+                return string.IsNullOrWhiteSpace(name + id) ? "" : string.Format("{0} {1}-{2:000}", name, classAbbrev, id);
             }
         }
 
         public override string ToString()
         {
-            //e.g. "Aragorn CA-001 -- Terran Ranger-class Heavy Cruiser -- TMF:45 / NPV:500"
-            return string.Format("{0} -- {1} {2}-class {3} -- TMF:{4} / NPV:{5}", InstanceName, race, className, shipClass, mass, pointValue);
+            //e.g. "Aragorn CA-001 -- Dunedain Ranger-class Heavy Cruiser -- TMF:45 / NPV:500"
+            return $"{InstanceName} -- {race} {className}-class {shipClass} -- TMF:{mass} / NPV:{pointValue}";
         }
 
         public static Unit loadNewUnit(string sourceFile)
@@ -104,6 +105,24 @@ namespace FireAndManeuver.GameEngine
                 //throw ex;
             }
 
+            //If Unit lacks critical features like id's on its systems, add them
+            var allSystems = new List<UnitSystem>() {
+                myNewUnit.mainDrive,
+                myNewUnit.ftlDrive
+            };
+            allSystems.AddRange(myNewUnit.electronics);
+            allSystems.AddRange(myNewUnit.defenses);
+            allSystems.AddRange(myNewUnit.holds);
+            allSystems.AddRange(myNewUnit.weapons);
+
+            //SortedSet<int> systemIDsTaken = new SortedSet<int>();
+            //allSystems.Where(x => x.id != -1).ToList().ForEach( x => systemIDsTaken.Add(x.id) );
+            //allSystems.Where( x => x.id != -1).Max( x => x.id);
+            //int nextID = systemIDsTaken.LastOrDefault()+1;
+
+            int nextID = Math.Max(allSystems.Max( x => x.id), 0) +1;
+            allSystems.Where(x => x.id == -1).ToList().ForEach( x => x.id = nextID++);
+            
             return myNewUnit;
         }
 

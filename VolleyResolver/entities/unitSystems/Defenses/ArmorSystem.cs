@@ -15,8 +15,7 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            string remArmorStr = string.IsNullOrWhiteSpace(remainingArmor) ? "" : String.Format(" ({0} remaining)", remainingArmor) ;
-            return string.Format("{0}{1}", this.totalArmor, remArmorStr);
+            return string.Format($"{totalArmor, 3} / {remainingArmor ?? totalArmor, 3}");
         }
     }
 

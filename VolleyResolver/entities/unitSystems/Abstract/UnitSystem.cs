@@ -4,7 +4,7 @@ namespace FireAndManeuver.GameEngine
 {
     public abstract class UnitSystem
     {
-        [XmlAttribute("id")] public int id { get; set; }
+        [XmlAttribute("id")] public int id { get; set; } = -1;
         [XmlAttribute("xSSD")] public int xSSD { get; set; }
         [XmlAttribute("ySSD")] public int ySSD { get; set; }
         [XmlIgnore] public virtual string systemName { get; protected set; }
@@ -17,7 +17,8 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}", systemName, status);
+            string idStr = id == -1 ? "" : string.Format("[{0:00}]", id);
+            return $"{idStr,2} - {systemName,-30} - {status,-12}";
         }
     }
 

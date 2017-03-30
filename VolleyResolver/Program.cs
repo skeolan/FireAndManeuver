@@ -12,7 +12,7 @@ namespace VolleyResolver
     {
         public static void Main(string[] args)
         {
-            if(args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")) )
+            if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
             {
                 //Print help
                 Console.WriteLine("Call program with one or more paths to json configs and/or xml unit designs.");
@@ -20,17 +20,17 @@ namespace VolleyResolver
                 //Exit early
                 return;
             }
-            
-            var configBuilder      = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
-            foreach(var jsonConfig in args.Where(a => a.EndsWith(".json")))
+
+            var configBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+            foreach (var jsonConfig in args.Where(a => a.EndsWith(".json")))
             {
                 configBuilder.AddJsonFile(jsonConfig);
             }
             var config = configBuilder.Build();
 
-            var srcFilesFromArgs   = args.Where(x => x.EndsWith(".xml") ).ToArray();
-            var srcFilesFromConfig = (config["srcFiles"]       == null ? new string[0] : config["srcFiles"]      .Split(',') );
-            var srcDirsFromConfig  = (config["srcDirectories"] == null ? new string[0] : config["srcDirectories"].Split(',') );
+            var srcFilesFromArgs = args.Where(x => x.EndsWith(".xml")).ToArray();
+            var srcFilesFromConfig = (config["srcFiles"] == null ? new string[0] : config["srcFiles"].Split(','));
+            var srcDirsFromConfig = (config["srcDirectories"] == null ? new string[0] : config["srcDirectories"].Split(','));
             var unitXMLFiles = getXMLFileList(srcFilesFromArgs, srcFilesFromConfig, srcDirsFromConfig);
             List<Unit> unitSet = LoadDesignXML(unitXMLFiles);
 
@@ -38,7 +38,7 @@ namespace VolleyResolver
             //unitSet.ForEach(myUnit => generateUnitReadout(myUnit).ForEach(l => Console.WriteLine(l) ) );
             foreach (var u in unitSet)
             {
-                Console.WriteLine("\n{0} : \"{1}\"", u.className, u.sourceFile);
+                //Console.WriteLine("\n{0} : \"{1}\"", u.className, u.sourceFile);
                 generateUnitReadout(u).ForEach(l => Console.WriteLine(l));
             }
 
@@ -71,7 +71,7 @@ namespace VolleyResolver
             var unitXMLFiles = new HashSet<FileInfo>(fileComparer);
 
             Console.WriteLine("{0} args, {1} files, {2} dirs", args.Length, fileSet.Length, dirSet.Length);
-            if (args.Length + fileSet.Length + dirSet.Length == 0) 
+            if (args.Length + fileSet.Length + dirSet.Length == 0)
             {
                 var defaultXML = ".\\Example-ShipData\\UNSC_DD_Lake-UNS_Nam_Lolwe.xml";
                 Console.WriteLine("Defaulting to {0}", defaultXML);
@@ -83,7 +83,7 @@ namespace VolleyResolver
             fileArgSet.AddRange(fileSet);
 
             //quietly drop any non-xml files from fileArgSet
-            foreach (var x in fileArgSet.Where( x => x.EndsWith("xml")) )
+            foreach (var x in fileArgSet.Where(x => x.EndsWith("xml")))
             {
                 Console.WriteLine("xml: [\"{0}\"]", x);
                 if (!string.IsNullOrEmpty(x))
@@ -141,25 +141,35 @@ namespace VolleyResolver
 
         private static List<string> generateUnitReadout(Unit myUnit)
         {
-            var outputFormat = "{0, -20} : {1}";
+            var outputFormat = "* {0, -20} : {1, -73} *";
+            var collectionItemOutputFormat = "* {0, -20} > {1, -73} *";
+            var separator = $"* {string.Concat(Enumerable.Repeat("-", 96))} *";
+            var boundary = string.Concat(Enumerable.Repeat("*", 100));
 
             List<string> readout = new List<string>();
 
             readout.Add("");
-            readout.Add(myUnit.ToString());
-            readout.Add("-----------------------------------------------------------------------------");
-            readout.Add(String.Format(outputFormat, "MainDrive", myUnit.mainDrive.ToString()));
-            readout.Add(String.Format(outputFormat, "FTLDrive", myUnit.ftlDrive.ToString()));
+            readout.Add(boundary);
+            readout.Add(string.Format("* {0, -96} *", myUnit.ToString()));
+            readout.Add(separator);
+            readout.Add(String.Format(outputFormat, "Status", myUnit.status));
             readout.Add(String.Format(outputFormat, "Armor", myUnit.armor.ToString()));
             readout.Add(String.Format(outputFormat, "Hull", myUnit.hull.ToString()));
-            readout.Add("");
-            readout.AddRange(printSystemCollection("Electronics", myUnit.electronics, outputFormat));
-            readout.AddRange(printSystemCollection("Defenses", myUnit.defenses, outputFormat));
-            readout.AddRange(printSystemCollection("Holds", myUnit.holds, outputFormat));
-            readout.AddRange(printSystemCollection("Weapons", myUnit.weapons, outputFormat));
-            readout.Add("-----------------------------------------------------------------------------");
-            readout.Add(String.Format(outputFormat, "Orders", myUnit.Orders.ToString()));
-            readout.Add("-----------------------------------------------------------------------------");
+            readout.Add(String.Format(outputFormat, "Crew", myUnit.crewQuality));
+            readout.Add(separator);
+            readout.Add(String.Format(outputFormat, "MainDrive", myUnit.mainDrive.ToString()));
+            readout.Add(String.Format(outputFormat, "FTLDrive", myUnit.ftlDrive.ToString()));
+            readout.Add(separator);
+            readout.AddRange(printSystemCollection("Electronics", myUnit.electronics, collectionItemOutputFormat));
+            readout.AddRange(printSystemCollection("Defenses", myUnit.defenses, collectionItemOutputFormat));
+            readout.AddRange(printSystemCollection("Holds", myUnit.holds, collectionItemOutputFormat));
+            readout.AddRange(printSystemCollection("Weapons", myUnit.weapons, collectionItemOutputFormat));
+            readout.Add(separator);
+            readout.Add(String.Format(outputFormat, "Orders", ""));
+            readout.Add(String.Format("* {0, -96} *", "     "+myUnit.Orders.ToString()));
+            readout.Add(separator);
+            readout.Add(String.Format("* {0, -96} *", myUnit.sourceFile));
+            readout.Add(boundary);
 
             return readout;
         }
@@ -170,11 +180,11 @@ namespace VolleyResolver
             switch (coll.Count)
             {
                 case 0: { /* print nothing */ break; }
-                case 1: { outputLines.Add(String.Format(outputFormat, collectionName, coll[0])); break; }
+                //case 1: { outputLines.Add(String.Format(outputFormat, collectionName, coll[0])); break; }
                 default:
                     {
                         //multiple entries needs a multi-line printout
-                        outputLines.Add(String.Format("{0,-12}({1, 2}) -----", collectionName, coll.Count.ToString()));
+                        outputLines.Add(String.Format("* {0,-12}({1, 2}){2,-80} *", collectionName, coll.Count.ToString(), ""));
                         foreach (var sys in coll)
                         {
                             outputLines.Add(String.Format(outputFormat, "", sys.ToString()));
