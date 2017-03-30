@@ -10,7 +10,23 @@ namespace FireAndManeuver.GameEngine
     public class Unit
     {
         //Instance properties
-        [XmlAttribute("id")] public int id { get; set; } = 1;
+        [XmlAttribute("id")] public int idNumeric { get; set; } = 1;
+        public string fullID {
+            get {
+                var raceToken = race.Split(' ')[0];
+                return $"{raceToken}-{classAbbrev}-{idNumeric:000}";
+            }
+            set {
+                var raceToken = race.Split(' ')[0];
+                string valueNumeric = value.Replace(raceToken, "").Replace(classAbbrev, "").Replace("-", "");
+                int newID = idNumeric;
+                if( !int.TryParse(value, out newID) | newID <1 ) {
+                    throw new ArgumentException($"New ID assignment {value} must be a positive integer value or a string like {race}-{classAbbrev}-###.");
+                }
+
+                idNumeric = newID;
+            }
+        }
         [XmlElement("Name")] public string name { get; set; } = "";
         [XmlElement("Status")] public string status { get; set; } = "Ok";
         //[XmlElement("Orders")] public string orders { get; set; }
@@ -68,7 +84,7 @@ namespace FireAndManeuver.GameEngine
 
             get
             {
-                return string.IsNullOrWhiteSpace(name + id) ? "" : string.Format("{0} {1}-{2:000}", name, classAbbrev, id);
+                return string.IsNullOrWhiteSpace(name + fullID) ? "" : string.Format("{0} [{1}]", name, fullID);
             }
         }
 

@@ -7,39 +7,55 @@ namespace FireAndManeuver.GameEngine
     [XmlRoot("FM.Orders")]
     public class Orders
     {
-        [XmlElement("FM.Speed")] public int Speed {get; set;}
-        [XmlElement("FM.Evasion")] public int Evasion {get; set;}
-        
-        [XmlArray("FM.Maneuvers")]
-        [XmlArrayItemAttribute("FM.Maneuver", Type = typeof(ManeuverOrder))] 
-        public List<ManeuverOrder> _maneuvers {get; set; }
-       
-        public List<ManeuverOrder> Maneuvers { 
-            get 
-            { 
-                if(_maneuvers==null || _maneuvers.Count == 0)
+        [XmlElement("FM.Speed")] public int Speed { get; set; }
+        [XmlElement("FM.Evasion")] public int Evasion { get; set; }
+
+        [XmlArray("FM.ManeuveringOrders")]
+        [XmlArrayItemAttribute("FM.Maneuver", Type = typeof(ManeuverOrder))]
+        public List<ManeuverOrder> _maneuvers { get; set; }
+
+        [XmlArray("FM.FiringOrders")]
+        [XmlArrayItemAttribute("FM.Fire", Type = typeof(FireOrder))]
+        public List<FireOrder> _firing { get; set; }  = new List<FireOrder> { };
+
+        public List<ManeuverOrder> ManeuveringOrders
+        {
+            get
+            {
+                if (_maneuvers == null || _maneuvers.Count == 0)
                     _maneuvers = new List<ManeuverOrder>() { new ManeuverOrder() };
 
                 return _maneuvers.OrderBy(x => x.priority.ToLowerInvariant() != "primary").ToList();
             }
-            set 
+            set
             {
                 _maneuvers = value;
             }
         }
 
+        public List<FireOrder> FiringOrders
+        {
+            get {
+                return _firing.OrderByDescending(x => x.TargetID.ToLowerInvariant() != "pd").OrderByDescending(x => x.Priority.ToLowerInvariant() == "primary").ToList();
+            }
+            set {
+                _firing = value;
+            }
+        }
+
         public Orders()
         {
-            this.Speed = 0;
-            this.Evasion = 0;
-            this._maneuvers = new List<ManeuverOrder>();
+            Speed = 0;
+            Evasion = 0;
+            _maneuvers = new List<ManeuverOrder>();
+            _firing = new List<FireOrder>();
         }
 
         public override string ToString()
         {
-            //string maneuverStrings = "...";
-            var maneuverStrings = string.Join("; ", Maneuvers.Select( m => m.ToString()) );
-            return $"Speed {Speed} - Evasion {Evasion} - target(s): [{maneuverStrings}]";
+            var maneuverStrings = string.Join("; ", ManeuveringOrders.Select(m => m.ToString()));
+            var firingStrings = string.Join(";", FiringOrders.Select(f => f.ToString()));
+            return $"Speed {Speed} - Evasion {Evasion} | Maneuvering: [{maneuverStrings}] | Firing: [{firingStrings}]";
         }
     }
 }

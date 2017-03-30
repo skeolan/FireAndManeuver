@@ -51,7 +51,7 @@ namespace FireAndManeuver.GameEngine
 
         public override string ToString()
         {
-            string typeDetail = type == HullTypeLookup.Custom ? "Custom" : string.Format("{0} [MUx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
+            string typeDetail = type == HullTypeLookup.Custom ? "Custom" : string.Format("{0} [TMFx{1}]", System.Enum.GetName(typeof(HullTypeLookup), type), hullTypeMultiplier);
             return string.Format("{0, 3} / {1, 3} - {2} {3} Hull ({4} rows)", remainingHullBoxes, totalHullBoxes, typeDetail, hullClass, rows);
         }
 

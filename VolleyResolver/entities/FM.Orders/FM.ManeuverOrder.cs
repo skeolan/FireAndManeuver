@@ -6,14 +6,14 @@ namespace FireAndManeuver.GameEngine
     public class ManeuverOrder
     {
         [XmlAttribute("type")] public string maneuverType {get; set;}="Maintain";
-        [XmlAttribute("target")] public int targetID {get; set;}=0;
+        [XmlAttribute("target")] public string targetID {get; set;}="*";
         [XmlAttribute("priority")] public string priority {get; set;}="secondary";
 
         public ManeuverOrder(){}
 
         public override string ToString()
         {
-            string tgtStr = targetID==0 ? "Default" : "Target#"+targetID;
+            string tgtStr = targetID=="*" ? "Default" : "Target:"+targetID;
             string priStr = priority.ToLowerInvariant()=="primary" ? "(Primary)" : "";
             return $"{tgtStr}:{maneuverType}{priStr}";
         }

@@ -39,7 +39,7 @@ namespace VolleyResolver
             foreach (var u in unitSet)
             {
                 //Console.WriteLine("\n{0} : \"{1}\"", u.className, u.sourceFile);
-                generateUnitReadout(u).ForEach(l => Console.WriteLine(l));
+                UnitConsoleReadoutUtilities.generateUnitReadout(u).ForEach(l => Console.WriteLine(l));
             }
 
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
@@ -138,64 +138,7 @@ namespace VolleyResolver
 
             return success;
         }
-
-        private static List<string> generateUnitReadout(Unit myUnit)
-        {
-            var outputFormat = "* {0, -20} : {1, -73} *";
-            var collectionItemOutputFormat = "* {0, -20} > {1, -73} *";
-            var separator = $"* {string.Concat(Enumerable.Repeat("-", 96))} *";
-            var boundary = string.Concat(Enumerable.Repeat("*", 100));
-
-            List<string> readout = new List<string>();
-
-            readout.Add("");
-            readout.Add(boundary);
-            readout.Add(string.Format("* {0, -96} *", myUnit.ToString()));
-            readout.Add(separator);
-            readout.Add(String.Format(outputFormat, "Status", myUnit.status));
-            readout.Add(String.Format(outputFormat, "Armor", myUnit.armor.ToString()));
-            readout.Add(String.Format(outputFormat, "Hull", myUnit.hull.ToString()));
-            readout.Add(String.Format(outputFormat, "Crew", myUnit.crewQuality));
-            readout.Add(separator);
-            readout.Add(String.Format(outputFormat, "MainDrive", myUnit.mainDrive.ToString()));
-            readout.Add(String.Format(outputFormat, "FTLDrive", myUnit.ftlDrive.ToString()));
-            readout.Add(separator);
-            readout.AddRange(printSystemCollection("Electronics", myUnit.electronics, collectionItemOutputFormat));
-            readout.AddRange(printSystemCollection("Defenses", myUnit.defenses, collectionItemOutputFormat));
-            readout.AddRange(printSystemCollection("Holds", myUnit.holds, collectionItemOutputFormat));
-            readout.AddRange(printSystemCollection("Weapons", myUnit.weapons, collectionItemOutputFormat));
-            readout.Add(separator);
-            readout.Add(String.Format(outputFormat, "Orders", ""));
-            readout.Add(String.Format("* {0, -96} *", "     "+myUnit.Orders.ToString()));
-            readout.Add(separator);
-            readout.Add(String.Format("* {0, -96} *", myUnit.sourceFile));
-            readout.Add(boundary);
-
-            return readout;
-        }
-
-        private static List<string> printSystemCollection<T>(string collectionName, List<T> coll, string outputFormat)
-        {
-            List<string> outputLines = new List<string>();
-            switch (coll.Count)
-            {
-                case 0: { /* print nothing */ break; }
-                //case 1: { outputLines.Add(String.Format(outputFormat, collectionName, coll[0])); break; }
-                default:
-                    {
-                        //multiple entries needs a multi-line printout
-                        outputLines.Add(String.Format("* {0,-12}({1, 2}){2,-80} *", collectionName, coll.Count.ToString(), ""));
-                        foreach (var sys in coll)
-                        {
-                            outputLines.Add(String.Format(outputFormat, "", sys.ToString()));
-                        }
-                        break;
-                    }
-            }
-
-            return outputLines;
-        }
-    }
+}
 
     public class FileInfoFullNameComparer : IEqualityComparer<FileInfo>
     {
