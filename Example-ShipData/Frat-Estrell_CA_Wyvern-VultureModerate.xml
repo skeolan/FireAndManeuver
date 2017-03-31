@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes" ?>
-<Ship id="1">
+<Ship id="2">
 	<Name>Vulture</Name>
 	<IconFamily value="Generic\Echo"/>
 	<Status>Moderate</Status>

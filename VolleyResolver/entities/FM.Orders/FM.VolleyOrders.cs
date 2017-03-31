@@ -4,9 +4,10 @@ using System.Xml.Serialization;
 
 namespace FireAndManeuver.GameEngine
 {
-    [XmlRoot("FM.Orders")]
-    public class Orders
+    [XmlRoot("FM.VolleyOrders")]
+    public class VolleyOrders
     {
+        [XmlAttribute] public int volley {get; set;}=0;
         [XmlElement("FM.Speed")] public int Speed { get; set; }
         [XmlElement("FM.Evasion")] public int Evasion { get; set; }
 
@@ -25,7 +26,7 @@ namespace FireAndManeuver.GameEngine
                 if (_maneuvers == null || _maneuvers.Count == 0)
                     _maneuvers = new List<ManeuverOrder>() { new ManeuverOrder() };
 
-                return _maneuvers.OrderBy(x => x.priority.ToLowerInvariant() != "primary").ToList();
+                return _maneuvers.OrderBy(x => x.Priority.ToLowerInvariant() != "primary").ToList();
             }
             set
             {
@@ -43,7 +44,7 @@ namespace FireAndManeuver.GameEngine
             }
         }
 
-        public Orders()
+        public VolleyOrders()
         {
             Speed = 0;
             Evasion = 0;

@@ -71,8 +71,9 @@ namespace FireAndManeuver.GameEngine
         [XmlArrayItem("AntiMatterTorpedoLauncher", Type = typeof(AntiMatterTorpedoLauncherSystem))]
         public List<WeaponSystem> weapons { get; set; }
 
-        [XmlElement("FM.Orders")]
-        public Orders Orders { get; set; } = new Orders();
+        [XmlArray("FM.Orders")]
+        [XmlArrayItem("FM.VolleyOrders", Type=typeof(VolleyOrders))]
+        public List<VolleyOrders> Orders { get; set; } = new List<VolleyOrders>();
 
         public Unit()
         {
