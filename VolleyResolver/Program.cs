@@ -10,6 +10,8 @@ namespace VolleyResolver
 {
     public class Program
     {
+        private const string _DefaultXML = ".\\DefaultUnit.xml";
+
         public static void Main(string[] args)
         {
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
@@ -73,9 +75,8 @@ namespace VolleyResolver
             Console.WriteLine("{0} args, {1} files, {2} dirs", args.Length, fileSet.Length, dirSet.Length);
             if (args.Length + fileSet.Length + dirSet.Length == 0)
             {
-                var defaultXML = ".\\Example-ShipData\\UNSC_DD_Lake-UNS_Nam_Lolwe.xml";
-                Console.WriteLine("Defaulting to {0}", defaultXML);
-                args = new string[] { defaultXML };
+                Console.WriteLine("Defaulting to {0}", _DefaultXML);
+                args = new string[] { _DefaultXML };
             }
 
             //Add ship files from commandline arguments and config
