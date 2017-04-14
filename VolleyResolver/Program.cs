@@ -53,13 +53,18 @@ namespace VolleyResolver
 
             //... load them all up
             foreach (var x in unitXMLFiles)
-            {
+            {   
+                try {
                 var newU = Unit.loadNewUnit(x.FullName);
                 if (newU != null)
                 {
                     unitSet.Add(newU);
                     string unitInfoShortForm = newU.ToString();
                     Debug.WriteLine("\n{0}\n     -- added from {1,30}", unitInfoShortForm, x.FullName);
+                }
+                }
+                catch (NullReferenceException ex) {
+                    Debug.WriteLine($"Unable to load {x.FullName} -- {ex.Message}");
                 }
             }
 

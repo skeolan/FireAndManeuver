@@ -8,6 +8,8 @@ namespace VolleyResolver
     public static class UnitConsoleReadoutUtilities
     {
 
+        const bool SUPPRESS_TITLE_LINE_FOR_HULLMATRIX=true;
+
         public static List<string> generateUnitReadout(Unit myUnit, List<Unit> allUnits = null)
         {
             var outputFormat = "* {0, -20} : {1, -73} *";
@@ -24,6 +26,7 @@ namespace VolleyResolver
             readout.Add(String.Format(outputFormat, "Status", myUnit.status));
             readout.Add(String.Format(outputFormat, "Armor", myUnit.armor.ToString()));
             readout.Add(String.Format(outputFormat, "Hull", myUnit.hull.ToString()));
+            readout.AddRange(printReadoutCollection("Hull", myUnit.hull.HullDisplay(), collectionItemOutputFormat, SUPPRESS_TITLE_LINE_FOR_HULLMATRIX));
             readout.Add(String.Format(outputFormat, "Crew", myUnit.crewQuality));
             readout.Add(separator);
             readout.Add(String.Format(outputFormat, "MainDrive", myUnit.mainDrive.ToString()));
@@ -49,7 +52,7 @@ namespace VolleyResolver
             return readout;
         }
 
-        private static List<string> printReadoutCollection<T>(string collectionName, List<T> coll, string outputFormat)
+        private static List<string> printReadoutCollection<T>(string collectionName, List<T> coll, string outputFormat, bool suppressTitleLine=false)
         {
             List<string> outputLines = new List<string>();
             switch (coll.Count)
@@ -59,7 +62,7 @@ namespace VolleyResolver
                 default:
                     {
                         //multiple entries needs a multi-line printout
-                        outputLines.Add(String.Format("* {0,-16}({1, 2}){2,-76} *", collectionName, coll.Count.ToString(), ""));
+                        if(!suppressTitleLine) outputLines.Add(String.Format("* {0,-16}({1, 2}){2,-76} *", collectionName, coll.Count.ToString(), ""));
                         foreach (var sys in coll)
                         {
                             outputLines.Add(String.Format(outputFormat, "", sys.ToString()));

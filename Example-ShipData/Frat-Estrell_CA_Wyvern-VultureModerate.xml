@@ -21,7 +21,7 @@
 	<MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
 	<FTLDrive id="4" status="Operational" active="false"/>
 	<Armor totalArmor="0" remainingArmor="0"/>
-	<Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="18"/>
+	<Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="16"/>
 	<Electronics>
 		<FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
 		<FireControl id="6" xSSD="90" ySSD="180" status="Damaged"/>

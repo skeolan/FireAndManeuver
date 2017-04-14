@@ -137,7 +137,9 @@ namespace FireAndManeuver.GameEngine
             //allSystems.Where( x => x.id != -1).Max( x => x.id);
             //int nextID = systemIDsTaken.LastOrDefault()+1;
 
-            int nextID = Math.Max(allSystems.Max( x => x.id), 0) +1;
+            
+            int nextID = 1;
+            if(allSystems.Count > 0) nextID = Math.Max(allSystems.Max( x => x.id), 0) +1;
             allSystems.Where(x => x.id == -1).ToList().ForEach( x => x.id = nextID++);
             
             return myNewUnit;
