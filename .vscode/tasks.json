@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}\\VolleyResolver\\project.json"
+                "${workspaceRoot}\\VolleyResolver\\VolleyResolver.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
