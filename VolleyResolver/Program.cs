@@ -14,6 +14,8 @@ namespace VolleyResolver
 
         public static void Main(string[] args)
         {
+
+            
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
             {
                 //Print help
@@ -41,10 +43,27 @@ namespace VolleyResolver
             foreach (var u in unitSet)
             {
                 //Console.WriteLine("\n{0} : \"{1}\"", u.className, u.sourceFile);
-                UnitConsoleReadoutUtilities.generateUnitReadout(u, unitSet).ForEach(l => Console.WriteLine(l));
+                //UnitConsoleReadoutUtilities.generateUnitReadout(u, unitSet).ForEach(l => Console.WriteLine(l));
             }
 
+            GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\Scenario1_Frat_Attack_2player.xml");
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
+
+            Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
+            Console.WriteLine("* Briefing *".PadRight(100, '*'));
+            foreach (string BriefingLine in UnitConsoleReadoutUtilities.WrapDecorated(ge.Briefing, 100, "* ", " *"))
+            {
+                Console.WriteLine(BriefingLine);
+            }
+            Console.WriteLine("".PadRight(100, '*'));
+            Console.WriteLine("");
+            Console.WriteLine("* Players *".PadRight(100, '*'));
+            foreach (GameEnginePlayer p in ge.Players)
+            {
+                Console.WriteLine($"* {p.id} -- {p.team.PadRight(16)} -- {p.name.PadRight(20)} -- {p.email.PadRight(20)} -- {p.Objectives.PadRight(23).Substring(0,23)} *");
+            }
+            Console.WriteLine("".PadRight(100, '*'));
+            
         }
 
         private static List<Unit> LoadDesignXML(HashSet<FileInfo> unitXMLFiles)

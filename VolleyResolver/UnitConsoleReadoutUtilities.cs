@@ -2,13 +2,14 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using FireAndManeuver.GameEngine;
+using System.Text.RegularExpressions;
 
 namespace VolleyResolver
 {
     public static class UnitConsoleReadoutUtilities
     {
 
-        const bool SUPPRESS_TITLE_LINE_FOR_HULLMATRIX=true;
+        const bool SUPPRESS_TITLE_LINE_FOR_HULLMATRIX = true;
 
         public static List<string> generateUnitReadout(Unit myUnit, List<Unit> allUnits = null)
         {
@@ -52,7 +53,7 @@ namespace VolleyResolver
             return readout;
         }
 
-        private static List<string> printReadoutCollection<T>(string collectionName, List<T> coll, string outputFormat, bool suppressTitleLine=false)
+        private static List<string> printReadoutCollection<T>(string collectionName, List<T> coll, string outputFormat, bool suppressTitleLine = false)
         {
             List<string> outputLines = new List<string>();
             switch (coll.Count)
@@ -62,7 +63,7 @@ namespace VolleyResolver
                 default:
                     {
                         //multiple entries needs a multi-line printout
-                        if(!suppressTitleLine) outputLines.Add(String.Format("* {0,-16}({1, 2}){2,-76} *", collectionName, coll.Count.ToString(), ""));
+                        if (!suppressTitleLine) outputLines.Add(String.Format("* {0,-16}({1, 2}){2,-76} *", collectionName, coll.Count.ToString(), ""));
                         foreach (var sys in coll)
                         {
                             outputLines.Add(String.Format(outputFormat, "", sys.ToString()));
@@ -112,6 +113,32 @@ namespace VolleyResolver
             }
 
             return output;
+        }
+
+        public static List<string> WrapDecorated(string text, int margin, string prefix, string suffix)
+        {
+            int start = 0, end;
+            var lines = new List<string>();
+            text = Regex.Replace(text, @"\s", " ").Trim();
+
+            margin = margin - prefix.Length - suffix.Length;
+
+            while ((end = start + margin) < text.Length)
+            {
+                while (text[end] != ' ' && end > start)
+                    end -= 1;
+
+                if (end == start)
+                    end = start + margin;
+
+                lines.Add(prefix + text.Substring(start, end - start).PadRight(margin) + suffix);
+                start = end + 1;
+            }
+
+            if (start < text.Length)
+                lines.Add(prefix + text.Substring(start).PadRight(margin) + suffix);
+
+            return lines;
         }
     }
 }

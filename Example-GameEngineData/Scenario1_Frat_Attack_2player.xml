@@ -1,0 +1,241 @@
+<?xml version="1.0" standalone="yes" ?>
+<GameEngine id="-1" name="Estrell Academy Duel - Frat Attack" turn="0">
+    <!-- Insert Game Options Here -->
+    <Briefing>The Friday night Estrell Naval Academy Duels in the SIMONA simulation system has been a popular way for cadets and instructors to spar against each other after a long week of classes. In this match, the Alpha Kappa Rho and Kappa Delta Psi fraternities have challenged each other to an even single-squardon fight.  The loser buys the beer!</Briefing>
+    <Player id="1" name="Alice Alicesdottir" email="alice@estrell.edu" team="Alpha Kappa Rho">
+        <Objectives>Win no matter what</Objectives>
+        <Ship id="1">
+            <Name>Vulture</Name>
+            <Status>Ok</Status>
+            <Orders></Orders>
+            <Position x="0.0" y="15.0"/>
+            <Heading heading="3"/>
+            <Speed speed="6"/>
+            <Course course="3.0"/>
+            <VectorSpeed speed="6.0"/>
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Wyvern</ClassName>
+            <IconFamily value="Generic\Echo" />
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive initialThrust="6"/>
+            <FTLDrive/>
+            <Armor totalArmor="0"/>
+            <Hull value="80" type="Average"/>
+            <Electronics>
+                <FireControl xSSD="70" ySSD="180"/>
+                <FireControl xSSD="90" ySSD="180"/>
+            </Electronics>
+            <Defenses>
+                <Screen xSSD="80" ySSD="160"/>
+            </Defenses>
+            <Weapons>
+                <BeamBattery xSSD="60" ySSD="50" rating="3" arcs="(FP/F)"/>
+                <BeamBattery xSSD="100" ySSD="50" rating="3" arcs="(F/FS)"/>
+                <BeamBattery xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)"/>
+                <BeamBattery xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)"/>
+                <BeamBattery xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)"/>
+                <PointDefense xSSD="60" ySSD="140" />
+                <PointDefense xSSD="100" ySSD="140" />
+            </Weapons>
+        </Ship>
+        <Ship id="2">
+            <Name>Vampire</Name>
+            <Status>Ok</Status>
+            <Orders></Orders>
+            <Position x="-5.0" y="23.0"/>
+            <Heading heading="3"/>
+            <Speed speed="6"/>
+            <Course course="3.0"/>
+            <VectorSpeed speed="6.0"/>
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Rhino</ClassName>
+            <IconFamily value="Generic\Echo" />
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive initialThrust="6"/>
+            <FTLDrive/>
+            <Armor totalArmor="0"/>
+            <Hull value="80" type="Average"/>
+            <Electronics>
+                <FireControl xSSD="70" ySSD="180"/>
+                <FireControl xSSD="90" ySSD="180"/>
+            </Electronics>
+            <Defenses>
+                <Screen xSSD="80" ySSD="160"/>
+            </Defenses>
+            <Weapons>
+                <PulseTorpedo xSSD="80" ySSD="40" arcs="(FP/F/FS)"/>
+                <BeamBattery xSSD="80" ySSD="90" rating="2" arcs="(FP/F/FS)"/>
+                <BeamBattery xSSD="40" ySSD="90" rating="2" arcs="(AP/FP/F)"/>
+                <BeamBattery xSSD="20" ySSD="120" rating="2" arcs="(AP/FP/F)"/>
+                <BeamBattery xSSD="120" ySSD="90" rating="2" arcs="(F/FS/AS)"/>
+                <BeamBattery xSSD="140" ySSD="120" rating="2" arcs="(F/FS/AS)"/>
+                <PointDefense xSSD="60" ySSD="140" />
+                <PointDefense xSSD="100" ySSD="140" />
+            </Weapons>
+        </Ship>
+        <Ship id="3">
+            <Name>Vixen</Name>
+            <Status>Ok</Status>
+            <Orders></Orders>
+            <Position x="-5.0" y="7.0"/>
+            <Heading heading="3"/>
+            <Speed speed="6"/>
+            <Course course="3.0"/>
+            <VectorSpeed speed="6.0"/>
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Scorpion</ClassName>
+            <IconFamily value="Generic\Echo" />
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive initialThrust="6"/>
+            <FTLDrive/>
+            <Armor totalArmor="0"/>
+            <Hull value="80" type="Average"/>
+            <Electronics>
+                <FireControl xSSD="70" ySSD="180"/>
+                <FireControl xSSD="90" ySSD="180"/>
+            </Electronics>
+            <Defenses>
+                <Screen xSSD="80" ySSD="160"/>
+            </Defenses>
+            <Weapons>
+                <BeamBattery xSSD="60" ySSD="100" rating="3" arcs="(FP/F)"/>
+                <BeamBattery xSSD="100" ySSD="100" rating="3" arcs="(F/FS)"/>
+                <SubmunitionPack xSSD="80" ySSD="20" />
+                <SubmunitionPack xSSD="40" ySSD="20" />
+                <SubmunitionPack xSSD="120" ySSD="20" />
+                <SubmunitionPack xSSD="80" ySSD="60" />
+                <SubmunitionPack xSSD="40" ySSD="60" />
+                <SubmunitionPack xSSD="120" ySSD="60" />
+                <PointDefense xSSD="60" ySSD="135" />
+                <PointDefense xSSD="100" ySSD="135" />
+            </Weapons>
+        </Ship>
+    </Player>
+    <Player id="2" name="Bob Bobsson" email="bob@estrell.edu" team="Kappa Delta Psi">
+        <Objectives>For teh free beerz!!!1!11one</Objectives>
+        <Ship id="4">
+            <Name>Brazen</Name>
+            <Status>Ok</Status>
+            <Orders></Orders>
+            <Position x="60.0" y="25.0"/>
+            <Heading heading="9"/>
+            <Speed speed="6"/>
+            <Course course="9.0"/>
+            <VectorSpeed speed="6.0"/>
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Wyvern</ClassName>
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <IconFamily value="Generic\Alpha" />
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive initialThrust="6"/>
+            <FTLDrive/>
+            <Armor totalArmor="0"/>
+            <Hull value="80" type="Average"/>
+            <Electronics>
+                <FireControl xSSD="70" ySSD="180"/>
+                <FireControl xSSD="90" ySSD="180"/>
+            </Electronics>
+            <Defenses>
+                <Screen xSSD="80" ySSD="160"/>
+            </Defenses>
+            <Weapons>
+                <BeamBattery xSSD="60" ySSD="50" rating="3" arcs="(FP/F)"/>
+                <BeamBattery xSSD="100" ySSD="50" rating="3" arcs="(F/FS)"/>
+                <BeamBattery xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)"/>
+                <BeamBattery xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)"/>
+                <BeamBattery xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)"/>
+                <PointDefense xSSD="60" ySSD="140" />
+                <PointDefense xSSD="100" ySSD="140" />
+            </Weapons>
+        </Ship>
+        <Ship id="5">
+            <Name>Broadsword</Name>
+            <Status>Ok</Status>
+            <Orders></Orders>
+            <Position x="65.0" y="33.0"/>
+            <Heading heading="9"/>
+            <Speed speed="6"/>
+            <Course course="9.0"/>
+            <VectorSpeed speed="6.0"/>
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Rhino</ClassName>
+            <IconFamily value="Generic\Alpha" />
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive initialThrust="6"/>
+            <FTLDrive/>
+            <Armor totalArmor="0"/>
+            <Hull value="80" type="Average"/>
+            <Electronics>
+                <FireControl xSSD="70" ySSD="180"/>
+                <FireControl xSSD="90" ySSD="180"/>
+            </Electronics>
+            <Defenses>
+                <Screen xSSD="80" ySSD="160"/>
+            </Defenses>
+            <Weapons>
+                <PulseTorpedo xSSD="80" ySSD="40" arcs="(FP/F/FS)"/>
+                <BeamBattery xSSD="80" ySSD="90" rating="2" arcs="(FP/F/FS)"/>
+                <BeamBattery xSSD="40" ySSD="90" rating="2" arcs="(AP/FP/F)"/>
+                <BeamBattery xSSD="20" ySSD="120" rating="2" arcs="(AP/FP/F)"/>
+                <BeamBattery xSSD="120" ySSD="90" rating="2" arcs="(F/FS/AS)"/>
+                <BeamBattery xSSD="140" ySSD="120" rating="2" arcs="(F/FS/AS)"/>
+                <PointDefense xSSD="60" ySSD="140" />
+                <PointDefense xSSD="100" ySSD="140" />
+            </Weapons>
+        </Ship>
+        <Ship id="6">
+            <Name>Bar Maid</Name>
+            <Status>Ok</Status>
+            <Orders></Orders>
+            <Position x="65.0" y="17.0"/>
+            <Heading heading="9"/>
+            <Speed speed="6"/>
+            <Course course="9.0"/>
+            <VectorSpeed speed="6.0"/>
+            <Race>Estrell Empire</Race>
+            <ClassAbbrev>CA</ClassAbbrev>
+            <ClassName>Scorpion</ClassName>
+            <IconFamily value="Generic\Alpha" />
+            <ShipClass>Heavy Cruiser</ShipClass>
+            <Mass>80</Mass>
+            <PointValue>266</PointValue>
+            <MainDrive initialThrust="6"/>
+            <FTLDrive/>
+            <Armor totalArmor="0"/>
+            <Hull value="80" type="Average"/>
+            <Electronics>
+                <FireControl xSSD="70" ySSD="180"/>
+                <FireControl xSSD="90" ySSD="180"/>
+            </Electronics>
+            <Defenses>
+                <Screen xSSD="80" ySSD="160"/>
+            </Defenses>
+            <Weapons>
+                <BeamBattery xSSD="60" ySSD="100" rating="3" arcs="(FP/F)"/>
+                <BeamBattery xSSD="100" ySSD="100" rating="3" arcs="(F/FS)"/>
+                <SubmunitionPack xSSD="80" ySSD="20" />
+                <SubmunitionPack xSSD="40" ySSD="20" />
+                <SubmunitionPack xSSD="120" ySSD="20" />
+                <SubmunitionPack xSSD="80" ySSD="60" />
+                <SubmunitionPack xSSD="40" ySSD="60" />
+                <SubmunitionPack xSSD="120" ySSD="60" />
+                <PointDefense xSSD="60" ySSD="135" />
+                <PointDefense xSSD="100" ySSD="135" />
+            </Weapons>
+        </Ship>
+    </Player>
+</GameEngine>

@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="GameEngine">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Briefing" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+        <xs:element name="Player" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Objectives" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+              <xs:element name="Ship" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Name" type="xs:string" minOccurs="0" msdata:Ordinal="0" />
+                    <xs:element name="Status" type="xs:string" minOccurs="0" msdata:Ordinal="1" />
+                    <xs:element name="Orders" type="xs:string" minOccurs="0" msdata:Ordinal="2" />
+                    <xs:element name="Race" type="xs:string" minOccurs="0" msdata:Ordinal="4" />
+                    <xs:element name="ClassAbbrev" type="xs:string" minOccurs="0" msdata:Ordinal="5" />
+                    <xs:element name="ClassName" type="xs:string" minOccurs="0" msdata:Ordinal="6" />
+                    <xs:element name="ShipClass" type="xs:string" minOccurs="0" msdata:Ordinal="7" />
+                    <xs:element name="Mass" type="xs:string" minOccurs="0" msdata:Ordinal="8" />
+                    <xs:element name="PointValue" type="xs:string" minOccurs="0" msdata:Ordinal="9" />
+                    <xs:element name="FTLDrive" type="xs:string" minOccurs="0" msdata:Ordinal="10" />
+                    <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="x" type="xs:string" />
+                        <xs:attribute name="y" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Heading" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="heading" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Speed" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="speed" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Course" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="course" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="VectorSpeed" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="speed" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="IconFamily" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="value" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="MainDrive" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="initialThrust" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Armor" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="totalArmor" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Hull" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="value" type="xs:string" />
+                        <xs:attribute name="type" type="xs:string" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Electronics" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="FireControl" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="xSSD" type="xs:string" />
+                              <xs:attribute name="ySSD" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Defenses" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Screen" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="xSSD" type="xs:string" />
+                              <xs:attribute name="ySSD" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Weapons" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="PulseTorpedo" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="xSSD" type="xs:string" />
+                              <xs:attribute name="ySSD" type="xs:string" />
+                              <xs:attribute name="arcs" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="BeamBattery" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="xSSD" type="xs:string" />
+                              <xs:attribute name="ySSD" type="xs:string" />
+                              <xs:attribute name="rating" type="xs:string" />
+                              <xs:attribute name="arcs" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="SubmunitionPack" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="xSSD" type="xs:string" />
+                              <xs:attribute name="ySSD" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="PointDefense" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="xSSD" type="xs:string" />
+                              <xs:attribute name="ySSD" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" />
+            <xs:attribute name="name" type="xs:string" />
+            <xs:attribute name="email" type="xs:string" />
+            <xs:attribute name="team" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" type="xs:string" />
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="turn" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="GameEngine" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
