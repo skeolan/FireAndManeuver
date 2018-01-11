@@ -53,6 +53,66 @@ namespace VolleyResolver
             return readout;
         }
 
+        internal static List<string> generateGameEngineReadout(GameEngine ge)
+        {
+            List<string> readout = new List<string>();
+            var allUnits = new List<Unit>();
+
+            const int READOUT_WIDTH = 100;
+
+            readout.Add(" BEGIN READOUT ".PadLeft((READOUT_WIDTH + " BEGIN READOUT ".Length) / 2, '^').PadRight(READOUT_WIDTH, '^'));
+            readout.Add("");
+
+            //Briefing block
+            readout.Add("* Briefing *".PadRight(READOUT_WIDTH, '*'));
+            foreach (string BriefingLine in WrapDecorated(ge.Briefing, READOUT_WIDTH, "* ", " *"))
+            {
+                readout.Add(BriefingLine);
+            }
+            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add("");
+
+            //Player block
+            readout.Add("* Players *".PadRight(READOUT_WIDTH, '*'));
+            foreach (var p in ge.Players)
+            {
+                readout.Add($"* {p.id} -- {p.team.PadRight(16)} -- {p.name.PadRight(20)} -- {p.email.PadRight(20)} -- {p.Objectives.PadRight(23).Substring(0, 23)} *");
+            }
+            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add("");
+
+            //Units summary block
+            foreach (var p in ge.Players)
+            {
+                readout.Add($"* Player [{p.id}]{p.name} Units ({p.Units.Length}):  *".PadRight(READOUT_WIDTH, '*'));
+                foreach (var u in p.Units)
+                {
+                    readout.AddRange(WrapDecorated(u.ToString(), READOUT_WIDTH, "*   -", " *"));
+                    readout.AddRange(WrapDecorated($"Status - {u.status}", READOUT_WIDTH, "*      -", " *"));
+                    allUnits.Add(u);
+                }
+                readout.Add("".PadRight(READOUT_WIDTH, '*'));
+                readout.Add("");
+            }
+
+            //Unit detail blocks
+            foreach (var p in ge.Players)
+            {
+                foreach (var u in p.Units)
+                {
+                    readout.Add($"* Player [{p.id}]{p.name} Unit Detail:  *".PadRight(READOUT_WIDTH, '*'));
+                    var unitReadout = generateUnitReadout(u, allUnits);
+                    readout.AddRange(unitReadout);
+                    readout.Add("".PadRight(READOUT_WIDTH, '*'));
+                    readout.Add("");
+                }
+            }
+
+            readout.Add(" END READOUT ".PadLeft((READOUT_WIDTH + " END READOUT ".Length) / 2, '^').PadRight(READOUT_WIDTH, '^'));
+
+            return readout;
+        }
+
         private static List<string> printReadoutCollection<T>(string collectionName, List<T> coll, string outputFormat, bool suppressTitleLine = false)
         {
             List<string> outputLines = new List<string>();

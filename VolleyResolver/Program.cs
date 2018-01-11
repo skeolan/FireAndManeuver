@@ -46,23 +46,12 @@ namespace VolleyResolver
                 //UnitConsoleReadoutUtilities.generateUnitReadout(u, unitSet).ForEach(l => Console.WriteLine(l));
             }
 
-            GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\Scenario1_Frat_Attack_2player.xml");
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
-
+            
+            GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\Scenario1_Frat_Attack_2player.xml");
             Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
-            Console.WriteLine("* Briefing *".PadRight(100, '*'));
-            foreach (string BriefingLine in UnitConsoleReadoutUtilities.WrapDecorated(ge.Briefing, 100, "* ", " *"))
-            {
-                Console.WriteLine(BriefingLine);
-            }
-            Console.WriteLine("".PadRight(100, '*'));
             Console.WriteLine("");
-            Console.WriteLine("* Players *".PadRight(100, '*'));
-            foreach (GameEnginePlayer p in ge.Players)
-            {
-                Console.WriteLine($"* {p.id} -- {p.team.PadRight(16)} -- {p.name.PadRight(20)} -- {p.email.PadRight(20)} -- {p.Objectives.PadRight(23).Substring(0,23)} *");
-            }
-            Console.WriteLine("".PadRight(100, '*'));
+            UnitConsoleReadoutUtilities.generateGameEngineReadout(ge).ForEach( l => Console.WriteLine(l));
             
         }
 

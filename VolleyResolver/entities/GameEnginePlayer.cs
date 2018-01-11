@@ -17,8 +17,9 @@ namespace FireAndManeuver.GameEngine
         public string email {get; set;}
         [XmlAttribute()]
         public string team {get; set;}
-        
         public string Objectives {get; set;}
+        [XmlElement("Ship")]
+        public Unit[] Units { get; set; }
 
     }
 }
