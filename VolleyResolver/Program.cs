@@ -48,7 +48,8 @@ namespace VolleyResolver
 
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
             
-            GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\Scenario1_Frat_Attack_2player.xml");
+            //GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\Scenario1_Frat_Attack_2player.xml");
+            GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml");
             Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
             Console.WriteLine("");
             UnitConsoleReadoutUtilities.generateGameEngineReadout(ge).ForEach( l => Console.WriteLine(l));

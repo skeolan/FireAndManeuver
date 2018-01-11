@@ -76,7 +76,8 @@ namespace VolleyResolver
             readout.Add("* Players *".PadRight(READOUT_WIDTH, '*'));
             foreach (var p in ge.Players)
             {
-                readout.Add($"* {p.id} -- {p.team.PadRight(16)} -- {p.name.PadRight(20)} -- {p.email.PadRight(20)} -- {p.Objectives.PadRight(23).Substring(0, 23)} *");
+                var pNameString = p.key <= 0 ? p.name : ($"{p.name} [{p.key}]");
+                readout.Add($"* {p.id} -- {p.team.PadRight(16)} -- {pNameString.PadRight(20)} -- {p.email.PadRight(20).Substring(0,20)} -- {p.Objectives.PadRight(23).Substring(0, 23)} *");
             }
             readout.Add("".PadRight(READOUT_WIDTH, '*'));
             readout.Add("");

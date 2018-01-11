@@ -10,14 +10,16 @@ namespace FireAndManeuver.GameEngine
     public class GameEnginePlayer
     {
         [XmlAttribute()]
-        public string id {get; set;}
+        public string id {get; set;} = "-1";
         [XmlAttribute()]
-        public string name {get; set;}
+        public string name {get; set;} = "Anonymous Coward";
         [XmlAttribute()]
-        public string email {get; set;}
+        public string email {get; set;} = "none@tempuri.org";
         [XmlAttribute()]
-        public string team {get; set;}
-        public string Objectives {get; set;}
+        public string team {get; set;} = "none";
+        [XmlAttribute()]
+        public int key {get; set;} = -1;
+        public string Objectives {get; set;} = "";
         [XmlElement("Ship")]
         public Unit[] Units { get; set; }
 
