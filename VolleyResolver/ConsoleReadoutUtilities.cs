@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace VolleyResolver
 {
-    public static class UnitConsoleReadoutUtilities
+    public static class ConsoleReadoutUtilities
     {
 
         const bool SUPPRESS_TITLE_LINE_FOR_HULLMATRIX = true;
@@ -58,17 +58,25 @@ namespace VolleyResolver
             List<string> readout = new List<string>();
             var allUnits = new List<Unit>();
 
-            const int READOUT_WIDTH = 100;
+            const int READOUT_WIDTH = 140;
 
             readout.Add(" BEGIN READOUT ".PadLeft((READOUT_WIDTH + " BEGIN READOUT ".Length) / 2, '^').PadRight(READOUT_WIDTH, '^'));
+            readout.Add("");
+            //Game Engine header block
+            readout.Add("* Game Info *".PadRight(READOUT_WIDTH, '*'));
+            readout.Add("* " + $"Game [{ge.id}] Exchange {ge.exchange} / Volley {ge.volley} -- Combat:{ge.combat}".PadRight(READOUT_WIDTH-4) + " *");
+            readout.Add("".PadRight(READOUT_WIDTH, '*'));
             readout.Add("");
 
             //Briefing block
             readout.Add("* Briefing *".PadRight(READOUT_WIDTH, '*'));
-            foreach (string BriefingLine in WrapDecorated(ge.Briefing, READOUT_WIDTH, "* ", " *"))
-            {
-                readout.Add(BriefingLine);
-            }
+            readout.AddRange(WrapDecorated(ge.Briefing, READOUT_WIDTH, "* ", " *"));
+            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add("");
+
+            //Report block
+            readout.Add("* Report *".PadRight(READOUT_WIDTH, '*'));
+            readout.AddRange(WrapDecorated(String.IsNullOrEmpty(ge.Report) ? "..." : ge.Report, READOUT_WIDTH, "* ", " *"));
             readout.Add("".PadRight(READOUT_WIDTH, '*'));
             readout.Add("");
 
@@ -77,7 +85,10 @@ namespace VolleyResolver
             foreach (var p in ge.Players)
             {
                 var pNameString = p.key <= 0 ? p.name : ($"{p.name} [{p.key}]");
-                readout.Add($"* {p.id} -- {p.team.PadRight(16)} -- {pNameString.PadRight(20)} -- {p.email.PadRight(20).Substring(0,20)} -- {p.Objectives.PadRight(23).Substring(0, 23)} *");
+                var fixedString = $"* {p.id} -- {p.team.PadRight(16)} -- {pNameString.PadRight(20)} -- {p.email.PadRight(20).Substring(0,20)} -- ";
+                var objLength = READOUT_WIDTH - fixedString.Length - 2;
+                var playerLine = fixedString + p.Objectives.PadRight(objLength).Substring(0, objLength) + " *";
+                readout.Add(playerLine);
             }
             readout.Add("".PadRight(READOUT_WIDTH, '*'));
             readout.Add("");
@@ -101,9 +112,10 @@ namespace VolleyResolver
             {
                 foreach (var u in p.Units)
                 {
-                    readout.Add($"* Player [{p.id}]{p.name} Unit Detail:  *".PadRight(READOUT_WIDTH, '*'));
-                    var unitReadout = generateUnitReadout(u, allUnits);
-                    readout.AddRange(unitReadout);
+                    readout.Add($"* Player [{p.id}]{p.name} Unit Detail: *".PadRight(READOUT_WIDTH, '*'));
+                    readout.Add($"* <{u.ToString().PadRight(READOUT_WIDTH-6)}> *");
+                    //var unitReadout = generateUnitReadout(u, allUnits);
+                    //readout.AddRange(unitReadout);
                     readout.Add("".PadRight(READOUT_WIDTH, '*'));
                     readout.Add("");
                 }

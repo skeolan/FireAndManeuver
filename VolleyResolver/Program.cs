@@ -43,7 +43,7 @@ namespace VolleyResolver
             foreach (var u in unitSet)
             {
                 //Console.WriteLine("\n{0} : \"{1}\"", u.className, u.sourceFile);
-                //UnitConsoleReadoutUtilities.generateUnitReadout(u, unitSet).ForEach(l => Console.WriteLine(l));
+                //ConsoleReadoutUtilities.generateUnitReadout(u, unitSet).ForEach(l => Console.WriteLine(l));
             }
 
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
@@ -52,7 +52,7 @@ namespace VolleyResolver
             GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml");
             Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
             Console.WriteLine("");
-            UnitConsoleReadoutUtilities.generateGameEngineReadout(ge).ForEach( l => Console.WriteLine(l));
+            ConsoleReadoutUtilities.generateGameEngineReadout(ge).ForEach( l => Console.WriteLine(l));
             
         }
 
