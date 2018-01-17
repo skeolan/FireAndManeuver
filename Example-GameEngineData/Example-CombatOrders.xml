@@ -1,0 +1,77 @@
+<?xml version="1.0" standalone="yes" ?>
+<GameEngine id="211" name="Human Practice Game" turn="13" combat="true">
+    <PlayerOrders id="1" name="[Seaman] anonymous coward -- virtutis.umbra@gmail.com" email="virtutis.umbra@gmail.com" compress="false" team="Human" key="415235">
+        <ShipOrders id="1100">
+            <Electronics>
+                    <FireControl id="5" xSSD="120" ySSD="170" targetId="2001" slavedWeapons="13" status="Operational"/>
+                    <FireControl id="6" xSSD="160" ySSD="170" targetId="2004" slavedWeapons="15,14" status="Operational"/>
+            </Electronics>
+            <Weapons>
+                    <PointDefense id="16" xSSD="90" ySSD="130" targetId="0" status="Operational"/>
+                    <PointDefense id="17" xSSD="120" ySSD="120" targetId="0" status="Operational"/>
+                    <PointDefense id="18" xSSD="160" ySSD="120" targetId="0" status="Operational"/>
+                    <PointDefense id="19" xSSD="190" ySSD="130" targetId="0" status="Operational"/>
+            </Weapons>
+        </ShipOrders>
+        <ShipOrders id="1011">
+            <Electronics>
+                    <FireControl id="5" xSSD="120" ySSD="175" targetId="2001" slavedWeapons="15,11,13,14" status="Operational"/>
+                    <FireControl id="6" xSSD="140" ySSD="175" status="Operational"/>
+                    <FireControl id="7" xSSD="160" ySSD="175" status="Operational"/>
+            </Electronics>
+            <Weapons>
+                    <PointDefense id="16" xSSD="80" ySSD="160" targetId="0" status="Operational"/>
+                    <PointDefense id="17" xSSD="200" ySSD="160" targetId="0" status="Operational"/>
+                    <PointDefense id="18" xSSD="40" ySSD="160" targetId="0" status="Operational"/>
+            </Weapons>
+        </ShipOrders>
+        <ShipOrders id="1027">
+            <Electronics>
+                    <FireControl id="5" xSSD="80" ySSD="185" targetId="2001" slavedWeapons="5" status="Operational"/>
+                    <FireControl id="6" xSSD="120" ySSD="185" targetId="2004" slavedWeapons="17,19,16,21" status="Operational"/>
+            </Electronics>
+            <Weapons>
+                    <PointDefense id="6" xSSD="70" ySSD="165" targetId="0" status="Operational"/>
+                    <PointDefense id="7" xSSD="100" ySSD="165" targetId="0" status="Operational"/>
+                    <PointDefense id="8" xSSD="130" ySSD="165" targetId="0" status="Operational"/>
+            </Weapons>
+        </ShipOrders>
+        <ShipOrders id="1028">
+            <Electronics>
+                    <FireControl id="5" xSSD="100" ySSD="185" targetId="2001" slavedWeapons="9,10" status="Operational"/>
+            </Electronics>
+            <Weapons>
+                    <PointDefense id="7" xSSD="50" ySSD="135" targetId="0" status="Operational"/>
+                    <PointDefense id="8" xSSD="150" ySSD="135" targetId="0" status="Operational"/>
+            </Weapons>
+        </ShipOrders>
+        <FighterOrders id="1101">
+            <Orders>Move</Orders>
+            <MoveTo x="60.5" y="37.2" heading="2"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="0"/>
+        </FighterOrders>
+        <FighterOrders id="1102">
+            <Orders>Attack Target</Orders>
+            <MoveTo x="38.6" y="35.5" heading="1"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="2001"/>
+        </FighterOrders>
+        <FighterOrders id="1103">
+            <Orders>Engage Fighters</Orders>
+            <MoveTo x="52.8" y="25.2" heading="3"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="2101"/>
+        </FighterOrders>
+        <FighterOrders id="1104">
+            <Orders>Engage Fighters</Orders>
+            <MoveTo x="46.1" y="27.1" heading="3"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="2101"/>
+        </FighterOrders>
+    </PlayerOrders>
+</GameEngine>

@@ -1,0 +1,49 @@
+<?xml version="1.0" standalone="yes" ?>
+<GameEngine id="211" name="Human Practice Game" turn="13" combat="false">
+    <PlayerOrders id="1" name="[Seaman] anonymous coward -- virtutis.umbra@gmail.com" email="virtutis.umbra@gmail.com" compress="false" team="Human" key="639117">
+        <ShipOrders id="1100">
+            <Orders>0</Orders>
+            <DamageControl/>
+        </ShipOrders>
+        <ShipOrders id="1011">
+            <Orders>0</Orders>
+            <DamageControl/>
+        </ShipOrders>
+        <ShipOrders id="1027">
+            <Orders>0</Orders>
+            <DamageControl/>
+        </ShipOrders>
+        <ShipOrders id="1028">
+            <Orders>0</Orders>
+            <DamageControl ids="4,4"/>
+        </ShipOrders>
+        <FighterOrders id="1101">
+            <Orders>Move</Orders>
+            <MoveTo x="60.5" y="37.2" heading="2"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="0"/>
+        </FighterOrders>
+        <FighterOrders id="1102">
+            <Orders>Attack Target</Orders>
+            <MoveTo x="38.6" y="35.5" heading="1"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="2001"/>
+        </FighterOrders>
+        <FighterOrders id="1103">
+            <Orders>Engage Fighters</Orders>
+            <MoveTo x="52.8" y="25.2" heading="3"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="2101"/>
+        </FighterOrders>
+        <FighterOrders id="1104">
+            <Orders>Engage Fighters</Orders>
+            <MoveTo x="46.1" y="27.1" heading="3"/>
+            <SecondaryMovement value="false"/>
+            <OnBoard value="false"/>
+            <Target id="2101"/>
+        </FighterOrders>
+    </PlayerOrders>
+</GameEngine>
