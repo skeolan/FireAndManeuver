@@ -21,7 +21,12 @@ namespace FireAndManeuver.GameEngine
         public int key {get; set;} = -1;
         public string Objectives {get; set;} = "";
         [XmlElement("Ship")]
-        public Unit[] Units { get; set; }
+        public List<Unit> Units { get; set; }
+
+        public GameEnginePlayer()
+        {
+            Units = new List<Unit>();
+        }
 
     }
 }

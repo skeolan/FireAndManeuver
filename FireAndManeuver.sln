@@ -1,9 +1,8 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VolleyResolver", "VolleyResolver\VolleyResolver.csproj", "{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VolleyResolver", "VolleyResolver\VolleyResolver.csproj", "{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,21 +13,24 @@ Global
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x64.ActiveCfg = Debug|x64
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x64.Build.0 = Debug|x64
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x86.ActiveCfg = Debug|x86
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x86.Build.0 = Debug|x86
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x64.Build.0 = Debug|Any CPU
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Debug|x86.Build.0 = Debug|Any CPU
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x64.ActiveCfg = Release|x64
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x64.Build.0 = Release|x64
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x86.ActiveCfg = Release|x86
-		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x86.Build.0 = Release|x86
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x64.ActiveCfg = Release|Any CPU
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x64.Build.0 = Release|Any CPU
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x86.ActiveCfg = Release|Any CPU
+		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51795CDD-CBA4-441E-8F3B-23EA47D7AFD8}
 	EndGlobalSection
 EndGlobal

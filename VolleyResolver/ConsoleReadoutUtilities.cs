@@ -10,19 +10,20 @@ namespace VolleyResolver
     {
 
         const bool SUPPRESS_TITLE_LINE_FOR_HULLMATRIX = true;
+        const int READOUT_WIDTH = 140;
+        static string boundary = "".PadRight(READOUT_WIDTH, '*');
+        static string separator = $"* {"".PadRight(READOUT_WIDTH-4, '-')} *";
+        static string outputFormat = "* {0, -20} : {1, -"+(READOUT_WIDTH - 25 - 2).ToString()+"} *";
+        static string collectionItemOutputFormat = "* {0, -20} > {1, -"+(READOUT_WIDTH - 25 - 2).ToString()+"} *";
 
         public static List<string> generateUnitReadout(Unit myUnit, List<Unit> allUnits = null)
         {
-            var outputFormat = "* {0, -20} : {1, -73} *";
-            var collectionItemOutputFormat = "* {0, -20} > {1, -73} *";
-            var separator = $"* {string.Concat(Enumerable.Repeat("-", 96))} *";
-            var boundary = string.Concat(Enumerable.Repeat("*", 100));
 
             List<string> readout = new List<string>();
 
             readout.Add("");
             readout.Add(boundary);
-            readout.Add(string.Format("* {0, -96} *", myUnit.ToString()));
+            readout.Add($"* {myUnit.ToString(), -(READOUT_WIDTH - 4)} *");
             readout.Add(separator);
             readout.Add(String.Format(outputFormat, "Status", myUnit.status));
             readout.Add(String.Format(outputFormat, "Armor", myUnit.armor.ToString()));
@@ -38,16 +39,16 @@ namespace VolleyResolver
             readout.AddRange(printReadoutCollection("Holds", myUnit.holds, collectionItemOutputFormat));
             readout.AddRange(printReadoutCollection("Weapons", myUnit.weapons, collectionItemOutputFormat));
             readout.Add(separator);
-            readout.Add(String.Format("* {0, -96} *", myUnit.Orders.Count > 0 ? "Orders" : "(No Orders)"));
+            readout.Add($"* {(myUnit.Orders.Count > 0 ? "Orders" : "(No Orders)"), -(READOUT_WIDTH - 4)} *");
             foreach (var volleyOrders in myUnit.Orders)
             {
-                readout.Add(String.Format("* {0, -96} *", $"  Volley #{volleyOrders.volley}"));
-                readout.Add(String.Format("* {0, -96} *", "     " + volleyOrders.ToString().Split('|')[0]));
+                readout.Add($"* {$"  Volley #{volleyOrders.volley}", -(READOUT_WIDTH - 4) } *");
+                readout.Add($"* {$"     Speed  {volleyOrders.Speed} - Evasion {volleyOrders.Evasion}", -(READOUT_WIDTH - 4)} *");
                 readout.AddRange(printOrders("     Maneuvering", volleyOrders.ManeuveringOrders, collectionItemOutputFormat, myUnit, allUnits));
                 readout.AddRange(printOrders("     Firing", volleyOrders.FiringOrders, collectionItemOutputFormat, myUnit, allUnits));
             }
             readout.Add(separator);
-            readout.Add(String.Format("* {0, -96} *", myUnit.sourceFile));
+            readout.Add($"* {("Source: "+myUnit.sourceFile), -(READOUT_WIDTH - 4)} *" );
             readout.Add(boundary);
 
             return readout;
@@ -58,26 +59,24 @@ namespace VolleyResolver
             List<string> readout = new List<string>();
             var allUnits = new List<Unit>();
 
-            const int READOUT_WIDTH = 140;
-
             readout.Add(" BEGIN READOUT ".PadLeft((READOUT_WIDTH + " BEGIN READOUT ".Length) / 2, '^').PadRight(READOUT_WIDTH, '^'));
             readout.Add("");
             //Game Engine header block
             readout.Add("* Game Info *".PadRight(READOUT_WIDTH, '*'));
             readout.Add("* " + $"Game [{ge.id}] Exchange {ge.exchange} / Volley {ge.volley} -- Combat:{ge.combat}".PadRight(READOUT_WIDTH-4) + " *");
-            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add(boundary);
             readout.Add("");
 
             //Briefing block
             readout.Add("* Briefing *".PadRight(READOUT_WIDTH, '*'));
             readout.AddRange(WrapDecorated(ge.Briefing, READOUT_WIDTH, "* ", " *"));
-            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add(boundary);
             readout.Add("");
 
             //Report block
             readout.Add("* Report *".PadRight(READOUT_WIDTH, '*'));
             readout.AddRange(WrapDecorated(String.IsNullOrEmpty(ge.Report) ? "..." : ge.Report, READOUT_WIDTH, "* ", " *"));
-            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add(boundary);
             readout.Add("");
 
             //Player block
@@ -90,20 +89,20 @@ namespace VolleyResolver
                 var playerLine = fixedString + p.Objectives.PadRight(objLength).Substring(0, objLength) + " *";
                 readout.Add(playerLine);
             }
-            readout.Add("".PadRight(READOUT_WIDTH, '*'));
+            readout.Add(boundary);
             readout.Add("");
 
             //Units summary block
             foreach (var p in ge.Players)
             {
-                readout.Add($"* Player [{p.id}]{p.name} Units ({p.Units.Length}):  *".PadRight(READOUT_WIDTH, '*'));
+                readout.Add($"* Player [{p.id}]{p.name} Units ({p.Units.Count}):  *".PadRight(READOUT_WIDTH, '*'));
                 foreach (var u in p.Units)
                 {
                     readout.AddRange(WrapDecorated(u.ToString(), READOUT_WIDTH, "*   -", " *"));
                     readout.AddRange(WrapDecorated($"Status - {u.status}", READOUT_WIDTH, "*      -", " *"));
                     allUnits.Add(u);
                 }
-                readout.Add("".PadRight(READOUT_WIDTH, '*'));
+                readout.Add(boundary);
                 readout.Add("");
             }
 
@@ -113,10 +112,9 @@ namespace VolleyResolver
                 foreach (var u in p.Units)
                 {
                     readout.Add($"* Player [{p.id}]{p.name} Unit Detail: *".PadRight(READOUT_WIDTH, '*'));
-                    readout.Add($"* <{u.ToString().PadRight(READOUT_WIDTH-6)}> *");
-                    //var unitReadout = generateUnitReadout(u, allUnits);
-                    //readout.AddRange(unitReadout);
-                    readout.Add("".PadRight(READOUT_WIDTH, '*'));
+                    readout.Add($"* <{u.ToString(), -(READOUT_WIDTH-6)}> *");
+                    var unitReadout = generateUnitReadout(u, allUnits);
+                    readout.AddRange(unitReadout);
                     readout.Add("");
                 }
             }
@@ -153,7 +151,10 @@ namespace VolleyResolver
             var output = new List<string>();
 
             if (coll.Count > 0)
-                output.Add(String.Format("* {0,-16}({1, 2}){2,-76} *", collectionName, coll.Count.ToString(), ""));
+                {
+                    output.Add($"* {$"{collectionName,-16}({coll.Count,2})", -(READOUT_WIDTH - 4)} *");
+                }
+
 
             foreach (var orderT in coll)
             {

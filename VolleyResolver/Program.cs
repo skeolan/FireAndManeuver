@@ -10,7 +10,7 @@ namespace VolleyResolver
 {
     public class Program
     {
-        private const string _DefaultXML = ".\\DefaultUnit.xml";
+        private const string _DefaultXML = ".\\..\\DefaultUnit.xml";
 
         public static void Main(string[] args)
         {

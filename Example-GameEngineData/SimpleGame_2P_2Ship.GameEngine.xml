@@ -58,7 +58,30 @@
             <Name>Glory</Name>
             <IconFamily value="Generic\Echo"/>
             <Status>Moderate</Status>
-            <Orders>0</Orders>
+            <FM.Orders>
+                <FM.VolleyOrders volley="1">
+                    <FM.Speed>4</FM.Speed>
+                    <FM.Evasion>2</FM.Evasion>
+                    <FM.ManeuveringOrders>
+                        <FM.Maneuver type="Close" target="2" priority="primary" />
+                    </FM.ManeuveringOrders>
+                    <FM.FiringOrders>
+                        <FM.Fire fireConID="3" target="2" priority="primary" weaponIDs="4,5,7,8" />
+                        <FM.Fire fireConID="0" target="PD" weaponIDs="9,10" />
+                    </FM.FiringOrders>
+                </FM.VolleyOrders>
+                <FM.VolleyOrders volley="2">
+                    <FM.Speed>3</FM.Speed>
+                    <FM.Evasion>3</FM.Evasion>
+                    <FM.ManeuveringOrders>
+                        <FM.Maneuver type="Withdraw" target="2" priority="primary" />
+                    </FM.ManeuveringOrders>
+                    <FM.FiringOrders>
+                        <FM.Fire fireConID="3" target="2" priority="primary" weaponIDs="6,7,8" />
+                        <FM.Fire fireConID="0" target="PD" weaponIDs="9,10" />
+                    </FM.FiringOrders>
+                </FM.VolleyOrders>
+            </FM.Orders>
             <DamageControl/>
             <Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
             <Heading heading="3" pastHeading="3" />
@@ -107,7 +130,7 @@
         </Ship>
     </Player>
     <Player id="2" name="specter" email="" team="Zetans">
-        <Ship id="2">
+<!--        <Ship id="2">
             <Name>Brazen</Name>
             <IconFamily value="Generic\Alpha"/>
             <Status>Ok</Status>
@@ -146,6 +169,6 @@
                 <PointDefense id="23" xSSD="60" ySSD="140" status="Operational"/>
                 <PointDefense id="24" xSSD="100" ySSD="140" status="Operational"/>
             </Weapons>
-        </Ship>
+        </Ship>-->
     </Player>
 </GameEngine>
