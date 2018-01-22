@@ -4,17 +4,21 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using FireAndManeuver.GameEngine;
+using FireAndManeuver.Common;
+using FireAndManeuver.GameModel;
 
 namespace VolleyResolver
 {
     public class Program
     {
-        private const string _DefaultXML = ".\\..\\DefaultUnit.xml";
+        public static IConfiguration Configuration { get; set; }
+
 
         public static void Main(string[] args)
         {
+            //TODO: Refactor out a "UnitDisplayer" console app and a "GameEngineDisplayer" console app, leaving behind a largely empty "VolleyResolver" app
 
+            string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
             {
@@ -26,16 +30,20 @@ namespace VolleyResolver
             }
 
             var configBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+            configBuilder.AddJsonFile("appsettings.json");
             foreach (var jsonConfig in args.Where(a => a.EndsWith(".json")))
             {
                 configBuilder.AddJsonFile(jsonConfig);
             }
             var config = configBuilder.Build();
-
+                        
+            string _DefaultUnitXML = Path.Combine(workingDir, config["Default_Unit_Xml"]);
+            string _DefaultEngineXML = Path.Combine(workingDir, config["Default_GameEngine_Xml"]);
+            
             var srcFilesFromArgs = args.Where(x => x.EndsWith(".xml")).ToArray();
             var srcFilesFromConfig = (config["srcFiles"] == null ? new string[0] : config["srcFiles"].Split(','));
             var srcDirsFromConfig = (config["srcDirectories"] == null ? new string[0] : config["srcDirectories"].Split(','));
-            var unitXMLFiles = getXMLFileList(srcFilesFromArgs, srcFilesFromConfig, srcDirsFromConfig);
+            var unitXMLFiles = getXMLFileList(srcFilesFromArgs, srcFilesFromConfig, srcDirsFromConfig, _DefaultUnitXML);
             List<Unit> unitSet = LoadDesignXML(unitXMLFiles);
 
             //... and list their stats    
@@ -47,9 +55,8 @@ namespace VolleyResolver
             }
 
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
-            
-            //GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\Scenario1_Frat_Attack_2player.xml");
-            GameEngine ge = GameEngine.loadFromXml(@"C:\Games\GitHub\FireAndManeuver.git\Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml");
+                      
+            GameEngine ge = GameEngine.loadFromXml(_DefaultEngineXML);
             Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
             Console.WriteLine("");
             ConsoleReadoutUtilities.generateGameEngineReadout(ge).ForEach( l => Console.WriteLine(l));
@@ -64,7 +71,7 @@ namespace VolleyResolver
             foreach (var x in unitXMLFiles)
             {   
                 try {
-                var newU = Unit.loadNewUnit(x.FullName);
+                var newU = Unit.LoadNewUnit(x.FullName);
                 if (newU != null)
                 {
                     unitSet.Add(newU);
@@ -80,7 +87,7 @@ namespace VolleyResolver
             return unitSet;
         }
 
-        private static HashSet<FileInfo> getXMLFileList(string[] args, string[] fileSet, string[] dirSet)
+        private static HashSet<FileInfo> getXMLFileList(string[] args, string[] fileSet, string[] dirSet, string _DefaultXML)
         {
 
             var fileComparer = new FileInfoFullNameComparer();

@@ -6,7 +6,7 @@ namespace VolleyResolver
         {
             //No data sources!
         }
-        public string[] srcDirectories { get; set; }
-        public string[] srcFiles { get; set; }
+        public string[] SrcDirectories { get; set; }
+        public string[] SrcFiles { get; set; }
     }
 }

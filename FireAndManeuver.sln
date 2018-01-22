@@ -4,6 +4,62 @@ VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VolleyResolver", "VolleyResolver\VolleyResolver.csproj", "{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameModel", "GameModel\GameModel.csproj", "{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{C7106891-87EC-4470-BB67-80EEEFB59AB9}"
+	ProjectSection(SolutionItems) = preProject
+		Configuration\shipDataSources-1v1.json = Configuration\shipDataSources-1v1.json
+		Configuration\shipDataSources-all.json = Configuration\shipDataSources-all.json
+		Configuration\shipDataSources-empty.json = Configuration\shipDataSources-empty.json
+		Configuration\shipDataSources-NSL.json = Configuration\shipDataSources-NSL.json
+		Configuration\shipDataSources-small.json = Configuration\shipDataSources-small.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example-GameEngineData", "Example-GameEngineData", "{3CAB93CD-2D5F-4168-9D7F-3CA918C27431}"
+	ProjectSection(SolutionItems) = preProject
+		Example-GameEngineData\Example-CombatOrders.xml = Example-GameEngineData\Example-CombatOrders.xml
+		Example-GameEngineData\Example-MovementOrders.xml = Example-GameEngineData\Example-MovementOrders.xml
+		Example-GameEngineData\GameEngine-Generated.cs = Example-GameEngineData\GameEngine-Generated.cs
+		Example-GameEngineData\GameEngine.xsd = Example-GameEngineData\GameEngine.xsd
+		Example-GameEngineData\Scenario1_Frat_Attack_2player.xml = Example-GameEngineData\Scenario1_Frat_Attack_2player.xml
+		Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml = Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameOptions", "GameOptions", "{66355DEE-959F-4AF1-AAD5-0801E13E1328}"
+	ProjectSection(SolutionItems) = preProject
+		GameOptions-Data\GameOptions_Standard.xml = GameOptions-Data\GameOptions_Standard.xml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipSetReadoutGenerator", "ShipSetReadoutGenerator\ShipSetReadoutGenerator.csproj", "{0FD8F294-C483-4443-AFEC-DDC1E133448E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{C4E94726-24BD-4F9F-A6D3-F82A049EE986}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{2A7A0667-1F59-4D90-8AE7-F5E602E19CFA}"
+	ProjectSection(SolutionItems) = preProject
+		DefaultUnit.xml = DefaultUnit.xml
+		LICENSE = LICENSE
+		README.md = README.md
+		Ruleset-FireAndManeuver.md = Ruleset-FireAndManeuver.md
+		ScriptingSheet-Snapshot.PNG = ScriptingSheet-Snapshot.PNG
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{15623DF6-7D78-4BAD-9F00-ADC380CDC45C}"
+	ProjectSection(SolutionItems) = preProject
+		Test.cmd = Test.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example-ShipData", "Example-ShipData", "{E6890EB6-03A1-491E-ACBF-BCCEE0FFDF65}"
+	ProjectSection(SolutionItems) = preProject
+		Example-ShipData\Frat-Estrell_CA_Rhino-VampireOK.xml = Example-ShipData\Frat-Estrell_CA_Rhino-VampireOK.xml
+		Example-ShipData\Frat-Estrell_CA_Wyvern-VultureModerate.xml = Example-ShipData\Frat-Estrell_CA_Wyvern-VultureModerate.xml
+		Example-ShipData\Game184_Turn02_Player1_D.GameEngineXml = Example-ShipData\Game184_Turn02_Player1_D.GameEngineXml
+		Example-ShipData\Scenario1_Frat_Attack_1player.GameEngineXml = Example-ShipData\Scenario1_Frat_Attack_1player.GameEngineXml
+		Example-ShipData\ship-xml-elements-listing.txt = Example-ShipData\ship-xml-elements-listing.txt
+		Example-ShipData\Sources.md = Example-ShipData\Sources.md
+		Example-ShipData\UNSC_DD_Lake-UNS_Nam_Lolwe.xml = Example-ShipData\UNSC_DD_Lake-UNS_Nam_Lolwe.xml
+		Example-ShipData\UNSC_DD_Lake.xml = Example-ShipData\UNSC_DD_Lake.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +82,42 @@ Global
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x64.Build.0 = Release|Any CPU
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x86.ActiveCfg = Release|Any CPU
 		{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}.Release|x86.Build.0 = Release|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Debug|x64.Build.0 = Debug|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Debug|x86.Build.0 = Debug|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Release|x64.ActiveCfg = Release|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Release|x64.Build.0 = Release|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Release|x86.ActiveCfg = Release|Any CPU
+		{F739BD9A-5EE7-4B4F-ACB4-210C50FC68F3}.Release|x86.Build.0 = Release|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Debug|x64.Build.0 = Debug|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Debug|x86.Build.0 = Debug|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Release|x64.ActiveCfg = Release|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Release|x64.Build.0 = Release|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Release|x86.ActiveCfg = Release|Any CPU
+		{0FD8F294-C483-4443-AFEC-DDC1E133448E}.Release|x86.Build.0 = Release|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Debug|x64.Build.0 = Debug|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Debug|x86.Build.0 = Debug|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Release|x64.ActiveCfg = Release|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Release|x64.Build.0 = Release|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4E94726-24BD-4F9F-A6D3-F82A049EE986}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

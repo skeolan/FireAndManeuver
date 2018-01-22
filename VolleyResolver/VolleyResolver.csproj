@@ -1,21 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
-    <DebugType>portable</DebugType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>VolleyResolver</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>VolleyResolver</PackageId>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
+  <ItemGroup>
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.0.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\GameModel\GameModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <GameEngineData Include="..\Example-GameEngineData\**\*.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+    <Copy SourceFiles="..\DefaultUnit.xml" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="..\Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml" DestinationFiles="$(OutDir)\DefaultGameEngine.xml" />
+    <Copy SourceFiles="@(GameEngineData)" DestinationFiles="$(OutDir)GameEngineData\%(RecursiveDir)%(Filename)%(Extension)" />
+  </Target>
 
 </Project>
