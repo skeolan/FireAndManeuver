@@ -178,7 +178,7 @@ namespace FireAndManeuver.Common
                     {
                         //Fire orders have additional lines of output indicating assigned weapons by ID
                         var weapon = thisUnit.Weapons.Where(w => $"{w.id}" == $"{weaponID}").FirstOrDefault();
-                        var weaponText = weapon == null ? $"Weapon [{weaponID:00}]" : weapon.systemName;
+                        var weaponText = weapon == null ? $"Weapon [{weaponID:00}]" : weapon.SystemName;
                         var weaponEntry = $"{"",21} - {weaponText,-30} [{weaponID,2}]";
                         output.Add(String.Format(outputFormat, "", weaponEntry));
                     }

@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using System.Collections.Generic;
 
 namespace FireAndManeuver.GameModel
@@ -6,7 +7,7 @@ namespace FireAndManeuver.GameModel
     {
         public WeaponSystem() : base()
         {
-            systemName = "BaseWeaponSystem Class";
+            SystemName = "Abstract Weapon System";
         }
 
         public List<int> Attack(Unit target, Unit attacker=null)

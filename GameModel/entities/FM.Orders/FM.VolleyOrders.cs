@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -57,6 +58,11 @@ namespace FireAndManeuver.GameModel
             var maneuverStrings = string.Join("; ", ManeuveringOrders.Select(m => m.ToString()));
             var firingStrings = string.Join(";", FiringOrders.Select(f => f.ToString()));
             return $"Speed {Speed} - Evasion {Evasion} | Maneuvering: [{maneuverStrings}] | Firing: [{firingStrings}]";
+        }
+
+        internal static VolleyOrders Clone(VolleyOrders o)
+        {
+            throw new NotImplementedException();
         }
     }
 }

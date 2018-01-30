@@ -31,6 +31,8 @@ namespace FireAndManeuver.GameModel
         }
         [XmlElement] public string Name { get; set; } = "";
         [XmlElement] public string Status { get; set; } = "Ok";
+
+
         //[XmlElement("Orders")] public string orders { get; set; }
         [XmlElement("DamageControl")] public string DamageControlRaw {
             get
@@ -86,7 +88,7 @@ namespace FireAndManeuver.GameModel
 
         [XmlArray]
         [XmlArrayItemAttribute("CargoHold", Type = typeof(CargoHoldSystem))]
-        public List<UnitSystem> Holds { get; set; }
+        public List<CargoHoldSystem> Holds { get; set; }
 
         [XmlArray]
         [XmlArrayItem("PointDefense", Type = typeof(PointDefenseSystem))]
@@ -180,6 +182,38 @@ namespace FireAndManeuver.GameModel
             return myNewUnit;
         }
 
+        internal static Unit Clone(Unit u)
+        {
+            //Copy all primitive types...
+            var newU = (Unit) u.MemberwiseClone();
+
+            //... clone all complex non-collection types...
+            newU.Armor = u.Armor.Clone();
+            newU.FtlDrive = u.FtlDrive.Clone();
+            newU.MainDrive = u.MainDrive.Clone();
+
+            //... initialize all collections...
+            newU.Defenses = new List<DefenseSystem>();
+            newU.Electronics = new List<ElectronicsSystem>();
+            newU.Holds = new List<CargoHoldSystem>();
+            newU.Orders = new List<VolleyOrders>();
+
+            //... and fill all collections with copied values / elements.
+            //TODO: Make a base SystemCollection class for all system collections to derive from
+            //TODO: Implement a 'public T Clone<T>() where T:SystemCollection' method
+            //TODO: Get rid of these system-collection foreach loops once the better Clone<T> method exists
+            //TODO: Fix your Clone() method -- it doesn't work as implemented below for e.g. PointDefenseSystem : DefenseSystem
+            (u.Defenses ?? newU.Defenses).ForEach(d => newU.Defenses.Add(d.Clone()));
+            (u.Electronics ?? newU.Electronics).ForEach(e => newU.Electronics.Add(e.Clone()));
+            (u.Holds ?? newU.Holds).ForEach(h => newU.Holds.Add(h.Clone()));
+            foreach (var o in u.Orders ?? newU.Orders)
+            {
+                //newU.Orders.Add(VolleyOrders.Clone(o));
+            }
+
+
+            return newU;
+        }
     }
 
 }

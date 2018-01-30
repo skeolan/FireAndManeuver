@@ -28,5 +28,19 @@ namespace FireAndManeuver.GameModel
             Units = new List<Unit>();
         }
 
+        internal static GameEnginePlayer Clone(GameEnginePlayer p)
+        {
+            //Copy all primitive types...
+            var newP = (GameEnginePlayer)p.MemberwiseClone();
+
+            //And clone all complex types.
+            List<Unit> newUnits = new List<Unit>();
+            foreach (var u in p.Units)
+            {
+                newUnits.Add(Unit.Clone(u));
+            }
+
+            return newP;
+        }
     }
 }

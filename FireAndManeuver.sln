@@ -17,12 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example-GameEngineData", "Example-GameEngineData", "{3CAB93CD-2D5F-4168-9D7F-3CA918C27431}"
 	ProjectSection(SolutionItems) = preProject
+		Example-GameEngineData\DefaultGameEngine.xml = Example-GameEngineData\DefaultGameEngine.xml
 		Example-GameEngineData\Example-CombatOrders.xml = Example-GameEngineData\Example-CombatOrders.xml
 		Example-GameEngineData\Example-MovementOrders.xml = Example-GameEngineData\Example-MovementOrders.xml
 		Example-GameEngineData\GameEngine-Generated.cs = Example-GameEngineData\GameEngine-Generated.cs
 		Example-GameEngineData\GameEngine.xsd = Example-GameEngineData\GameEngine.xsd
 		Example-GameEngineData\Scenario1_Frat_Attack_2player.xml = Example-GameEngineData\Scenario1_Frat_Attack_2player.xml
-		Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml = Example-GameEngineData\SimpleGame_2P_2Ship.GameEngine.xml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameOptions", "GameOptions", "{66355DEE-959F-4AF1-AAD5-0801E13E1328}"

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +26,7 @@ namespace FireAndManeuver.GameModel
         public bool combat { get; set; }
         public string Briefing { get; set; }
         public GameEngineOptions GameOptions { get; set; }
-        public string Report {get; set;}
+        public string Report { get; set; }
 
         [XmlElement("Player")]
         public GameEnginePlayer[] Players { get; set; }
@@ -37,7 +38,7 @@ namespace FireAndManeuver.GameModel
         }
 
 
-        public static GameEngine loadFromXml(string sourceFile)
+        public static GameEngine LoadFromXml(string sourceFile)
         {
             XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
 
@@ -65,6 +66,34 @@ namespace FireAndManeuver.GameModel
             }
 
             return ge;
+        }
+
+        public static GameEngine Clone(GameEngine oldGE)
+        {
+            var newGE = (GameEngine) oldGE.MemberwiseClone();
+            
+            //Break connection to source file, if any
+            newGE.SourceFile = "";
+
+            //Deep copy of complex types
+            newGE.GameOptions = GameEngineOptions.Clone(oldGE.GameOptions);
+
+            List<GameEnginePlayer> newPlayers = new List<GameEnginePlayer>();
+            foreach(var P in oldGE.Players)
+            {
+                newPlayers.Add(GameEnginePlayer.Clone(P));
+            }
+            newGE.Players = newPlayers.ToArray();
+            
+
+            return newGE;
+        }
+
+        public static GameEngine ResolveVolley(GameEngine startState, IConfigurationRoot config)
+        {
+            GameEngine newState = GameEngine.Clone(startState);
+
+            return newState;
         }
     }
 }

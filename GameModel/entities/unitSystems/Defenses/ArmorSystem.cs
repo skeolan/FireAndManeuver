@@ -3,9 +3,11 @@ using System.Xml.Serialization;
 namespace FireAndManeuver.GameModel
 {
     [XmlRoot("Armor")]
-    public class ArmorSystem : UnitSystem
+    public class ArmorSystem : DefenseSystem
     {
-        public ArmorSystem() { }
+        public ArmorSystem() {
+            SystemName = "Armor System";
+        }
 
         [XmlAttribute] public string totalArmor { get; set; }
         [XmlAttribute] public string remainingArmor { get; set; }

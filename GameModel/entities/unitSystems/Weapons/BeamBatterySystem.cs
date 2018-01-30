@@ -4,7 +4,7 @@ namespace FireAndManeuver.GameModel
 {
     public class BeamBatterySystem : ArcWeaponSystem
     {
-        private string _arcs;
+        [XmlIgnore] private string _arcs;
         [XmlAttribute] public int rating { get; set; }=1;
         [XmlAttribute] public override string arcs {
             get
@@ -17,15 +17,10 @@ namespace FireAndManeuver.GameModel
                 _arcs = value;
             }
         }
-        [XmlIgnore] public override string systemName
-        {
-            get { return string.Format("Class-{0} Beam Battery", this.rating); }
-            protected set {}
-        }
 
         public BeamBatterySystem() : base()
         {
-
+            SystemName = "Beam Battery System";
         }
     }
 

@@ -10,7 +10,7 @@ namespace FireAndManeuver.GameModel
 
         public CargoHoldSystem() : base()
         {
-            systemName = "Cargo Hold";
+            SystemName = "Cargo Hold System";
         }
 
         public override string ToString()

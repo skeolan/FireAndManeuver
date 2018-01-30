@@ -5,7 +5,7 @@ namespace FireAndManeuver.GameModel
     [XmlRoot("MainDrive")]
     public class DriveSystem : UnitSystem
     {
-        private int? _currentThrust = null;
+        [XmlIgnore] private int? _currentThrust = null;
         [XmlAttribute] public string type { get; set; } = "Standard";
         [XmlAttribute] public int initialThrust { get; set; } = 0;
         
@@ -15,13 +15,10 @@ namespace FireAndManeuver.GameModel
         }
         [XmlAttribute] public bool active { get; set; } = false;
         public DriveSystem()
-        {        }
-
-        [XmlIgnore] public override string systemName
         {
-            get { return $"{this.type} Drive {this.currentThrust}/{this.initialThrust}"; }
-            protected set {}
+            SystemName = "Standard Drive System";
         }
+
 
         public override string ToString()
         {

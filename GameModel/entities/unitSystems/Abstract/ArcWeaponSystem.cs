@@ -4,11 +4,12 @@ namespace FireAndManeuver.GameModel
 {
     public abstract class ArcWeaponSystem : WeaponSystem
     {
+
         [XmlAttribute] public virtual string arcs { get; set; }
         public ArcWeaponSystem() : base()
         {
-            this.systemName = "Arc-Firing Weapon System";
-            this.arcs = "(F)";
+            SystemName = "Abstract Arc-Firing Weapon System";
+            arcs = "(F)";
         }
 
         public override string ToString()

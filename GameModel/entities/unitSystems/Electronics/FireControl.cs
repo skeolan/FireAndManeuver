@@ -7,7 +7,7 @@ namespace FireAndManeuver.GameModel
     {
         public FireControlSystem()
         {
-            systemName = "Fire Control System";
+            SystemName = "Fire Control System";            
         }
     }
 

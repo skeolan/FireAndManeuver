@@ -4,21 +4,28 @@ namespace FireAndManeuver.GameModel
 {
     public abstract class UnitSystem
     {
+        [XmlIgnore] public string SystemName { get; protected set; } = "Abstract base Unit System";
+
         [XmlAttribute("id")] public int id { get; set; } = -1;
         [XmlAttribute("xSSD")] public int xSSD { get; set; }
         [XmlAttribute("ySSD")] public int ySSD { get; set; }
-        [XmlIgnore] public virtual string systemName { get; protected set; }
         [XmlAttribute] public string status { get; set; } = "Operational";
 
         public UnitSystem()
         {
-            systemName = "Universal unitSystem class";
+
         }
 
         public override string ToString()
         {
-            string idStr = id == -1 ? "" : string.Format("[{0:00}]", id);
-            return $"{idStr,2} - {systemName,-30} - {status,-12}";
+            string idStr = this.id == -1 ? "" : string.Format("[{0:00}]", this.id);
+            return $"{idStr,2} - {this.SystemName,-30} - {this.status,-12}";
+        }
+
+        //As long as all properties are primitive type, no need to override this for derived classes
+        public virtual dynamic Clone()
+        {
+            return (dynamic)this.MemberwiseClone();
         }
     }
 

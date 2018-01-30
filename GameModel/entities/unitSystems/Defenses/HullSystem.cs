@@ -5,11 +5,19 @@ using System.Xml.Serialization;
 
 namespace FireAndManeuver.GameModel
 {
-    public class HullSystem : UnitSystem
+    public class HullSystem : DefenseSystem
     {
+
         [XmlAttribute] public int value { get; set; }
         [XmlAttribute] public HullTypeLookup type { get; set; }
         [XmlAttribute("class")] public string hullClass { get; set; }="Military";
+
+        public HullSystem()
+        {
+            rows = 4;
+            SystemName = "Hull System";
+        }
+
         [XmlAttribute]
         public int totalHullBoxes
         {
@@ -47,10 +55,6 @@ namespace FireAndManeuver.GameModel
             }
         }
 
-        public HullSystem()
-        {
-            rows = 4;
-        }
 
         public override string ToString()
         {
