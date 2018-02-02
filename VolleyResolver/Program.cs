@@ -12,11 +12,10 @@ namespace FireAndManeuver.Clients
     public class VolleyResolver
     {
         public static IConfiguration Configuration { get; set; }
-        private static int DEFAULT_VOLLEYS_PER_EXCHANGE = 3;
-
+        private const int DEFAULT_VOLLEYS_PER_EXCHANGE = 3;
 
         public static void Main(string[] args)
-        {            
+        {
             string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
@@ -41,26 +40,16 @@ namespace FireAndManeuver.Clients
             var VPEStr = config["Volleys_Per_Exchange"];
             if (!int.TryParse(VPEStr, out VolleysPerExchange)) VolleysPerExchange = DEFAULT_VOLLEYS_PER_EXCHANGE;
 
-            Console.WriteLine($"Initializing game engine with {VolleysPerExchange} volleys per exchange.");
-
             GameEngine ge = GameEngine.LoadFromXml(_DefaultEngineXML);
             Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
             Console.WriteLine("Begin Volley Resolution!");
 
-            GameEngine newState = ResolveVolley(ge, config);
+            ge = GameEngine.ResolveVolleys(ge, config, VolleysPerExchange, ge.SourceFile);
 
             //TestCloning();
 
-            Console.WriteLine("Volley resolution completed!");
+            Console.WriteLine($"Exchange {ge.exchange -1 } resolution completed!");
         }
-
-        private static GameEngine ResolveVolley(GameEngine ge, IConfigurationRoot config)
-        {
-            GameEngine newGE = GameEngine.Clone(ge);
-
-            return newGE;
-        }
-
 
         //TODO: Refactor this out into a test project
         private static void TestCloning()

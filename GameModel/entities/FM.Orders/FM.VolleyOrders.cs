@@ -24,8 +24,9 @@ namespace FireAndManeuver.GameModel
         {
             get
             {
+                //Default maneuvering order is "Maintain vs. everyone"
                 if (_maneuvers == null || _maneuvers.Count == 0)
-                    _maneuvers = new List<ManeuverOrder>() { new ManeuverOrder() };
+                    _maneuvers = new List<ManeuverOrder>() { new ManeuverOrder() { ManeuverType = "Maintain", Priority = "default", TargetID = "*" } };
 
                 return _maneuvers.OrderBy(x => x.Priority.ToLowerInvariant() != "primary").ToList();
             }
