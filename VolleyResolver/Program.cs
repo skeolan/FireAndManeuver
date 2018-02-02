@@ -49,6 +49,9 @@ namespace FireAndManeuver.Clients
             //TestCloning();
 
             Console.WriteLine($"Exchange {ge.exchange -1 } resolution completed!");
+
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
 
         //TODO: Refactor this out into a test project

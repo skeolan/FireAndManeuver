@@ -66,7 +66,7 @@
                         <FM.Maneuver type="Close" target="2" priority="primary" />
                     </FM.ManeuveringOrders>
                     <FM.FiringOrders>
-                        <FM.Fire fireConID="3" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
+                        <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
                         <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
                     </FM.FiringOrders>
                 </FM.VolleyOrders>
@@ -77,10 +77,26 @@
                         <FM.Maneuver type="Withdraw" target="2" priority="primary" />
                     </FM.ManeuveringOrders>
                     <FM.FiringOrders>
-                        <FM.Fire fireConID="3" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
-                        <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
+                        <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
+                        <!-- Assigning weapons to "fireCon zero" requires they be in PD mode -->
+                        <FM.Fire fireConID="0" target="2" weaponIDs="13,14" />
                     </FM.FiringOrders>
                 </FM.VolleyOrders>
+              <FM.VolleyOrders volley="2">
+                <FM.Speed>3</FM.Speed>
+                <FM.Evasion>3</FM.Evasion>
+                <FM.ManeuveringOrders>
+                  <!-- <FM.Maneuver type="Withdraw" target="2" priority="primary" /> -->
+                  <!-- Intentionally no movement orders this Volley, should be handled smoothly?? -->
+                </FM.ManeuveringOrders>
+                <FM.FiringOrders>
+                  <!-- Damaged weapon #8 should not fire-->
+                  <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10" />
+                  <!-- Firing with a damaged FireCon should result in no shots fired-->
+                  <FM.Fire fireConID="6" target="2"  weaponIDs="11,12" />
+                  <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
+                </FM.FiringOrders>
+              </FM.VolleyOrders>
             </FM.Orders>
             <DamageControl/>
             <Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
@@ -111,8 +127,8 @@
                 <BeamBattery id="8" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Damaged"/>
                 <BeamBattery id="9" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational"/>
                 <BeamBattery id="10" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational"/>
-                <BeamBattery id="11" xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)" status="Operational"/>
-                <BeamBattery id="12" xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)" status="Operational"/>
+                <BeamBattery id="11" xSSD="40" ySSD="100" rating="1" arcs="(All arcs)" status="Operational"/>
+                <BeamBattery id="12" xSSD="120" ySSD="100" rating="1" arcs="(All arcs)" status="Operational"/>
                 <PointDefense id="13" xSSD="60" ySSD="140" targetId="0" status="Operational"/>
                 <PointDefense id="14" xSSD="100" ySSD="140" targetId="0" status="Operational"/>
             </Weapons>
@@ -120,12 +136,12 @@
                 <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 3 beam battery.                </Record>
                 <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
                 <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="High">                    Brazen hit for four points with a class 3 beam battery.                </Record>
+                <Record turn="2" event="Attack" priority="High"  >                    Brazen hit for four points with a class 3 beam battery.   </Record>
                 <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="Medium">                    Broadsword missed with a pulse torpedo.                </Record>
-                <Record turn="2" event="Attack" priority="High">                    Bar Maid hit for one point with a class 3 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="High">                    Bar Maid hit for one point with a class 3 beam battery.                </Record>
-                <Record turn="2" event="Damage" priority="Medium">                    First threshold check.                </Record>
+                <Record turn="2" event="Attack" priority="Medium">                    Broadsword missed with a pulse torpedo.                   </Record>
+                <Record turn="2" event="Attack" priority="High"  >                    Bar Maid hit for one point with a class 3 beam battery.   </Record>
+                <Record turn="2" event="Attack" priority="High"  >                    Bar Maid hit for one point with a class 3 beam battery.   </Record>
+                <Record turn="2" event="Damage" priority="Medium">                    First threshold check.                                    </Record>
             </Log>
         </Ship>
     </Player>

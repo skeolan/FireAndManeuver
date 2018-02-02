@@ -116,13 +116,15 @@ namespace FireAndManeuver.GameModel
 
         public static GameEngine ResolveVolleys(GameEngine ge, IConfigurationRoot config, int VolleyMax, string sourceFileName)
         {
-            for (var i = ge.volley; i <= VolleyMax; i++)
+            for (; ge.volley <= VolleyMax; ge.volley++)
             {
-                Console.WriteLine($"VOLLEY {i}");
+                Console.WriteLine();
+                Console.WriteLine($"VOLLEY {ge.volley}");
+                Console.WriteLine("".PadRight(100, '*'));
                 //********
                 //MANEUVER
                 //********
-                ge.ExecuteManeuversForVolley(i);
+                ge.ExecuteManeuversForVolley(ge.volley);
 
 
                 //FIRE
@@ -131,10 +133,9 @@ namespace FireAndManeuver.GameModel
                 //Record Volley Report
                 RecordVolleyReport(ge, sourceFileName);
 
-                ge.volley = (++ge.volley >= VolleyMax) ? VolleyMax : ge.volley;
+                Console.WriteLine("".PadRight(100, '*'));
             }
 
-            Debug.Assert(ge.volley == VolleyMax, $"Volley resolution ran volley count to {ge.volley}, which is higher than {VolleyMax}");
 
             {
                 //Set up for a new Exchange by clearing out this Exchange's scripting
@@ -155,13 +156,14 @@ namespace FireAndManeuver.GameModel
                 destFileName
                 );
             ge.SourceFile = destFileFullName;
-            Console.WriteLine($"Volley interim report saving to {ge.SourceFile}...");
+            Console.WriteLine($" - Volley interim report saving to:");
+            Console.WriteLine($"          {ge.SourceFile}...");
             ge.SaveToFile(ge.SourceFile);
         }
 
         private bool ExecuteManeuversForVolley(int currentVolley)
         {
-            Console.WriteLine("MANEUVER SEGMENT");
+            Console.WriteLine(" - MANEUVER SEGMENT");
 
             //--Launch Phase (Ordnance, Fighters, Gunboats)
             //TODO
@@ -170,7 +172,7 @@ namespace FireAndManeuver.GameModel
             // -- Roll all maneuver tests
             foreach (var u in AllUnits)
             {
-                Console.WriteLine($"  --  Process Maneuver orders for {u.ToString()}");
+                Console.WriteLine($"  -- Process Maneuver orders for {u.ToString()}");
                 var orders = u.Orders.FirstOrDefault(o => o.volley == currentVolley);
                 var maneuveringOrders = (orders ?? new VolleyOrders()).ManeuveringOrders;
                 foreach (var o in maneuveringOrders)
@@ -179,7 +181,7 @@ namespace FireAndManeuver.GameModel
                     var target = o.TargetID;
                     var priority = o.Priority;
 
-                    Console.WriteLine($"Execute {priority} {type} maneuver against Unit [{target}]");
+                    Console.WriteLine($"   --- Execute {priority} {type} maneuver against Unit [{target}]");
                 }
             }
 
@@ -194,7 +196,7 @@ namespace FireAndManeuver.GameModel
         }
         private static void ExecuteCombatForVolley(GameEngine newGE)
         {
-            Console.WriteLine("FIRE SEGMENT");
+            Console.WriteLine(" - FIRE SEGMENT");
             //--Point Defense Phase
             //TODO
 
