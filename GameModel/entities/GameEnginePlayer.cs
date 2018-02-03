@@ -21,11 +21,11 @@ namespace FireAndManeuver.GameModel
         public int key {get; set;} = -1;
         public string Objectives {get; set;} = "";
         [XmlElement("Ship")]
-        public List<Unit> Units { get; set; }
+        public List<GameUnit> Units { get; set; }
 
         public GameEnginePlayer()
         {
-            Units = new List<Unit>();
+            Units = new List<GameUnit>();
         }
 
         internal static GameEnginePlayer Clone(GameEnginePlayer p)
@@ -34,10 +34,10 @@ namespace FireAndManeuver.GameModel
             var newP = (GameEnginePlayer)p.MemberwiseClone();
 
             //And clone all complex types.
-            List<Unit> newUnits = new List<Unit>();
+            List<GameUnit> newUnits = new List<GameUnit>();
             foreach (var u in p.Units)
             {
-                newUnits.Add(Unit.Clone(u));
+                newUnits.Add(GameUnit.Clone(u));
             }
 
             return newP;

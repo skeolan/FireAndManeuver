@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace FireAndManeuver.GameModel
 {
     [XmlRoot("Ship")]
-    public class Unit
+    public class GameUnit
     {
         private string _damageControlRaw = "";
         private List<UnitSystem> _allSystems;
@@ -96,6 +96,10 @@ namespace FireAndManeuver.GameModel
         [XmlArrayItem("AntiMatterTorpedoLauncher", Type = typeof(AntiMatterTorpedoLauncherSystem))]
         public List<WeaponSystem> Weapons { get; set; }
 
+        [XmlArray]
+        [XmlArrayItem("Record", Type = typeof(GameUnitRecord))]
+        public List<GameUnitRecord> Log { get; set; }
+
         [XmlIgnore]
         public List<UnitSystem> AllSystems
         {
@@ -125,7 +129,7 @@ namespace FireAndManeuver.GameModel
         [XmlArrayItem("FM.VolleyOrders", Type=typeof(VolleyOrders))]
         public List<VolleyOrders> Orders { get; set; } = new List<VolleyOrders>();
 
-        public Unit()
+        public GameUnit()
         {
 
         }
@@ -145,12 +149,12 @@ namespace FireAndManeuver.GameModel
             return $"{InstanceName} -- {Race} {ClassName}-class {ShipClass} -- TMF:{Mass} / NPV:{PointValue}";
         }
 
-        public static Unit LoadNewUnit(string sourceFile)
+        public static GameUnit LoadNewUnit(string sourceFile)
         {
-            XmlSerializer srz = new XmlSerializer(typeof(Unit));
+            XmlSerializer srz = new XmlSerializer(typeof(GameUnit));
 
             FileStream fs;
-            Unit myNewUnit = null;
+            GameUnit myNewUnit = null;
 
             try
             {
@@ -163,7 +167,7 @@ namespace FireAndManeuver.GameModel
 
             try
             {
-                myNewUnit = (Unit)srz.Deserialize(fs);
+                myNewUnit = (GameUnit)srz.Deserialize(fs);
                 myNewUnit.SourceFile = sourceFile;
             }
             catch (InvalidOperationException ex)
@@ -182,10 +186,10 @@ namespace FireAndManeuver.GameModel
             return myNewUnit;
         }
 
-        internal static Unit Clone(Unit u)
+        internal static GameUnit Clone(GameUnit u)
         {
             //Copy all primitive types...
-            var newU = (Unit) u.MemberwiseClone();
+            var newU = (GameUnit) u.MemberwiseClone();
 
             //... clone all complex non-collection types...
             newU.Armor = u.Armor.Clone();

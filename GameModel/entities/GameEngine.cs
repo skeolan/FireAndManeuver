@@ -34,13 +34,13 @@ namespace FireAndManeuver.GameModel
         public GameEnginePlayer[] Players { get; set; }
 
         [XmlIgnore]
-        public IEnumerable<Unit> AllUnits
+        public IEnumerable<GameUnit> AllUnits
         {
             get
             {
                 foreach (GameEnginePlayer p in Players)
                 {
-                    foreach (Unit u in p.Units)
+                    foreach (GameUnit u in p.Units)
                     {
                         yield return u;
                     }
@@ -209,7 +209,7 @@ namespace FireAndManeuver.GameModel
         {
             foreach(GameEnginePlayer p in Players)
             {
-                foreach(Unit u in p.Units)
+                foreach(GameUnit u in p.Units)
                 {
                     
                 }

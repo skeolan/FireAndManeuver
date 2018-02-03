@@ -10,13 +10,14 @@ namespace FireAndManeuver.Common
     {
 
         const bool SUPPRESS_TITLE_LINE_FOR_HULLMATRIX = true;
-        const int READOUT_WIDTH = 140;
+        const int READOUT_WIDTH = 100; //90 is the absolute minimum for a reasonable console output, otherwise some lines will blow out the right side.
+        const int HANGING_INDENT_WIDTH = 2;
         static string boundary = "".PadRight(READOUT_WIDTH, '*');
         static string separator = $"* {"".PadRight(READOUT_WIDTH-4, '-')} *";
-        static string outputFormat = "* {0, -20} : {1, -"+(READOUT_WIDTH - 25 - 2).ToString()+"} *";
-        static string collectionItemOutputFormat = "* {0, -20} > {1, -"+(READOUT_WIDTH - 25 - 2).ToString()+"} *";
+        static string outputFormat = "* {0, -19} : {1, -"+(READOUT_WIDTH - 24 - 2).ToString()+"} *";
+        static string collectionItemOutputFormat = "* {0, -19} > {1, -"+(READOUT_WIDTH - 24 - 2).ToString()+"} *";
 
-        public static List<string> generateUnitReadout(Unit myUnit, List<Unit> allUnits = null)
+        public static List<string> generateUnitReadout(GameUnit myUnit, List<GameUnit> allUnits = null)
         {
 
             List<string> readout = new List<string>();
@@ -38,6 +39,7 @@ namespace FireAndManeuver.Common
             readout.AddRange(printReadoutCollection("Defenses", myUnit.Defenses, collectionItemOutputFormat));
             readout.AddRange(printReadoutCollection("Holds", myUnit.Holds, collectionItemOutputFormat));
             readout.AddRange(printReadoutCollection("Weapons", myUnit.Weapons, collectionItemOutputFormat));
+            readout.AddRange(printReadoutCollection("Log", myUnit.Log, collectionItemOutputFormat));
             readout.Add(separator);
             readout.Add($"* {(myUnit.Orders.Count > 0 ? "Orders" : "(No Orders)"), -(READOUT_WIDTH - 4)} *");
             foreach (var volleyOrders in myUnit.Orders)
@@ -57,7 +59,7 @@ namespace FireAndManeuver.Common
         public static List<string> generateGameEngineReadout(GameEngine ge)
         {
             List<string> readout = new List<string>();
-            var allUnits = new List<Unit>();
+            var allUnits = new List<GameUnit>();
 
             readout.Add(" BEGIN READOUT ".PadLeft((READOUT_WIDTH + " BEGIN READOUT ".Length) / 2, '^').PadRight(READOUT_WIDTH, '^'));
             readout.Add("");
@@ -69,13 +71,13 @@ namespace FireAndManeuver.Common
 
             //Briefing block
             readout.Add("* Briefing *".PadRight(READOUT_WIDTH, '*'));
-            readout.AddRange(WrapDecorated(ge.Briefing, READOUT_WIDTH, "* ", " *"));
+            readout.AddRange(WrapDecorated(ge.Briefing, READOUT_WIDTH, "* ", " *", HANGING_INDENT_WIDTH));
             readout.Add(boundary);
             readout.Add("");
 
             //Report block
             readout.Add("* Report *".PadRight(READOUT_WIDTH, '*'));
-            readout.AddRange(WrapDecorated(String.IsNullOrEmpty(ge.Report) ? "..." : ge.Report, READOUT_WIDTH, "* ", " *"));
+            readout.AddRange(WrapDecorated(String.IsNullOrEmpty(ge.Report) ? "..." : ge.Report, READOUT_WIDTH, "* ", " *", HANGING_INDENT_WIDTH));
             readout.Add(boundary);
             readout.Add("");
 
@@ -134,10 +136,10 @@ namespace FireAndManeuver.Common
                 default:
                     {
                         //multiple entries needs a multi-line printout
-                        if (!suppressTitleLine) outputLines.Add(String.Format("* {0,-16}({1, 2}){2,-76} *", collectionName, coll.Count.ToString(), ""));
+                        if (!suppressTitleLine) outputLines.AddRange(WrapDecorated($"{collectionName, -16}({coll.Count, 2})", READOUT_WIDTH, "* ", " *"));
                         foreach (var sys in coll)
                         {
-                            outputLines.Add(String.Format(outputFormat, "", sys.ToString()));
+                            outputLines.AddRange(WrapDecorated(sys.ToString(), READOUT_WIDTH, "*                      > ", " *", HANGING_INDENT_WIDTH));
                         }
                         break;
                     }
@@ -146,7 +148,7 @@ namespace FireAndManeuver.Common
             return outputLines;
         }
 
-        private static List<string> printOrders<T>(string collectionName, List<T> coll, string outputFormat, Unit thisUnit = null, List<Unit> allUnits = null)
+        private static List<string> printOrders<T>(string collectionName, List<T> coll, string outputFormat, GameUnit thisUnit = null, List<GameUnit> allUnits = null)
         {
             var output = new List<string>();
 
@@ -189,28 +191,34 @@ namespace FireAndManeuver.Common
             return output;
         }
 
-        public static List<string> WrapDecorated(string text, int margin, string prefix, string suffix)
+        public static List<string> WrapDecorated(string text, int margin, string prefix, string suffix, int hangingIndentLength=0)
         {
             int start = 0, end;
             var lines = new List<string>();
             text = Regex.Replace(text, @"\s", " ").Trim();
 
             margin = margin - prefix.Length - suffix.Length;
+            int indent = 0;
 
-            while ((end = start + margin) < text.Length)
+            while ((end = start + margin - indent) < text.Length)
             {
                 while (text[end] != ' ' && end > start)
+                {
                     end -= 1;
+                    var candidate = text.Substring(start, end - start);
+                }
 
                 if (end == start)
                     end = start + margin;
 
-                lines.Add(prefix + text.Substring(start, end - start).PadRight(margin) + suffix);
+                lines.Add(prefix + "".PadRight(indent) + text.Substring(start, end - start).PadRight(margin - indent) + suffix);
                 start = end + 1;
+
+                indent = hangingIndentLength;
             }
 
             if (start < text.Length)
-                lines.Add(prefix + text.Substring(start).PadRight(margin) + suffix);
+                lines.Add(prefix + "".PadRight(indent) + text.Substring(start).PadRight(margin - indent) + suffix);
 
             return lines;
         }

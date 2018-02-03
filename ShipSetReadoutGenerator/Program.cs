@@ -41,7 +41,7 @@ namespace FireAndManeuver.Clients
             var srcFilesFromConfig = (config["srcFiles"] == null ? new string[0] : config["srcFiles"].Split(','));
             var srcDirsFromConfig = (config["srcDirectories"] == null ? new string[0] : config["srcDirectories"].Split(','));
             var unitXMLFiles = DataLoadUtilities.getXMLFileList(srcFilesFromArgs, srcFilesFromConfig, srcDirsFromConfig, _DefaultUnitXML);
-            List<Unit> unitSet = DataLoadUtilities.LoadDesignXML(unitXMLFiles);
+            List<GameUnit> unitSet = DataLoadUtilities.LoadDesignXML(unitXMLFiles);
 
             //... and list their stats
             foreach (var u in unitSet)

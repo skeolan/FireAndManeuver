@@ -10,7 +10,7 @@ namespace FireAndManeuver.GameModel
             SystemName = "Abstract Weapon System";
         }
 
-        public List<int> Attack(Unit target, Unit attacker=null)
+        public List<int> Attack(GameUnit target, GameUnit attacker=null)
         {
             List<int> damageMatrix = new List<int>() {0};
 

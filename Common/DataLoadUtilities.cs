@@ -10,16 +10,16 @@ namespace FireAndManeuver.Common
 {
     public class DataLoadUtilities
     {
-        public static List<Unit> LoadDesignXML(HashSet<FileInfo> unitXMLFiles)
+        public static List<GameUnit> LoadDesignXML(HashSet<FileInfo> unitXMLFiles)
         {
-            var unitSet = new List<Unit>();
+            var unitSet = new List<GameUnit>();
 
             //... load them all up
             foreach (var x in unitXMLFiles)
             {
                 try
                 {
-                    var newU = Unit.LoadNewUnit(x.FullName);
+                    var newU = GameUnit.LoadNewUnit(x.FullName);
                     if (newU != null)
                     {
                         unitSet.Add(newU);
