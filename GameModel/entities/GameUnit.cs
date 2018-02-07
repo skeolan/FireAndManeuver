@@ -11,7 +11,8 @@ namespace FireAndManeuver.GameModel
     {
         private string _damageControlRaw = "";
         private List<UnitSystem> _allSystems;
-        
+        private Func<int, int> _rollSuccesses = FireAndManeuver.GameModel.DiceUtilities.RollStandardDice;
+
         [XmlAttribute("id")] public int IdNumeric { get; set; } = 1;
         [XmlIgnore] public string FullID {
             get {
@@ -42,7 +43,7 @@ namespace FireAndManeuver.GameModel
             set
             {
                 _damageControlRaw = value;
-            } 
+            }
         }
         [XmlIgnore] public List<int> DamageControl
         {
@@ -64,7 +65,6 @@ namespace FireAndManeuver.GameModel
         [XmlElement] public string CrewQuality { get; set; } = "Average";
 
 
-        // Class+instance properties
         [XmlElement] public string Race { get; set; } = "Generic";
         [XmlElement] public string ClassAbbrev { get; set; } = "XX";
         [XmlElement] public string ClassName { get; set; } = "Unit";
@@ -111,6 +111,7 @@ namespace FireAndManeuver.GameModel
             }
         }
 
+        //Non-Property methods
         private List<UnitSystem> ComposeAllSystemsList()
         {
             var allSystems = new List<UnitSystem>() {
@@ -126,8 +127,23 @@ namespace FireAndManeuver.GameModel
         }
 
         [XmlArray("FM.Orders")]
-        [XmlArrayItem("FM.VolleyOrders", Type=typeof(VolleyOrders))]
+        [XmlArrayItem("FM.VolleyOrders", Type = typeof(VolleyOrders))]
         public List<VolleyOrders> Orders { get; set; } = new List<VolleyOrders>();
+
+        public ManeuverResult ResolveManeuver (VolleyOrders orders, int SpeedDRM = 0, int EvasionDRM = 0)
+        {
+            int speedSuccesses = 0;
+            int evasionSuccesses = 0;
+
+            //Roll for Speed
+            speedSuccesses = RollSuccesses(orders.Speed);
+
+            //Roll for Evasion
+            evasionSuccesses = RollSuccesses(orders.Evasion);
+
+
+            return new ManeuverResult() { SpeedSuccesses = speedSuccesses, EvasionSuccesses = evasionSuccesses };
+        }
 
         public GameUnit()
         {

@@ -7,11 +7,10 @@ namespace FireAndManeuver.GameModel
 {
     public class GameUnitRecord
     {
+        [XmlIgnore] private int _volley { get; set; }
+
         [XmlAttribute("turn")] public int Turn { get; set; }
-        [XmlIgnore]
-        private int _volley { get; set; }
-        [XmlAttribute("fmVolley")]
-        public int Volley
+        [XmlAttribute("fmVolley")] public int Volley
         {
             get { if (_volley == -1 && Turn > 0) { _volley = Turn; } return _volley; }
             set { _volley = value; }
