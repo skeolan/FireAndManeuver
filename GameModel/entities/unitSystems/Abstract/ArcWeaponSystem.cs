@@ -1,21 +1,26 @@
-using System.Xml.Serialization;
+// <copyright file="ArcWeaponSystem.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System.Xml.Serialization;
+
     public abstract class ArcWeaponSystem : WeaponSystem
     {
-
-        [XmlAttribute] public virtual string arcs { get; set; }
-        public ArcWeaponSystem() : base()
+        public ArcWeaponSystem()
+            : base()
         {
-            SystemName = "Abstract Arc-Firing Weapon System";
-            arcs = "(F)";
+            this.SystemName = "Abstract Arc-Firing Weapon System";
+            this.Arcs = "(F)";
         }
+
+        [XmlAttribute("arcs")]
+        public virtual string Arcs { get; set; }
 
         public override string ToString()
         {
-            return $"{base.ToString()} - {arcs}";
+            return $"{base.ToString()} - {this.Arcs}";
         }
     }
-
 }

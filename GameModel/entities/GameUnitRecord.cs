@@ -1,47 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
+﻿// <copyright file="GameUnitRecord.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Xml.Serialization;
+
     public class GameUnitRecord
     {
-        [XmlIgnore] private int _volley { get; set; }
-
-        [XmlAttribute("turn")] public int Turn { get; set; }
-        [XmlAttribute("fmVolley")] public int Volley
-        {
-            get { if (_volley == -1 && Turn > 0) { _volley = Turn; } return _volley; }
-            set { _volley = value; }
-        }
-        [XmlAttribute("fmExchange")] public int Exchange { get; set; }
-        [XmlAttribute("event")] public string Event { get; set; }
-        [XmlAttribute("priority")] public string Priority { get; set; }
-        [XmlText] public string Message { get; set; }
-
         public GameUnitRecord()
         {
-            Turn = -1;
-            Volley = -1;
-            Exchange = 1;
-            Event = "Info";
-            Priority = "Low";
-            Message = "";
+            this.Turn = -1;
+            this.Volley = -1;
+            this.Exchange = 1;
+            this.Event = "Info";
+            this.Priority = "Low";
+            this.Message = string.Empty;
         }
 
         public GameUnitRecord(int volley, int exchange, string eventType, string priority, string message)
         {
-            Volley = volley;
-            Exchange = exchange;
-            Event = eventType;
-            Priority = priority;
-            Message = message;
+            this.Volley = volley;
+            this.Exchange = exchange;
+            this.Event = eventType;
+            this.Priority = priority;
+            this.Message = message;
         }
+
+        [XmlAttribute("turn")]
+        public int Turn { get; set; }
+
+        [XmlAttribute("fmVolley")]
+        public int Volley
+        {
+            get
+            {
+                if (this.VolleyInternal == -1 && this.Turn > 0)
+                {
+                    this.VolleyInternal = this.Turn;
+                }
+
+                return this.VolleyInternal;
+            }
+
+            set
+            {
+                this.VolleyInternal = value;
+            }
+        }
+
+        [XmlAttribute("fmExchange")]
+        public int Exchange { get; set; }
+
+        [XmlAttribute("event")]
+        public string Event { get; set; }
+
+        [XmlAttribute("priority")]
+        public string Priority { get; set; }
+
+        [XmlText]
+        public string Message { get; set; }
+
+        [XmlIgnore]
+        private int VolleyInternal { get; set; }
 
         public override string ToString()
         {
-            return $"E{Exchange,2} / V{Volley,2} - {Priority,-6} - {Event,-6} - {Message.Trim()}";
+            return $"E{this.Exchange, 2} / V{this.Volley, 2} - {this.Priority, -6} - {this.Event, -6} - {this.Message.Trim()}";
         }
     }
 }

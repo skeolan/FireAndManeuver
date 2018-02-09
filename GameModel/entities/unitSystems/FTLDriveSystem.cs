@@ -1,19 +1,25 @@
-using System.Xml.Serialization;
+// <copyright file="FTLDriveSystem.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System.Xml.Serialization;
+
     [XmlRoot("FTLDrive")]
     public class FTLDriveSystem : UnitSystem
     {
-        [XmlAttribute] public bool active { get; set; } = false;
         public FTLDriveSystem()
         {
-            SystemName = "FTL Drive System";
+            this.SystemName = "FTL Drive System";
         }
+
+        [XmlAttribute("active")]
+        public bool Active { get; set; } = false;
+
         public override string ToString()
         {
-            return string.Format("{0} - {1}", base.ToString(), this.active ? "Active" : "Inactive");
+            return string.Format("{0} - {1}", base.ToString(), this.Active ? "Active" : "Inactive");
         }
     }
-
 }

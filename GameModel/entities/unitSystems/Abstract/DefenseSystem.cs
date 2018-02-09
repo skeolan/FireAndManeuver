@@ -1,13 +1,16 @@
-using System.Xml.Serialization;
+// <copyright file="DefenseSystem.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System.Xml.Serialization;
+
     public abstract class DefenseSystem : UnitSystem
     {
         public DefenseSystem()
         {
-            SystemName = "Abstract Defense System";
+            this.SystemName = "Abstract Defense System";
         }
     }
-
 }

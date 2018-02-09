@@ -1,39 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Serialization;
+// <copyright file="GameEnginePlayer.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Xml.Serialization;
+
     [XmlRoot("Player")]
     public class GameEnginePlayer
     {
-        [XmlAttribute()]
-        public string id {get; set;} = "-1";
-        [XmlAttribute()]
-        public string name {get; set;} = "Anonymous Coward";
-        [XmlAttribute()]
-        public string email {get; set;} = "none@tempuri.org";
-        [XmlAttribute()]
-        public string team {get; set;} = "none";
-        [XmlAttribute()]
-        public int key {get; set;} = -1;
-        public string Objectives {get; set;} = "";
+        public GameEnginePlayer()
+        {
+            this.Units = new List<GameUnit>();
+        }
+
+        [XmlAttribute("id")]
+        public string Id { get; set; } = "-1";
+
+        [XmlAttribute("name")]
+        public string Name { get; set; } = "Anonymous Coward";
+
+        [XmlAttribute("email")]
+        public string Email { get; set; } = "none@tempuri.org";
+
+        [XmlAttribute("team")]
+        public string Team { get; set; } = "none";
+
+        [XmlAttribute("key")]
+        public int Key { get; set; } = -1;
+
+        public string Objectives { get; set; } = string.Empty;
+
         [XmlElement("Ship")]
         public List<GameUnit> Units { get; set; }
 
-        public GameEnginePlayer()
-        {
-            Units = new List<GameUnit>();
-        }
-
         internal static GameEnginePlayer Clone(GameEnginePlayer p)
         {
-            //Copy all primitive types...
+            // Copy all primitive types...
             var newP = (GameEnginePlayer)p.MemberwiseClone();
 
-            //And clone all complex types.
+            // And clone all complex types.
             List<GameUnit> newUnits = new List<GameUnit>();
             foreach (var u in p.Units)
             {

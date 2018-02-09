@@ -1,3 +1,7 @@
+// <copyright file="HullTypeLookup.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
+
 namespace FireAndManeuver.GameModel
 {
     public enum HullTypeLookup
@@ -8,6 +12,5 @@ namespace FireAndManeuver.GameModel
         Strong = 40,
         Super = 50,
         Custom = 100
-    };
-
+    }
 }

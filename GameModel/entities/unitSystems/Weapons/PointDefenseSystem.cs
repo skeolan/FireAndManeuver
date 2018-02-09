@@ -1,13 +1,17 @@
-using System.Xml.Serialization;
+// <copyright file="PointDefenseSystem.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System.Xml.Serialization;
+
     public class PointDefenseSystem : WeaponSystem
     {
-        public PointDefenseSystem() : base()
+        public PointDefenseSystem()
+            : base()
         {
-            SystemName = "Point Defense System";
+            this.SystemName = "Point Defense System";
         }
     }
-
 }

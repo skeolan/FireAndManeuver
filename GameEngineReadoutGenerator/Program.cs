@@ -1,27 +1,31 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using FireAndManeuver.Common;
-using FireAndManeuver.GameModel;
+﻿// <copyright file="Program.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.Clients
 {
-    public class GameEngineReadoutGenerator
-    {
-        //public static IConfiguration Configuration { get; set; }
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using FireAndManeuver.Common;
+    using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.Configuration;
 
-        static void Main(string[] args)
+    public class Program
+    {
+        // public static IConfiguration Configuration { get; set; }
+        public static void Main(string[] args)
         {
             string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
             {
-                //Print help
+                // Print help
                 Console.WriteLine("??? NEEDS HELP TEXT");
-                //Exit early
+
+                // Exit early
                 return;
             }
 
@@ -29,13 +33,16 @@ namespace FireAndManeuver.Clients
             configBuilder.AddJsonFile(Path.Combine(workingDir, "appsettings.json"), true, true);
             var config = configBuilder.Build();
 
-            string _DefaultUnitXML = Path.Combine(workingDir, config["Default_Unit_Xml"] ?? "DefaultUnit.xml");
-            string _DefaultEngineXML = Path.Combine(workingDir, config["Default_GameEngine_Xml"] ?? "DefaultGameEngine.xml");
+            string defaultUnitXML = Path.Combine(workingDir, config["Default_Unit_Xml"] ?? "DefaultUnit.xml");
+            string defaultEngineXML = Path.Combine(workingDir, config["Default_GameEngine_Xml"] ?? "DefaultGameEngine.xml");
 
-            GameEngine ge = GameEngine.LoadFromXml(_DefaultEngineXML);
-            Console.WriteLine($"GameEngine [{ge.id}] from {ge.SourceFile} loaded successfully.");
-            Console.WriteLine("");
-            ConsoleReadoutUtilities.generateGameEngineReadout(ge).ForEach(l => Console.WriteLine(l));
+            GameEngine ge = GameEngine.LoadFromXml(defaultEngineXML);
+            Console.WriteLine($"GameEngine [{ge.Id}] from {ge.SourceFile} loaded successfully.");
+            Console.WriteLine(string.Empty);
+            ConsoleReadoutUtilities.GenerateGameEngineReadout(ge).ForEach(l => Console.WriteLine(l));
+
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }

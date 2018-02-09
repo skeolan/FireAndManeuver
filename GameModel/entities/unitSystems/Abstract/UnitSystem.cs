@@ -1,32 +1,42 @@
-using System.Xml.Serialization;
+// <copyright file="UnitSystem.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System.Xml.Serialization;
+
     public abstract class UnitSystem
     {
-        [XmlIgnore] public string SystemName { get; protected set; } = "Abstract base Unit System";
-
-        [XmlAttribute("id")] public int id { get; set; } = -1;
-        [XmlAttribute("xSSD")] public int xSSD { get; set; }
-        [XmlAttribute("ySSD")] public int ySSD { get; set; }
-        [XmlAttribute] public string status { get; set; } = "Operational";
-
         public UnitSystem()
         {
-
         }
+
+        [XmlIgnore]
+        public string SystemName { get; protected set; } = "Abstract base Unit System";
+
+        [XmlAttribute("id")]
+        public int Id { get; set; } = -1;
+
+        [XmlAttribute("xSSD")]
+        public int SSDXCoordinate { get; set; }
+
+        [XmlAttribute("ySSD")]
+        public int SSDYCoordinate { get; set; }
+
+        [XmlAttribute("status")]
+        public string Status { get; set; } = "Operational";
 
         public override string ToString()
         {
-            string idStr = this.id == -1 ? "" : string.Format("[{0:00}]", this.id);
-            return $"{idStr,2} - {this.SystemName,-30} - {this.status,-12}";
+            string idStr = this.Id == -1 ? string.Empty : string.Format("[{0:00}]", this.Id);
+            return $"{idStr, 2} - {this.SystemName, -30} - {this.Status, -12}";
         }
 
-        //As long as all properties are primitive type, no need to override this for derived classes
+        // As long as all properties are primitive type, no need to override this for derived classes
         public virtual dynamic Clone()
         {
             return (dynamic)this.MemberwiseClone();
         }
     }
-
 }

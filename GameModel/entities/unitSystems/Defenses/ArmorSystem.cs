@@ -1,23 +1,29 @@
-using System.Xml.Serialization;
+// <copyright file="ArmorSystem.cs" company="Patrick Maughan">
+// Copyright (c) Patrick Maughan. All rights reserved.
+// </copyright>
 
 namespace FireAndManeuver.GameModel
 {
+    using System.Xml.Serialization;
+
     [XmlRoot("Armor")]
     public class ArmorSystem : DefenseSystem
     {
-        public ArmorSystem() {
-            SystemName = "Armor System";
+        public ArmorSystem()
+        {
+            this.SystemName = "Armor System";
         }
 
-        [XmlAttribute] public string totalArmor { get; set; }
-        [XmlAttribute] public string remainingArmor { get; set; }
+        [XmlAttribute("totalArmor")]
+        public string TotalArmor { get; set; }
 
-        //public int[] armorLayers { get { return new List<string>(totalArmor.Split(",")).ForEach() } }
+        [XmlAttribute("remainingArmor")]
+        public string RemainingArmor { get; set; }
 
+        // public int[] armorLayers { get { return new List<string>(totalArmor.Split(",")).ForEach() } }
         public override string ToString()
         {
-            return string.Format($"{totalArmor, 3} / {remainingArmor ?? totalArmor, 3}");
+            return string.Format($"{this.TotalArmor, 3} / {this.RemainingArmor ?? this.TotalArmor, 3}");
         }
     }
-
 }
