@@ -54,15 +54,29 @@ namespace FireAndManeuver.Clients
             Console.WriteLine($"GameEngine [{ge.Id}] from {ge.SourceFile} loaded successfully.");
             Console.WriteLine("Begin Volley Resolution!");
 
-            //ge = GameEngine.ResolveVolleys(ge, config, volleysPerExchange, ge.SourceFile);
+            ge = GameEngine.ResolveVolleys(ge, config, volleysPerExchange, ge.SourceFile);
 
             // TestCloning();
+            // TestDeserialize(ge);
             TestDice();
 
             Console.WriteLine($"Exchange {ge.Exchange - 1} resolution completed!");
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
+        }
+
+        private static void TestDeserialize(GameEngine ge)
+        {
+            var destFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "SaveAttempt.xml");
+            FileInfo f = new FileInfo(destFileName);
+
+            ge.SaveToFile(destFileName);
+
+            if (f.Exists)
+            {
+                Console.WriteLine($"Saved to {destFileName} successfully!");
+            }
         }
 
         private static void TestDice()
@@ -84,6 +98,10 @@ namespace FireAndManeuver.Clients
             var result = u.ResolveManeuver(u.Orders.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
 
             Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
+
+            Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
+            var damageResult = new DiceNotationUtility().RollFTDamage(15, 0, 2, true);
+            Console.WriteLine($"Dealt a total of {damageResult.Standard} standard damage and {damageResult.Penetrating} penetrating damage.");
         }
 
         // TODO: Refactor this out into a test project

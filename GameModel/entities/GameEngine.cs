@@ -29,10 +29,10 @@ namespace FireAndManeuver.GameModel
         [XmlAttribute("id")]
         public int Id { get; set; }
 
-        [XmlElement("FM:Exchange")]
+        [XmlAttribute("FM.Exchange")]
         public int Exchange { get; set; }
 
-        [XmlElement("FM:Volley")]
+        [XmlAttribute("FM.Volley")]
         public int Volley { get; set; }
 
         [XmlAttribute("turn")]
@@ -45,10 +45,13 @@ namespace FireAndManeuver.GameModel
         [XmlAttribute("combat")]
         public bool Combat { get; set; }
 
+        [XmlElement("Briefing")]
         public string Briefing { get; set; }
 
+        [XmlElement("GameOptions")]
         public GameEngineOptions GameOptions { get; set; }
 
+        [XmlElement("Report")]
         public string Report { get; set; }
 
         [XmlElement("Player")]
@@ -68,11 +71,6 @@ namespace FireAndManeuver.GameModel
                 }
             }
         }
-
-        public static bool ShouldSerializeTurn()
-        {
-            return false;
-        } // ... but our implementation shouldn't produce it
 
         public static GameEngine LoadFromXml(string sourceFile)
         {
@@ -209,11 +207,24 @@ namespace FireAndManeuver.GameModel
         {
             Console.WriteLine(" - MANEUVER SEGMENT");
 
+            var speedSuccessesById = new Dictionary<int, int>(this.AllUnits.Count());
+            var evasionSuccessesById = new Dictionary<int, int>(this.AllUnits.Count());
+
             //--Launch Phase (Ordnance, Fighters, Gunboats)
             // TODO
 
             //--Movement Phase
-            // -- Roll all maneuver tests
+            foreach (var u in this.AllUnits)
+            {
+                var result = u.ResolveManeuver(u.Orders.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
+
+                speedSuccessesById.Add(u.IdNumeric, result.SpeedSuccesses);
+                evasionSuccessesById.Add(u.IdNumeric, result.EvasionSuccesses);
+
+                Console.WriteLine($"{u.InstanceName} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
+            }
+
+            // -- Adjudicate all maneuver tests
             foreach (var u in this.AllUnits)
             {
                 Console.WriteLine($"  -- Process Maneuver orders for {u.ToString()}");
