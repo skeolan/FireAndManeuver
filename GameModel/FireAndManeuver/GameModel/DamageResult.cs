@@ -1,4 +1,4 @@
-﻿// <copyright file="DiceNotationUtility.cs" company="Patrick Maughan">
+﻿// <copyright file="DamageResult.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 

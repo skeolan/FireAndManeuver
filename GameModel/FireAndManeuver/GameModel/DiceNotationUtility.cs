@@ -56,34 +56,49 @@ namespace FireAndManeuver.GameModel
             return successes;
         }
 
-        public DamageResult RollFTDamage(int numberOfDice, int drm = 0, int targetScreenRating = 0, bool dealPenetrating = false)
+        public DamageResult RollFTDamage(int numberOfDice, int drm = 0, int targetScreenRating = 0, bool dealPenetrating = false, int recursionDepth = 0)
         {
+            var indent = string.Empty.PadRight(4 * recursionDepth);
+            var penetrationCount = 0;
             var damageResult = new DamageResult();
 
             var diceRolled = this.dice.Roll($"{numberOfDice}D6", this.roller);
-            Console.Write($"DiceRoller library RollFTDamage die roll [{diceRolled.DiceExpression}]");
-            Console.Write($"with DRM {drm}, screen {targetScreenRating}, penetration {dealPenetrating}");
-            Console.WriteLine($": {string.Join(",", diceRolled.Results.Select(r => r.Value))}");
+            var rolls = diceRolled.Results.OrderByDescending(v => v.Value);
 
-            foreach (var roll in diceRolled.Results)
+            Console.Write($"{indent}DiceRoller library RollFTDamage die roll [{diceRolled.DiceExpression}]");
+            Console.Write($" with DRM {drm}, screen {targetScreenRating}, penetration {dealPenetrating}");
+            Console.WriteLine($": {string.Join(",", rolls.Select(r => r.Value))}");
+
+            foreach (var roll in rolls)
             {
                 var dieDamage = CountSuccessesOnRoll(roll.Value, drm, targetScreenRating);
 
-                Console.WriteLine($"Roll of {roll.Value} deals {dieDamage} damage");
+                Console.Write($"{indent}Roll of {roll.Value} deals {dieDamage} damage");
 
                 damageResult.Standard += dieDamage;
 
                 if (roll.Value >= Constants.MinRollForDoubleSuccess && dealPenetrating)
                 {
-                    Console.WriteLine($"{roll.Value} penetrates! Rolling die for penetration damage:");
-
-                    // On a "natural" max roll, deal recursive, shield-ignoring, penetrating followup damage
-                    var penetrationFollowup = this.RollFTDamage(1, drm, 0, true);
-                    damageResult.Penetrating += penetrationFollowup.Standard;
-
-                    // Penetrating damage could ITSELF penetrate, but it all rolls up to just one count of penetrating damage
-                    damageResult.Penetrating += penetrationFollowup.Penetrating;
+                    penetrationCount++;
+                    Console.Write($" -- penetration die count: {penetrationCount}");
                 }
+
+                Console.WriteLine();
+
+                // Exit early if dieDamage == 0, since dice are sorted in descending order?
+            }
+
+            if (penetrationCount > 0)
+            {
+                Console.WriteLine($"{indent}Rolling penetrating dice: [");
+
+                // On a "natural" max roll, deal recursive, shield-ignoring, penetrating followup damage
+                var penetrationFollowup = this.RollFTDamage(penetrationCount, drm, 0, true, recursionDepth + 1);
+                Console.WriteLine($"{indent}]");
+                damageResult.Penetrating += penetrationFollowup.Standard;
+
+                // Penetrating damage could ITSELF penetrate, but it all rolls up to just one count of penetrating damage
+                damageResult.Penetrating += penetrationFollowup.Penetrating;
             }
 
             return damageResult;
@@ -105,14 +120,14 @@ namespace FireAndManeuver.GameModel
 
             // After DRM, 4+ counts for 1 success,
             // except in cases of "screen level 1" or equivalent "ignore 4's" situations
-            if (value - drm >= Constants.MinRollForSuccess + (difficultyLevel > 0 ? 1 : 0))
+            if (value + drm >= Constants.MinRollForSuccess + (difficultyLevel > 0 ? 1 : 0))
             {
                 successes += 1;
             }
 
             // Natural 6 counts for 2 successes, unless DRM causes it to fail
             // except in "screen level 2" or equivalent "ignore double-success on 6's" situations
-            if (value >= Constants.MinRollForDoubleSuccess && value - drm >= Constants.MinRollForSuccess && difficultyLevel < 2)
+            if (value >= Constants.MinRollForDoubleSuccess && value + drm >= Constants.MinRollForSuccess && difficultyLevel < 2)
             {
                 successes += 1;
             }

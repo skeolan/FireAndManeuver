@@ -62,8 +62,11 @@ namespace FireAndManeuver.Clients
 
             Console.WriteLine($"Exchange {ge.Exchange - 1} resolution completed!");
 
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            if (!Console.IsInputRedirected)
+            {
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+            }
         }
 
         private static void TestDeserialize(GameEngine ge)
@@ -100,7 +103,12 @@ namespace FireAndManeuver.Clients
             Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
-            var damageResult = new DiceNotationUtility().RollFTDamage(15, 0, 2, true);
+            var damageResult = new DiceNotationUtility()
+            .RollFTDamage(
+                numberOfDice: 20,
+                drm: -1,
+                targetScreenRating: 2,
+                dealPenetrating: true);
             Console.WriteLine($"Dealt a total of {damageResult.Standard} standard damage and {damageResult.Penetrating} penetrating damage.");
         }
 
