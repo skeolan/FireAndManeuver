@@ -1,190 +1,257 @@
 <?xml version="1.0" standalone="yes" ?>
 <GameEngine id="001" name="Simple 2-ship game" turn="2" combat="false">
-    <Briefing>Two ships enter. One ship leaves. An Alliance and a Zetan cruiser happen upon each other during a routine unaccompanied patrol of the Lost Zone. Inevitably, the short ceasefire between these two empires does not hold...</Briefing>
-    <GameOptions>
-        <Variant value="Standard"/>
-        <Deadline value="14"/>
-        <AftArcFire value="true"/>
-        <CinematicMovement value="true"/>
-        <CoreSystems value="false"/>
-        <PenetratingDamage value="true"/>
-        <SensorRules value="0"/>
-        <SensorLevel value="4"/>
-        <SensorRangeBand value="18.0"/>
-        <SensorBlipBands value="10.0"/>
-        <ShipRoll value="false"/>
-        <SimultaneousFire value="true"/>
-        <TargetResolution value="1"/>
-        <ThresholdDamagedSystems value="true"/>
-        <PDSFireAtShips value="true"/>
-        <FighterMorale value="false"/>
-        <AreaDefenseActivationRange value="6.0"/>
-        <BeamRangeBand value="12.0"/>
-        <KineticGunRangeBand value="6.0"/>
-        <PointDefenseRange value="6.0"/>
-        <PulseTorpedoRangeBand value="6.0"/>
-        <MultipleKineticPenetratorPackRange value="12.0"/>
-        <NeedleBeamRange value="12.0"/>
-        <SalvoMissileRange value="24.0"/>
-        <SalvoMissileExtendedRange value="36.0"/>
-        <SalvoMissileLockOn value="6.0"/>
-        <MissileLockOnRange value="6.0"/>
-        <ScattergunRange value="6.0"/>
-        <SubmunitionPackRangeBand value="6.0"/>
-        <FighterRange value="6.0"/>
-        <FighterMovementRange value="24.0"/>
-        <FighterFastMovementRange value="36.0"/>
-        <FighterSecondaryRange value="12.0"/>
-        <PulserRangeBand value="12.0"/>
-        <PlasmaBoltRange value="30.0"/>
-        <PlasmaBoltBlastRange value="6.0"/>
-        <GraserRangeBand value="18.0"/>
-        <AntiMatterTorpedoRange value="18.0"/>
-        <AntiMatterTorpedoLockOnRange value="6.0"/>
-        <AntiMatterTorpedoBlastRange value="3.0"/>
-        <ActiveExtent value="true"/>
-        <XMinExtent value="-500.0"/>
-        <XMaxExtent value="500.0"/>
-        <YMinExtent value="-500.0"/>
-        <YMaxExtent value="500.0"/>
-        <DebugMode value="true"/>
-        <TestingMode value="true"/>
-        <PlayTest value="false"/>
-    </GameOptions>
-    <Report></Report>
-    <Player id="1" name="skeolan" email="virtutis.umbra@gmail.com" team="Alliance" key="662249">
-        <Objectives>For the Alliance! For Glory!</Objectives>
-        <Ship id="1">
-            <Name>Glory</Name>
-            <IconFamily value="Generic\Echo"/>
-            <Status>Moderate</Status>
-            <FM.Orders>
-                <FM.VolleyOrders volley="1">
-                    <FM.Speed>4</FM.Speed>
-                    <FM.Evasion>2</FM.Evasion>
-                    <FM.ManeuveringOrders>
-                        <FM.Maneuver type="Close" target="2" priority="primary" />
-                    </FM.ManeuveringOrders>
-                    <FM.FiringOrders>
-                        <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
-                        <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
-                    </FM.FiringOrders>
-                </FM.VolleyOrders>
-                <FM.VolleyOrders volley="2">
-                    <FM.Speed>3</FM.Speed>
-                    <FM.Evasion>3</FM.Evasion>
-                    <FM.ManeuveringOrders>
-                        <FM.Maneuver type="Withdraw" target="2" priority="primary" />
-                    </FM.ManeuveringOrders>
-                    <FM.FiringOrders>
-                        <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
-                        <!-- Assigning weapons to "fireCon zero" requires they be in PD mode -->
-                        <FM.Fire fireConID="0" target="2" weaponIDs="13,14" />
-                    </FM.FiringOrders>
-                </FM.VolleyOrders>
-              <FM.VolleyOrders volley="2">
-                <FM.Speed>3</FM.Speed>
-                <FM.Evasion>3</FM.Evasion>
-                <FM.ManeuveringOrders>
-                  <!-- <FM.Maneuver type="Withdraw" target="2" priority="primary" /> -->
-                  <!-- Intentionally no movement orders this Volley, should be handled smoothly?? -->
-                </FM.ManeuveringOrders>
-                <FM.FiringOrders>
-                  <!-- Damaged weapon #8 should not fire-->
-                  <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10" />
-                  <!-- Firing with a damaged FireCon should result in no shots fired-->
-                  <FM.Fire fireConID="6" target="2"  weaponIDs="11,12" />
-                  <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
-                </FM.FiringOrders>
-              </FM.VolleyOrders>
-            </FM.Orders>
-            <DamageControl/>
-            <Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
-            <Heading heading="3" pastHeading="3" />
-            <Speed speed="6"/>
-            <VectorSpeed speed="6.0"/>
-            <Course course="3.0"/>
-            <Race>Alliance</Race>
-            <ClassAbbrev>CA</ClassAbbrev>
-            <ClassName>Wyvern</ClassName>
-            <ShipClass>Heavy Cruiser</ShipClass>
-            <CrewQuality>First Rate</CrewQuality>
-            <Mass>80</Mass>
-            <PointValue>266</PointValue>
-            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
-            <FTLDrive id="4" status="Operational" active="false"/>
-            <Armor totalArmor="0" remainingArmor="0"/>
-            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="18"/>
-            <Electronics>
-                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
-                <FireControl id="6" xSSD="90" ySSD="180" status="Damaged"/>
-            </Electronics>
-            <Defenses>
-                <Screen id="7" xSSD="80" ySSD="160" status="Damaged"/>
-            </Defenses>
-            <Holds></Holds>
-            <Weapons>
-                <BeamBattery id="8" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Damaged"/>
-                <BeamBattery id="9" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational"/>
-                <BeamBattery id="10" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational"/>
-                <BeamBattery id="11" xSSD="40" ySSD="100" rating="1" arcs="(All arcs)" status="Operational"/>
-                <BeamBattery id="12" xSSD="120" ySSD="100" rating="1" arcs="(All arcs)" status="Operational"/>
-                <PointDefense id="13" xSSD="60" ySSD="140" targetId="0" status="Operational"/>
-                <PointDefense id="14" xSSD="100" ySSD="140" targetId="0" status="Operational"/>
-            </Weapons>
-            <Log>
-                <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 3 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="High"  >                    Brazen hit for four points with a class 3 beam battery.   </Record>
-                <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
-                <Record turn="2" event="Attack" priority="Medium">                    Broadsword missed with a pulse torpedo.                   </Record>
-                <Record turn="2" event="Attack" priority="High"  >                    Bar Maid hit for one point with a class 3 beam battery.   </Record>
-                <Record turn="2" event="Attack" priority="High"  >                    Bar Maid hit for one point with a class 3 beam battery.   </Record>
-                <Record turn="2" event="Damage" priority="Medium">                    First threshold check.                                    </Record>
-            </Log>
-        </Ship>
-    </Player>
-    <Player id="2" name="specter" email="" team="Zetans">
-<!--        <Ship id="2">
-            <Name>Brazen</Name>
-            <IconFamily value="Generic\Alpha"/>
-            <Status>Ok</Status>
-            <Orders>Z1+4</Orders>
-            <DamageControl/>
-            <Position x="33.1" y="21.0" pastX="48.0" pastY="25.0" />
-            <Heading heading="9" pastHeading="9" />
-            <Speed speed="16"/>
-            <VectorSpeed speed="6.0"/>
-            <Course course="9.0"/>
-            <Race>Zetan</Race>
-            <ClassAbbrev>CA</ClassAbbrev>
-            <ClassName>Wyvern</ClassName>
-            <ShipClass>Heavy Cruiser</ShipClass>
-            <CrewQuality>First Rate</CrewQuality>
-            <Mass>80</Mass>
-            <PointValue>266</PointValue>
-            <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="true" />
-            <FTLDrive id="4" status="Operational" active="false"/>
-            <Armor totalArmor="0" remainingArmor="0"/>
-            <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
-            <Electronics>
-                <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
-                <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
-            </Electronics>
-            <Defenses>
-                <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
-            </Defenses>
-            <Holds></Holds>
-            <Weapons>
-                <BeamBattery id="18" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Operational" recharge="1"/>
-                <BeamBattery id="19" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational" recharge="1"/>
-                <BeamBattery id="20" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational" recharge="1"/>
-                <BeamBattery id="21" xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)" status="Operational" recharge="1"/>
-                <BeamBattery id="22" xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)" status="Operational" recharge="1"/>
-                <PointDefense id="23" xSSD="60" ySSD="140" status="Operational"/>
-                <PointDefense id="24" xSSD="100" ySSD="140" status="Operational"/>
-            </Weapons>
-        </Ship>-->
-    </Player>
+  <Briefing>Two ships enter. One ship leaves. An Alliance and a Zetan cruiser happen upon each other during a routine unaccompanied patrol of the Lost Zone. Inevitably, the short ceasefire between these two empires does not hold...</Briefing>
+  <GameOptions>
+    <Variant value="Standard"/>
+    <Deadline value="14"/>
+    <AftArcFire value="true"/>
+    <CinematicMovement value="true"/>
+    <CoreSystems value="false"/>
+    <PenetratingDamage value="true"/>
+    <SensorRules value="0"/>
+    <SensorLevel value="4"/>
+    <SensorRangeBand value="18.0"/>
+    <SensorBlipBands value="10.0"/>
+    <ShipRoll value="false"/>
+    <SimultaneousFire value="true"/>
+    <TargetResolution value="1"/>
+    <ThresholdDamagedSystems value="true"/>
+    <PDSFireAtShips value="true"/>
+    <FighterMorale value="false"/>
+    <AreaDefenseActivationRange value="6.0"/>
+    <BeamRangeBand value="12.0"/>
+    <KineticGunRangeBand value="6.0"/>
+    <PointDefenseRange value="6.0"/>
+    <PulseTorpedoRangeBand value="6.0"/>
+    <MultipleKineticPenetratorPackRange value="12.0"/>
+    <NeedleBeamRange value="12.0"/>
+    <SalvoMissileRange value="24.0"/>
+    <SalvoMissileExtendedRange value="36.0"/>
+    <SalvoMissileLockOn value="6.0"/>
+    <MissileLockOnRange value="6.0"/>
+    <ScattergunRange value="6.0"/>
+    <SubmunitionPackRangeBand value="6.0"/>
+    <FighterRange value="6.0"/>
+    <FighterMovementRange value="24.0"/>
+    <FighterFastMovementRange value="36.0"/>
+    <FighterSecondaryRange value="12.0"/>
+    <PulserRangeBand value="12.0"/>
+    <PlasmaBoltRange value="30.0"/>
+    <PlasmaBoltBlastRange value="6.0"/>
+    <GraserRangeBand value="18.0"/>
+    <AntiMatterTorpedoRange value="18.0"/>
+    <AntiMatterTorpedoLockOnRange value="6.0"/>
+    <AntiMatterTorpedoBlastRange value="3.0"/>
+    <ActiveExtent value="true"/>
+    <XMinExtent value="-500.0"/>
+    <XMaxExtent value="500.0"/>
+    <YMinExtent value="-500.0"/>
+    <YMaxExtent value="500.0"/>
+    <DebugMode value="true"/>
+    <TestingMode value="true"/>
+    <PlayTest value="false"/>
+  </GameOptions>
+  <Report></Report>
+  <Player id="1" name="skeolan" email="virtutis.umbra@gmail.com" team="Alliance" key="662249">
+    <Objectives>For the Alliance! For Glory!</Objectives>
+    <Ship id="1">
+      <Name>ANS Glory</Name>
+      <IconFamily value="Generic\Echo"/>
+      <Status>Moderate</Status>
+      <FM.Orders>
+        <FM.VolleyOrders volley="1">
+          <FM.Speed>4</FM.Speed>
+          <FM.Evasion>2</FM.Evasion>
+          <FM.ManeuveringOrders>
+            <FM.Maneuver type="Close" target="2" priority="primary" />
+          </FM.ManeuveringOrders>
+          <FM.FiringOrders>
+            <!-- TODO: all the individual Unit should supply is FireCon allocation orders, not targets -->
+            <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
+            <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
+          </FM.FiringOrders>
+        </FM.VolleyOrders>
+        <FM.VolleyOrders volley="2">
+          <FM.Speed>3</FM.Speed>
+          <FM.Evasion>3</FM.Evasion>
+          <FM.ManeuveringOrders>
+            <FM.Maneuver type="Withdraw" target="2" priority="primary" />
+          </FM.ManeuveringOrders>
+          <FM.FiringOrders>
+            <!-- TODO: all the individual Unit should supply is FireCon allocation orders, not targets -->
+            <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10,11,12" />
+            <!-- Assigning weapons to "fireCon zero" requires they be in PD mode -->
+            <FM.Fire fireConID="0" target="2" weaponIDs="13,14" />
+          </FM.FiringOrders>
+        </FM.VolleyOrders>
+        <FM.VolleyOrders volley="2">
+          <FM.Speed>3</FM.Speed>
+          <FM.Evasion>3</FM.Evasion>
+          <FM.ManeuveringOrders>
+            <!-- <FM.Maneuver type="Withdraw" target="2" priority="primary" /> -->
+            <!-- Intentionally no movement orders this Volley, should be handled smoothly?? -->
+          </FM.ManeuveringOrders>
+          <FM.FiringOrders>
+            <!-- TODO: all the individual Unit should supply is FireCon allocation orders, not targets -->
+            <!-- Damaged weapon #8 should not fire-->
+            <FM.Fire fireConID="5" target="2" priority="primary" weaponIDs="8,9,10" />
+            <!-- Firing with a damaged FireCon should result in no shots fired-->
+            <FM.Fire fireConID="6" target="2"  weaponIDs="11,12" />
+            <FM.Fire fireConID="0" target="PD" weaponIDs="13,14" />
+          </FM.FiringOrders>
+        </FM.VolleyOrders>
+      </FM.Orders>
+      <DamageControl/>
+      <Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
+      <Heading heading="3" pastHeading="3" />
+      <Speed speed="6"/>
+      <VectorSpeed speed="6.0"/>
+      <Course course="3.0"/>
+      <Race>Alliance</Race>
+      <ClassAbbrev>CA</ClassAbbrev>
+      <ClassName>Wyvern</ClassName>
+      <ShipClass>Heavy Cruiser</ShipClass>
+      <CrewQuality>First Rate</CrewQuality>
+      <Mass>80</Mass>
+      <PointValue>266</PointValue>
+      <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="false" />
+      <FTLDrive id="4" status="Operational" active="false"/>
+      <Armor totalArmor="0" remainingArmor="0"/>
+      <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="18"/>
+      <Electronics>
+        <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+        <FireControl id="6" xSSD="90" ySSD="180" status="Damaged"/>
+      </Electronics>
+      <Defenses>
+        <Screen id="7" xSSD="80" ySSD="160" status="Damaged"/>
+      </Defenses>
+      <Holds></Holds>
+      <Weapons>
+        <BeamBattery id="8" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Damaged"/>
+        <BeamBattery id="9" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational"/>
+        <BeamBattery id="10" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational"/>
+        <BeamBattery id="11" xSSD="40" ySSD="100" rating="1" arcs="(All arcs)" status="Operational"/>
+        <BeamBattery id="12" xSSD="120" ySSD="100" rating="1" arcs="(All arcs)" status="Operational"/>
+        <PointDefense id="13" xSSD="60" ySSD="140" targetId="0" status="Operational"/>
+        <PointDefense id="14" xSSD="100" ySSD="140" targetId="0" status="Operational"/>
+      </Weapons>
+      <Log>
+        <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 3 beam battery.                </Record>
+        <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
+        <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
+        <Record turn="2" event="Attack" priority="High"  >                    Brazen hit for four points with a class 3 beam battery.   </Record>
+        <Record turn="2" event="Attack" priority="Medium">                    Brazen missed with a class 2 beam battery.                </Record>
+        <Record turn="2" event="Attack" priority="Medium">                    Broadsword missed with a pulse torpedo.                   </Record>
+        <Record turn="2" event="Attack" priority="High"  >                    Bar Maid hit for one point with a class 3 beam battery.   </Record>
+        <Record turn="2" event="Attack" priority="High"  >                    Bar Maid hit for one point with a class 3 beam battery.   </Record>
+        <Record turn="2" event="Damage" priority="Medium">                    First threshold check.                                    </Record>
+      </Log>
+    </Ship>
+  </Player>
+  <Player id="2" name="specter" email="" team="Zetans">
+    <Ship id="2">
+      <Name>ZFS Bandit 1</Name>
+      <IconFamily value="Generic\Alpha"/>
+      <Status>Ok</Status>
+      <Orders>Z1+4</Orders>
+      <DamageControl/>
+      <Position x="33.1" y="21.0" pastX="48.0" pastY="25.0" />
+      <Heading heading="9" pastHeading="9" />
+      <Speed speed="16"/>
+      <VectorSpeed speed="6.0"/>
+      <Course course="9.0"/>
+      <Race>Zetan</Race>
+      <ClassAbbrev>CA</ClassAbbrev>
+      <ClassName>Wyvern</ClassName>
+      <ShipClass>Heavy Cruiser</ShipClass>
+      <CrewQuality>First Rate</CrewQuality>
+      <Mass>80</Mass>
+      <PointValue>266</PointValue>
+      <MainDrive id="3" type="Standard" initialThrust="6" currentThrust="6" status="Operational" active="true" />
+      <FTLDrive id="4" status="Operational" active="false"/>
+      <Armor totalArmor="0" remainingArmor="0"/>
+      <Hull value="80" type="Average" class="Military" stealth="0" remainingHullBoxes="24"/>
+      <Electronics>
+        <FireControl id="5" xSSD="70" ySSD="180" status="Operational"/>
+        <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
+      </Electronics>
+      <Defenses>
+        <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
+      </Defenses>
+      <Holds></Holds>
+      <Weapons>
+        <BeamBattery id="18" xSSD="60" ySSD="50" rating="3" arcs="(FP/F)" status="Operational" recharge="1"/>
+        <BeamBattery id="19" xSSD="100" ySSD="50" rating="3" arcs="(F/FS)" status="Operational" recharge="1"/>
+        <BeamBattery id="20" xSSD="80" ySSD="100" rating="2" arcs="(FP/F/FS)" status="Operational" recharge="1"/>
+        <BeamBattery id="21" xSSD="40" ySSD="100" rating="2" arcs="(AP/FP/F)" status="Operational" recharge="1"/>
+        <BeamBattery id="22" xSSD="120" ySSD="100" rating="2" arcs="(F/FS/AS)" status="Operational" recharge="1"/>
+        <PointDefense id="23" xSSD="60" ySSD="140" status="Operational"/>
+        <PointDefense id="24" xSSD="100" ySSD="140" status="Operational"/>
+      </Weapons>
+    </Ship>
+  </Player>
+  <FM.Formations>
+    <Formation id="1" playerId="1" name="Alpha 1" maxThrust="999">
+      <Units>
+        <!-- Only one Unit per Formation should have flag="true" -->
+        <!-- HitModifier of all FormationUnits should equal 0, else error. -->
+        <!-- HitModifier if negative should not exceed amount allowed by extraEvasion. -->
+        <!-- Incorrect name in the element-text field shouldn't matter, matching is by id; should be corrected in output XMLs.-->
+        <!-- Incorrect mass or extraEvasion values shouldn't matter; should be corrected before calculations and in output XMLs.-->
+        <Unit id="1" mass="80" hitModifier="0" extraEvasion="0" maxThrust="99" flag="true">UNS Glorry</Unit>
+      </Units>
+      <Orders>
+        <VolleyOrders volley="1" speed="4" evasion="2">
+          <Maneuver priority="primary" targetId="2" targetFormationName="Zeta 2">Close</Maneuver>
+          <!-- target for all the weapons on each Unit assigned to "Primary" FireCon -->
+          <Fire target="2" priority="Primary" />
+
+          <!-- no secondary target assigned or no "B" FireCons are available -->
+          <Fire target="-1" priority="B" />
+
+          <!-- If Target is nonzero, it needs to be the ID of a Formation containing Fighters. -->
+          <Fire target="0" priority="PD" diceAssigned="2" />
+
+          <!-- Default PD behavior: extra PD dice not assigned to a particular target are used passively -->
+          <!-- (i.e. evenly spread onto incoming ordnance / fighters)? -->
+          <Fire target="0" priority="PD" diceAssigned="*" />
+        </VolleyOrders>
+        <VolleyOrders volley="2" speed="3" evasion="3">
+          <Maneuver priority="primary" targetId="2" targetFormationName="Zeta 2">Withdraw</Maneuver>
+          <Fire target="2" priority="primary" />
+          <!-- no secondary targeting is OK; no PD assignment means all PD fires passively? -->
+        </VolleyOrders>
+        <VolleyOrders volley="2" speed="3" evasion="3">
+          <!-- Intentionally no movement orders this Volley -->
+          <!-- Maneuvers should be handled smoothly as "Default (Maintain) versus everybody" -->
+          <!-- Absent any specific firing orders, all PD-capable weapons run in passive/PD mode, and nothing else fires -->
+        </VolleyOrders>
+      </Orders>
+    </Formation>
+    <Formation id="2" playerId="2" name="Zeta 1">
+      <Units>
+        <Unit id="2"/>
+      </Units>
+      <Orders>
+        <VolleyOrders volley="1" speed="4" evasion="2">
+          <Maneuver type="Close" priority="Primary" target="1" targetName="Alpha 1"/>
+          <Fire type="Normal" priority="Primary" target="1" targetName="Alpha 1"/>
+        </VolleyOrders>
+        <VolleyOrders volley="2" speed="4" evasion="2">
+          <Maneuver type="Close" priority="Primary" target="1" targetName="Alpha 1"/>
+          <Fire type="Normal" priority="Primary" target="1" targetName="Alpha 1"/>
+        </VolleyOrders>
+        <VolleyOrders volley="3" speed="4" evasion="2">
+          <Maneuver type="Close" priority="Primary" target="1" targetName="Alpha 1"/>
+          <Fire type="Normal" priority="Primary" target="1" targetName="Alpha 1"/>
+        </VolleyOrders>
+      </Orders>
+    </Formation>
+  </FM.Formations>
+  <FM.Distances>
+    <!-- Incorrect targetFormationName shouldn't matter, matching is by id; should be corrected in output XMLs -->
+    <Distance sourceId="1" sourceName="Alhpa-1" targetId="2" targetName="Zeat-2">60</Distance>
+    <!-- Should gracefully handle if A->B distance exists with no B->A distance, but not if A->B <> B->A both exist -->
+    <Distance sourceId="2" targetId="1">60</Distance>
+  </FM.Distances>
 </GameEngine>

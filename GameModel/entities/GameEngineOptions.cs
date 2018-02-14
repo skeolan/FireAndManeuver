@@ -14,6 +14,7 @@ namespace FireAndManeuver.GameModel
     public class GameEngineOptions
     {
         public const int RangeBandDefault = 6;
+        public const int DefaultStartingRange = 60;
 
         internal static GameEngineOptions Clone(GameEngineOptions gameOptions)
         {

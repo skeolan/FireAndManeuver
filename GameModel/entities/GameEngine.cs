@@ -57,6 +57,10 @@ namespace FireAndManeuver.GameModel
         [XmlElement("Player")]
         public GameEnginePlayer[] Players { get; set; }
 
+        [XmlArray("FM.Distances")]
+        [XmlArrayItem("Distance")]
+        public List<FormationDistance> Distances { get; set; } = new List<FormationDistance>();
+
         [XmlIgnore]
         public IEnumerable<GameUnit> AllUnits
         {
@@ -71,6 +75,10 @@ namespace FireAndManeuver.GameModel
                 }
             }
         }
+
+        [XmlArray("FM.Formations")]
+        [XmlArrayItem("Formation")]
+        public List<GameFormation> Formations { get; set; } = new List<GameFormation>();
 
         public static GameEngine LoadFromXml(string sourceFile)
         {
@@ -100,10 +108,93 @@ namespace FireAndManeuver.GameModel
                 // throw ex;
             }
 
+            // Instantiate references
+            var allUnits = ge.AllUnits.ToList<GameUnit>();
+
+            // FormationUnitInfo -> Unit
+            foreach (var f in ge.Formations)
+            {
+                List<GameUnitFormationInfo> newInfo = new List<GameUnitFormationInfo>(f.Units.Count);
+                var flagshipFound = false;
+
+                foreach (var fu in f.Units)
+                {
+                    try
+                    {
+                        var newFu = new GameUnitFormationInfo(allUnits, fu.UnitId)
+                        {
+                            IsFormationFlag = fu.IsFormationFlag
+                        };
+                        newInfo.Add(newFu);
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Console.Error.WriteLine($"Invalid GameEngine data: GameUnit with Id [{fu.UnitId}] listed as a FormationUnit in Formation [{f.FormationId}] but not found in list of GameUnits: {e.Message}");
+                        throw e;
+                    }
+
+                    if (fu.IsFormationFlag)
+                    {
+                        flagshipFound = true;
+                    }
+                }
+
+                // Default to first Unit in list if not flagship found
+                if (!flagshipFound && newInfo.FirstOrDefault() != null)
+                {
+                    var newFlag = newInfo.First();
+                    newFlag.IsFormationFlag = true;
+                }
+
+                // Calculate formation-wide max-thrust and per-unit Excess Thrust once all units are dereferenced
+                f.Units = newInfo;
+                f.MaxThrust = newInfo.Max(u => u.MaxThrust);
+                f.Units.ForEach(u => u.ExtraThrust = Math.Max(u.MaxThrust - f.MaxThrust, 0));
+            }
+
+            // Distance references -> Formations
+            foreach (var d in ge.Distances)
+            {
+                var sourceRealF = ge.Formations.Where(f => d.SourceFormationId == f.FormationId).First();
+                var targetRealF = ge.Formations.Where(f => d.TargetFormationId == f.FormationId).First();
+
+                // All ID References in the Distances collection MUST resolve to a real Formation
+                if (sourceRealF == null || targetRealF == null)
+                {
+                    var invalidIds = new List<string>();
+                    if (sourceRealF == null)
+                    {
+                        invalidIds.Add(d.SourceFormationId.ToString());
+                    }
+
+                    if (targetRealF == null)
+                    {
+                        invalidIds.Add(d.TargetFormationId.ToString());
+                    }
+
+                    throw new InvalidDataException($"Distance entry {d.ToString()} lists IDs which are not valid: {string.Join(", ", invalidIds)}");
+                }
+
+                d.SourceFormationName = sourceRealF.FormationName;
+                d.TargetFormationName = targetRealF.FormationName;
+            }
+
             return ge;
         }
 
-        public static GameEngine Clone(GameEngine oldGE)
+        public static GameEngine Clone(GameEngine ge)
+        {
+            // Cheat!
+            XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
+            MemoryStream ms = new MemoryStream();
+            srz.Serialize(ms, ge);
+
+            var newGE = srz.Deserialize(ms) as GameEngine;
+
+            return newGE;
+        }
+
+        public static GameEngine DeepClone(GameEngine oldGE)
         {
             var newGE = (GameEngine)oldGE.MemberwiseClone();
 
@@ -120,6 +211,15 @@ namespace FireAndManeuver.GameModel
             }
 
             newGE.Players = newPlayers.ToArray();
+
+            // Formations
+            newGE.Formations = new List<GameFormation>(oldGE.Formations.Count);
+            foreach (var f in oldGE.Formations)
+            {
+                newGE.Formations.Add(f.Clone());
+            }
+
+            // 
 
             return newGE;
         }

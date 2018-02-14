@@ -44,6 +44,11 @@ namespace FireAndManeuver.GameModel
 
         public int RollFTSuccesses(int numberOfDice, int drm = 0, int difficultyLevel = 0)
         {
+            if (numberOfDice == 0)
+            {
+                return 0; // No successes possible if no dice rolled!
+            }
+
             var successes = 0;
             var diceRolled = this.dice.Roll($"{numberOfDice}D6", this.roller);
             Console.WriteLine($"DiceRoller library FTSuccesses die roll [{diceRolled.DiceExpression}]: {string.Join(",", diceRolled.Results.Select(r => r.Value))}");

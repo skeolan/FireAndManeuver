@@ -6,6 +6,7 @@ namespace FireAndManeuver.GameModel
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Xml.Serialization;
 
@@ -59,6 +60,17 @@ namespace FireAndManeuver.GameModel
             {
                 this.FiringInternal = value;
             }
+        }
+
+        internal VolleyOrders Clone()
+        {
+            XmlSerializer srz = new XmlSerializer(typeof(VolleyOrders));
+            MemoryStream ms = new MemoryStream();
+            srz.Serialize(ms, this);
+
+            var clone = srz.Deserialize(ms) as VolleyOrders;
+
+            return clone;
         }
 
         [XmlArray("FM.ManeuveringOrders")]

@@ -129,6 +129,23 @@ namespace FireAndManeuver.Common
                 }
             }
 
+            readout.Add(boundary);
+
+            // Formation readout block
+            foreach (var f in ge.Formations)
+            {
+                readout.Add($"* Formation [{f.FormationId}]{f.FormationName} detail: *".PadRight(ReadoutWidth, '*'));
+                readout.AddRange(GenerateFormationReadout(f, allUnits, ge.Players));
+                readout.Add(boundary);
+            }
+
+            // Distance readout block
+            {
+                readout.Add($"* Formation distances: *".PadRight(ReadoutWidth, '*'));
+                readout.AddRange(GenerateDistanceReadout(ge.Distances));
+                readout.Add(boundary);
+            }
+
             readout.Add(" END READOUT ".PadLeft((ReadoutWidth + " END READOUT ".Length) / 2, '^').PadRight(ReadoutWidth, '^'));
 
             return readout;
@@ -242,6 +259,45 @@ namespace FireAndManeuver.Common
             }
 
             return output;
+        }
+
+        private static List<string> GenerateFormationReadout(GameFormation f, List<GameUnit> allUnits, GameEnginePlayer[] players)
+        {
+            var readout = new List<string>();
+
+            var player = players.Where(p => p.Id == f.PlayerId.ToString()).FirstOrDefault() ?? new GameEnginePlayer() { Name = "Unknown Player" };
+
+            readout.AddRange(WrapDecorated($"Player    [{f.PlayerId}]'{player.Name}'", ReadoutWidth, "* ", " *"));
+            readout.AddRange(WrapDecorated($"MaxThrust '{f.MaxThrust}'", ReadoutWidth, "* ", " *"));
+            readout.AddRange(WrapDecorated($"Units ({f.Units.Count})", ReadoutWidth, "* ", " *"));
+            foreach (var u in f.Units)
+            {
+                readout.AddRange(WrapDecorated($"  - {u.ToString()}", ReadoutWidth, "* ", " *"));
+            }
+
+            return readout;
+        }
+
+        private static List<string> GenerateDistanceReadout(List<FormationDistance> input)
+        {
+            var readout = new List<string>();
+            var distances = new List<FormationDistance>(input);
+
+            while (distances.Count > 0)
+            {
+                var node = distances.First();
+                var mirrorNode = distances.Where(n => node.SourceFormationId == n.TargetFormationId && node.TargetFormationId == n.SourceFormationId).FirstOrDefault();
+
+                distances.Remove(node);
+                if (mirrorNode != null)
+                {
+                    distances.Remove(mirrorNode);
+                }
+
+                readout.Add(node.ToString());
+            }
+
+            return readout;
         }
     }
 }

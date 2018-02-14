@@ -82,6 +82,18 @@ namespace FireAndManeuver.GameModel
             }
         }
 
+        internal int GetCurrentThrust()
+        {
+            if (this.MainDrive == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return this.MainDrive.CurrentThrust;
+            }
+        }
+
         // [XmlElement] public string Position { get; set; }
         // [XmlElement] public string Heading { get; set; }
         // [XmlElement] public string Speed { get; set; }
@@ -129,11 +141,11 @@ namespace FireAndManeuver.GameModel
         public List<ElectronicsSystem> Electronics { get; set; }
 
         [XmlArray]
-        [XmlArrayItemAttribute("Screen", Type = typeof(ScreenSystem))]
+        [XmlArrayItem("Screen", Type = typeof(ScreenSystem))]
         public List<DefenseSystem> Defenses { get; set; }
 
         [XmlArray]
-        [XmlArrayItemAttribute("CargoHold", Type = typeof(CargoHoldSystem))]
+        [XmlArrayItem("CargoHold", Type = typeof(CargoHoldSystem))]
         public List<CargoHoldSystem> Holds { get; set; }
 
         [XmlArray]
@@ -225,15 +237,17 @@ namespace FireAndManeuver.GameModel
         {
             Console.WriteLine($"Resolving maneuver for {this.InstanceName}");
 
+            var maneuverOrders = orders ?? new VolleyOrders(); // Default to no-maneuver if none specified
+
             int speedSuccesses = 0;
             int evasionSuccesses = 0;
             var roller = new DiceNotationUtility() as IDiceUtility;
 
             // Roll for Speed
-            speedSuccesses = roller.RollFTSuccesses(orders.Speed);
+            speedSuccesses = roller.RollFTSuccesses(maneuverOrders.Speed);
 
             // Roll for Evasion
-            evasionSuccesses = roller.RollFTSuccesses(orders.Evasion);
+            evasionSuccesses = roller.RollFTSuccesses(maneuverOrders.Evasion);
 
             return new ManeuverResult() { SpeedSuccesses = speedSuccesses, EvasionSuccesses = evasionSuccesses };
         }
