@@ -53,7 +53,7 @@
   </GameOptions>
   <Report></Report>
   <Player id="1" name="skeolan" email="virtutis.umbra@gmail.com" team="Alliance" key="662249">
-    <Objectives>For the Alliance! For Glory!</Objectives>
+    <Objectives>For the Alliance! For Glory! These are the words that guide us in our mission to explore the galaxy and claim it for mankind. These Zetans think they can just push us around with no consequences? They've got another thing coming...</Objectives>
     <Ship id="1">
       <Name>ANS Glory</Name>
       <IconFamily value="Generic\Echo"/>
@@ -150,7 +150,7 @@
   </Player>
   <Player id="2" name="specter" email="" team="Zetans">
     <Ship id="2">
-      <Name>ZFS Bandit 1</Name>
+      <Name>Bandit 1</Name>
       <IconFamily value="Generic\Alpha"/>
       <Status>Ok</Status>
       <Orders>Z1+4</Orders>
@@ -162,7 +162,7 @@
       <Course course="9.0"/>
       <Race>Zetan</Race>
       <ClassAbbrev>CA</ClassAbbrev>
-      <ClassName>Wyvern</ClassName>
+      <ClassName>Zmey</ClassName>
       <ShipClass>Heavy Cruiser</ShipClass>
       <CrewQuality>First Rate</CrewQuality>
       <Mass>80</Mass>
@@ -188,6 +188,21 @@
         <PointDefense id="23" xSSD="60" ySSD="140" status="Operational"/>
         <PointDefense id="24" xSSD="100" ySSD="140" status="Operational"/>
       </Weapons>
+    </Ship>
+    <Ship id="3">
+      <Name>Bandit 2</Name>
+      <Status>Ok</Status>
+      <Race>Zetan</Race>
+      <ClassAbbrev>FF</ClassAbbrev>
+      <ClassName>Rusalka</ClassName>
+      <ShipClass>Escort Frigate</ShipClass>
+      <CrewQuality>First Rate</CrewQuality>
+      <Mass>40</Mass>
+      <PointValue>133</PointValue>
+      <MainDrive id="3" type="Standard" initialThrust="8" currentThrust="8" status="Operational" active="true" />
+      <FTLDrive id="4" status="Operational" active="false"/>
+      <Armor totalArmor="0" remainingArmor="0"/>
+      <Hull value="40" type="Average" class="Military" stealth="0"/>
     </Ship>
   </Player>
   <FM.Formations>
@@ -230,7 +245,8 @@
     </Formation>
     <Formation id="2" playerId="2" name="Zeta 1">
       <Units>
-        <Unit id="2"/>
+        <Unit id="2" hitModifier="10"/>
+        <Unit id="3" hitModifier="-10" extraThrust="2" />
       </Units>
       <Orders>
         <VolleyOrders volley="1" speed="4" evasion="2">

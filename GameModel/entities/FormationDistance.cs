@@ -2,7 +2,6 @@
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
-
 namespace FireAndManeuver.GameModel
 {
     using System.Xml.Serialization;

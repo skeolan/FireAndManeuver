@@ -195,8 +195,13 @@ namespace FireAndManeuver.GameModel
             return newGE;
         }
 
-        public static GameEngine DeepClone(GameEngine oldGE)
+        public static GameEngine DeepClone(GameEngine oldGE, bool forceImplementation = false)
         {
+            if (!forceImplementation)
+            {
+                throw new NotImplementedException("Finish this method!");
+            }
+
             var newGE = (GameEngine)oldGE.MemberwiseClone();
 
             // Break connection to source file, if any
@@ -219,8 +224,6 @@ namespace FireAndManeuver.GameModel
             {
                 newGE.Formations.Add(f.Clone());
             }
-
-            // 
 
             return newGE;
         }

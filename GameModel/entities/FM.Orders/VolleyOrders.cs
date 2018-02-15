@@ -62,17 +62,6 @@ namespace FireAndManeuver.GameModel
             }
         }
 
-        internal VolleyOrders Clone()
-        {
-            XmlSerializer srz = new XmlSerializer(typeof(VolleyOrders));
-            MemoryStream ms = new MemoryStream();
-            srz.Serialize(ms, this);
-
-            var clone = srz.Deserialize(ms) as VolleyOrders;
-
-            return clone;
-        }
-
         [XmlArray("FM.ManeuveringOrders")]
         [XmlArrayItemAttribute("FM.Maneuver", Type = typeof(ManeuverOrder))]
         internal List<ManeuverOrder> ManeuveringInternal { get; set; }
@@ -85,12 +74,23 @@ namespace FireAndManeuver.GameModel
         {
             var maneuverStrings = string.Join("; ", this.ManeuveringOrders.Select(m => m.ToString()));
             var firingStrings = string.Join(";", this.FiringOrders.Select(f => f.ToString()));
-            return $"Speed {this.Speed} - Evasion {this.Evasion} | Maneuvering: [{maneuverStrings}] | Firing: [{firingStrings}]";
+            return $"v{this.Volley} - Speed {this.Speed} - Evasion {this.Evasion} | Maneuvering: [{maneuverStrings}] | Firing: [{firingStrings}]";
         }
 
         internal static VolleyOrders Clone(VolleyOrders o)
         {
-            throw new NotImplementedException();
+            return o.Clone();
+        }
+
+        internal VolleyOrders Clone()
+        {
+            XmlSerializer srz = new XmlSerializer(typeof(VolleyOrders));
+            MemoryStream ms = new MemoryStream();
+            srz.Serialize(ms, this);
+
+            var clone = srz.Deserialize(ms) as VolleyOrders;
+
+            return clone;
         }
     }
 }

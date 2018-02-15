@@ -82,18 +82,6 @@ namespace FireAndManeuver.GameModel
             }
         }
 
-        public int GetCurrentThrust()
-        {
-            if (this.MainDrive == null)
-            {
-                return 0;
-            }
-            else
-            {
-                return this.MainDrive.CurrentThrust;
-            }
-        }
-
         // [XmlElement] public string Position { get; set; }
         // [XmlElement] public string Heading { get; set; }
         // [XmlElement] public string Speed { get; set; }
@@ -225,6 +213,18 @@ namespace FireAndManeuver.GameModel
             allSystems.Where(x => x.Id == -1).ToList().ForEach(x => x.Id = nextID++);
 
             return myNewUnit;
+        }
+
+        public int GetCurrentThrust()
+        {
+            if (this.MainDrive == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return this.MainDrive.CurrentThrust;
+            }
         }
 
         public override string ToString()

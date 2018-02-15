@@ -34,12 +34,10 @@ namespace FireAndManeuver.GameModel
         {
             get
             {
-                /*
-                 * if (this.Units.Count > 0)
+                if (this.Units.Count > 0)
                 {
-                    this.maxThrust = this.Units.Max(u => u.MaxThrust);
+                    this.maxThrust = this.Units.Min(u => u.MaxThrust);
                 }
-                */
 
                 return this.maxThrust;
             }
@@ -55,6 +53,7 @@ namespace FireAndManeuver.GameModel
         public List<GameUnitFormationInfo> Units { get; set; } = new List<GameUnitFormationInfo>();
 
         [XmlArray("Orders")]
+        [XmlArrayItem("VolleyOrders")]
         public List<VolleyOrders> Orders { get; set; } = new List<VolleyOrders>();
 
         public GameFormation Clone()
@@ -81,6 +80,15 @@ namespace FireAndManeuver.GameModel
         public decimal GetTotalMass()
         {
             return this.Units.Sum(u => u.Mass);
+        }
+
+        public decimal GetHitChancePercentage(int unitID)
+        {
+            var unit = this.Units.Where(u => u.UnitId == unitID).FirstOrDefault() ?? throw new InvalidOperationException($"ID provided ({unitID}) is not found in Formation's Unit list");
+
+            var hitChance = ((decimal)unit.Mass / this.GetTotalMass() * (decimal)100) + (decimal)unit.HitModifier;
+
+            return hitChance;
         }
     }
 }
