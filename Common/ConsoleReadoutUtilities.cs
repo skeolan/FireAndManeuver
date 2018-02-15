@@ -28,43 +28,40 @@ namespace FireAndManeuver.Common
 
             readout.Add(string.Empty);
             readout.Add(boundary);
-            readout.Add($"* {myUnit.ToString(), -(ReadoutWidth - 4)} *");
+            readout.Add($"* {myUnit.ToString(),-(ReadoutWidth - 4)} *");
+
             readout.Add(separator);
+
             readout.Add(string.Format(outputFormat, "Status", myUnit.Status));
             readout.Add(string.Format(outputFormat, "Armor", myUnit.Armor.ToString()));
             readout.Add(string.Format(outputFormat, "Hull", myUnit.Hull.ToString()));
             readout.AddRange(PrintReadoutCollection("Hull", myUnit.Hull.HullDisplay(), collectionItemOutputFormat, SuppressTitleLineForHullMatrix));
             readout.Add(string.Format(outputFormat, "Crew", myUnit.CrewQuality));
+
             readout.Add(separator);
+
             readout.Add(string.Format(outputFormat, "MainDrive", myUnit.MainDrive.ToString()));
             readout.Add(string.Format(outputFormat, "FTLDrive", myUnit.FtlDrive.ToString()));
+
             readout.Add(separator);
+
             readout.AddRange(PrintReadoutCollection("Electronics", myUnit.Electronics, collectionItemOutputFormat));
             readout.AddRange(PrintReadoutCollection("Defenses", myUnit.Defenses, collectionItemOutputFormat));
             readout.AddRange(PrintReadoutCollection("Holds", myUnit.Holds, collectionItemOutputFormat));
             readout.AddRange(PrintReadoutCollection("Weapons", myUnit.Weapons, collectionItemOutputFormat));
             readout.AddRange(PrintReadoutCollection("Log", myUnit.Log, collectionItemOutputFormat));
-            readout.Add(separator);
-            readout.Add($"* {(myUnit.Orders.Count > 0 ? "Orders" : "(No Orders)"), -(ReadoutWidth - 4)} *");
-            foreach (var volleyOrders in myUnit.Orders)
-            {
-                readout.Add($"* {$"  Volley #{volleyOrders.Volley}", -(ReadoutWidth - 4)} *");
-                readout.Add($"* {$"     Speed  {volleyOrders.Speed} - Evasion {volleyOrders.Evasion}", -(ReadoutWidth - 4)} *");
-                readout.AddRange(PrintOrders("     Maneuvering", volleyOrders.ManeuveringOrders, collectionItemOutputFormat, myUnit, allUnits));
-                readout.AddRange(PrintOrders("     Firing", volleyOrders.FiringOrders, collectionItemOutputFormat, myUnit, allUnits));
-            }
 
             readout.Add(separator);
-            readout.Add($"* {"Source: " + myUnit.SourceFile, -(ReadoutWidth - 4)} *");
+            readout.Add($"* {"Source: " + myUnit.SourceFile,-(ReadoutWidth - 4)} *");
             readout.Add(boundary);
 
             return readout;
         }
 
-        public static List<string> GenerateGameEngineReadout(GameEngine ge)
+        public static List<string> GenerateGameEngineReadout(GameEngine ge, bool printUnitDetails = false)
         {
             List<string> readout = new List<string>();
-            var allUnits = new List<GameUnit>();
+            var allUnits = ge.AllUnits.ToList<GameUnit>();
 
             readout.Add(" BEGIN READOUT ".PadLeft((ReadoutWidth + " BEGIN READOUT ".Length) / 2, '^').PadRight(ReadoutWidth, '^'));
             readout.Add(string.Empty);
@@ -87,49 +84,41 @@ namespace FireAndManeuver.Common
             readout.Add(boundary);
             readout.Add(string.Empty);
 
-            // Player block
-            readout.Add("* Players *".PadRight(ReadoutWidth, '*'));
-            foreach (var p in ge.Players)
-            {
-                var pNameString = p.Key <= 0 ? p.Name : $"{p.Name} [{p.Key}]";
-                var fixedString = $"* {p.Id} -- {p.Team.PadRight(16)} -- {pNameString.PadRight(20)} -- {p.Email.PadRight(20).Substring(0, 20)} -- ";
-                var objLength = ReadoutWidth - fixedString.Length - 2;
-                var playerLine = fixedString + p.Objectives.PadRight(objLength).Substring(0, objLength) + " *";
-                readout.Add(playerLine);
-            }
-
-            readout.Add(boundary);
-            readout.Add(string.Empty);
-
             // Units summary block
             foreach (var p in ge.Players)
             {
-                readout.Add($"* Player [{p.Id}]{p.Name} Units ({p.Units.Count}):  *".PadRight(ReadoutWidth, '*'));
+                var fixedString = $"* Player {p.Id} -- {p.Team.PadRight(16)} -- {(p.Key <= 0 ? p.Name : $"{p.Name} [{p.Key}]").PadRight(20)} -- {p.Email.PadRight(20).Substring(0, 20)} -- ";
+                var playerLine = fixedString + p.Objectives.PadRight(ReadoutWidth - fixedString.Length - 2).Substring(0, ReadoutWidth - fixedString.Length - 2) + " *";
+
+                readout.Add(boundary);
+                readout.Add(playerLine);
+                readout.Add($"* Units ({p.Units.Count}):  *".PadRight(ReadoutWidth, '*'));
                 foreach (var u in p.Units)
                 {
-                    readout.AddRange(WrapDecorated(u.ToString(), ReadoutWidth, "*   -", " *"));
-                    readout.AddRange(WrapDecorated($"Status - {u.Status}", ReadoutWidth, "*      -", " *"));
-                    allUnits.Add(u);
+                    // readout.AddRange(WrapDecorated($"- {u.ToString()} Status - {u.Status}", ReadoutWidth, "*   ", " *", 5));
                 }
 
                 readout.Add(boundary);
                 readout.Add(string.Empty);
             }
 
-            // Unit detail blocks
-            foreach (var p in ge.Players)
+            if (printUnitDetails)
             {
-                foreach (var u in p.Units)
+                // Unit detail blocks
+                foreach (var p in ge.Players)
                 {
-                    readout.Add($"* Player [{p.Id}]{p.Name} Unit Detail: *".PadRight(ReadoutWidth, '*'));
-                    readout.Add($"* <{u.ToString(), -(ReadoutWidth - 6)}> *");
-                    var unitReadout = GenerateUnitReadout(u, allUnits);
-                    readout.AddRange(unitReadout);
-                    readout.Add(string.Empty);
+                    foreach (var u in p.Units)
+                    {
+                        readout.Add($"* Player [{p.Id}]{p.Name} Unit Detail: *".PadRight(ReadoutWidth, '*'));
+                        readout.Add($"* <{u.ToString(), -(ReadoutWidth - 6)}> *");
+                        var unitReadout = GenerateUnitReadout(u, allUnits);
+                        readout.AddRange(unitReadout);
+                        readout.Add(string.Empty);
+                    }
                 }
-            }
 
-            readout.Add(boundary);
+                readout.Add(boundary);
+            }
 
             // Formation readout block
             foreach (var f in ge.Formations)
@@ -143,6 +132,14 @@ namespace FireAndManeuver.Common
             {
                 readout.Add($"* Formation distances: *".PadRight(ReadoutWidth, '*'));
                 readout.AddRange(GenerateDistanceReadout(ge.Distances));
+                readout.Add(boundary);
+            }
+
+            // Orders readout block
+            foreach (var f in ge.Formations)
+            {
+                readout.Add($"* Formation orders for {f.FormationName}: *".PadRight(ReadoutWidth, '*'));
+                // readout.AddRange(GenerateOrdersReadout(f.Orders));
                 readout.Add(boundary);
             }
 
@@ -193,9 +190,9 @@ namespace FireAndManeuver.Common
             switch (coll.Count)
             {
                 case 0:
-            { /* print nothing */
-                break;
-            }
+                    { /* print nothing */
+                        break;
+                    }
 
                 // case 1: { outputLines.Add(String.Format(outputFormat, collectionName, coll[0])); break; }
                 default:
@@ -203,7 +200,7 @@ namespace FireAndManeuver.Common
                         // multiple entries needs a multi-line printout
                         if (!suppressTitleLine)
                         {
-                            outputLines.AddRange(WrapDecorated($"{collectionName, -16}({coll.Count, 2})", ReadoutWidth, "* ", " *"));
+                            outputLines.AddRange(WrapDecorated($"{collectionName,-16}({coll.Count,2})", ReadoutWidth, "* ", " *"));
                         }
 
                         foreach (var sys in coll)
@@ -223,9 +220,9 @@ namespace FireAndManeuver.Common
             var output = new List<string>();
 
             if (coll.Count > 0)
-                {
-                    output.Add($"* {$"{collectionName, -16}({coll.Count, 2})", -(ReadoutWidth - 4)} *");
-                }
+            {
+                output.Add($"* {$"{collectionName,-16}({coll.Count,2})",-(ReadoutWidth - 4)} *");
+            }
 
             foreach (var orderT in coll)
             {
@@ -250,7 +247,7 @@ namespace FireAndManeuver.Common
                         // Fire orders have additional lines of output indicating assigned weapons by ID
                         var weapon = thisUnit.Weapons.Where(w => $"{w.Id}" == $"{weaponID}").FirstOrDefault();
                         var weaponText = weapon == null ? $"Weapon [{weaponID:00}]" : weapon.SystemName;
-                        var weaponEntry = $"{string.Empty, 21} - {weaponText, -30} [{weaponID, 2}]";
+                        var weaponEntry = $"{string.Empty,21} - {weaponText,-30} [{weaponID,2}]";
                         output.Add(string.Format(outputFormat, string.Empty, weaponEntry));
                     }
 
@@ -272,7 +269,18 @@ namespace FireAndManeuver.Common
             readout.AddRange(WrapDecorated($"Units ({f.Units.Count})", ReadoutWidth, "* ", " *"));
             foreach (var u in f.Units)
             {
-                readout.AddRange(WrapDecorated($"  - {u.ToString()}", ReadoutWidth, "* ", " *"));
+                var uR = allUnits.Where(ur => ur.IdNumeric == u.UnitId).First();
+                var unitString = $"- {uR.ToString()} ({uR.Status}) -- Thrust {f.MaxThrust}/{uR.GetCurrentThrust()}";
+                if (u.IsFormationFlag)
+                {
+                    unitString += $" -- Flagship";
+                }
+
+                var hitRange = (((decimal)u.Mass / (decimal)f.GetTotalMass()) * (decimal)100.0) + (decimal)u.HitModifier;
+                unitString += $" -- HitChance {hitRange}%";
+
+                readout.AddRange(WrapDecorated(unitString, ReadoutWidth, "*   ", " *", 5));
+                // readout.AddRange(WrapDecorated($"  - {u.ToString()}", ReadoutWidth, "* ", " *"));
             }
 
             return readout;

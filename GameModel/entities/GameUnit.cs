@@ -82,7 +82,7 @@ namespace FireAndManeuver.GameModel
             }
         }
 
-        internal int GetCurrentThrust()
+        public int GetCurrentThrust()
         {
             if (this.MainDrive == null)
             {

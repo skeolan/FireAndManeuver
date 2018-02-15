@@ -123,7 +123,8 @@ namespace FireAndManeuver.GameModel
                     {
                         var newFu = new GameUnitFormationInfo(allUnits, fu.UnitId)
                         {
-                            IsFormationFlag = fu.IsFormationFlag
+                            IsFormationFlag = fu.IsFormationFlag,
+                            HitModifier = fu.HitModifier
                         };
                         newInfo.Add(newFu);
                     }
