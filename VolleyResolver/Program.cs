@@ -88,20 +88,37 @@ namespace FireAndManeuver.Clients
             roller.RollFTSuccesses(1);
 
             var u = new GameUnit() { Name = "Example Unit" };
-            u.Orders.Add(
-                new VolleyOrders()
+            u.MainDrive = new DriveSystem()
+            {
+                Id = 0,
+                DriveType = "Standard",
+                InitialThrust = 6,
+                CurrentThrust = 6,
+                Status = "Operational",
+                Active = true
+            };
+            u.Weapons.Add(new BeamBatterySystem()
+            {
+                Arcs = "(all arcs)",
+                Id = 1,
+                Rating = 1,
+                Status = "Operational",
+            });
+
+            /*
+            u.FireAllocation.Add(
+                new GameUnitFireAllocation()
                 {
                     Volley = 1,
-                    Speed = 2,
-                    Evasion = 2,
-                    FiringOrders = new List<FireOrder> { new FireOrder { FireConID = 1, Priority = "Primary", TargetID = "1", WeaponIDs = "1, 2" } },
-                    ManeuveringOrders = new List<ManeuverOrder> { new ManeuverOrder { TargetID = "1", Priority = "Primary", ManeuverType = "Close" } }
+                    FireConId = 1,
+                    FireMode = "Normal",
+                    Priority = "Primary",
+                    WeaponIDs = new List<int>() { 1 }
                 });
+            */
 
-            var result = u.ResolveManeuver(u.Orders.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
-
-            Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
-
+            // var result = u.ResolveManeuver(u.FireAllocation.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
+            // Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
             var damageResult = new DiceNotationUtility()
             .RollFTDamage(

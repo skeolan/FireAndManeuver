@@ -55,7 +55,7 @@ namespace FireAndManeuver.GameModel
         public string Report { get; set; }
 
         [XmlElement("Player")]
-        public GameEnginePlayer[] Players { get; set; }
+        public GameEnginePlayer[] Players { get; set; } // TODO: make this a List<GameEnginePlayer>
 
         [XmlArray("FM.Distances")]
         [XmlArrayItem("Distance")]
@@ -318,21 +318,24 @@ namespace FireAndManeuver.GameModel
             // TODO
 
             //--Movement Phase
-            foreach (var u in this.AllUnits)
+            foreach (var f in this.Formations)
             {
-                var result = u.ResolveManeuver(u.Orders.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
+                Console.WriteLine($"Resolve maneuver for {f.FormationName}, volley {currentVolley}");
+                /*
+                var result = f.ResolveManeuver(f.Orders.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
 
                 speedSuccessesById.Add(u.IdNumeric, result.SpeedSuccesses);
                 evasionSuccessesById.Add(u.IdNumeric, result.EvasionSuccesses);
 
                 Console.WriteLine($"{u.InstanceName} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
+                */
             }
 
             // -- Adjudicate all maneuver tests
-            foreach (var u in this.AllUnits)
+            foreach (var f in this.Formations)
             {
-                Console.WriteLine($"  -- Process Maneuver orders for {u.ToString()}");
-                var orders = u.Orders.FirstOrDefault(o => o.Volley == currentVolley);
+                Console.WriteLine($"  -- Process Maneuver orders for {f.ToString()}");
+                var orders = f.Orders.FirstOrDefault(o => o.Volley == currentVolley);
                 var maneuveringOrders = (orders ?? new VolleyOrders()).ManeuveringOrders;
                 foreach (var o in maneuveringOrders)
                 {

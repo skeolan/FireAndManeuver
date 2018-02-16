@@ -6,7 +6,7 @@ namespace FireAndManeuver.GameModel
 {
     using System.Xml.Serialization;
 
-    [XmlRoot("FM.Maneuver")]
+    [XmlRoot("Maneuver")]
     public class ManeuverOrder : UnitOrders
     {
         public ManeuverOrder()
@@ -16,6 +16,6 @@ namespace FireAndManeuver.GameModel
         [XmlAttribute("type")]
         public string ManeuverType { get; set; } = "Maintain";
 
-        public override string ToString() => $"{this.ManeuverType, -8}  - {base.ToString(), -30}";
+        public override string ToString() => $"{this.ManeuverType}  - {base.ToString()}";
     }
 }

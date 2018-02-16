@@ -12,17 +12,19 @@ namespace FireAndManeuver.GameModel
         {
         }
 
-        [XmlAttribute("target")]
-        public string TargetID { get; set; } = "*";
+        [XmlAttribute("targetId")]
+        public string TargetID { get; set; } = "0";
 
         [XmlAttribute("priority")]
-        public string Priority { get; set; } = "secondary";
+        public string Priority { get; set; } = string.Empty;
+
+        [XmlAttribute("targetName")]
+        public string TargetFormationName { get; set; } = string.Empty;
 
         public override string ToString()
         {
-            string tgtStr = this.TargetID == "*" ? "Default" : $"Target:[{this.TargetID}]";
-            string priStr = this.Priority.ToLowerInvariant() == "primary" ? "(Primary)" : string.Empty;
-            return $"{tgtStr}{priStr}";
+            string tgtStr = this.TargetID == "*" ? "Default" : $"Target:[{this.TargetID}]{this.TargetFormationName}";
+            return $"{tgtStr} - Priority:{this.Priority}";
         }
     }
 }

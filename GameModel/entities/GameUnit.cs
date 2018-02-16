@@ -160,9 +160,9 @@ namespace FireAndManeuver.GameModel
             }
         }
 
-        [XmlArray("FM.Orders")]
-        [XmlArrayItem("FM.VolleyOrders", Type = typeof(VolleyOrders))]
-        public List<VolleyOrders> Orders { get; set; } = new List<VolleyOrders>();
+        [XmlArray("FM.FireAllocations")]
+        [XmlArrayItem("FireAllocation")]
+        public List<GameUnitFireAllocation> FireAllocation { get; set; } = new List<GameUnitFireAllocation>();
 
         public string InstanceName
         {
@@ -266,7 +266,8 @@ namespace FireAndManeuver.GameModel
             newU.Defenses = new List<DefenseSystem>();
             newU.Electronics = new List<ElectronicsSystem>();
             newU.Holds = new List<CargoHoldSystem>();
-            newU.Orders = new List<VolleyOrders>();
+
+            newU.FireAllocation = new List<GameUnitFireAllocation>();
 
             // ... and fill all collections with copied values / elements.
             // TODO: Make a base SystemCollection class for all system collections to derive from
@@ -276,10 +277,11 @@ namespace FireAndManeuver.GameModel
             (u.Defenses ?? newU.Defenses).ForEach(d => newU.Defenses.Add(d.Clone()));
             (u.Electronics ?? newU.Electronics).ForEach(e => newU.Electronics.Add(e.Clone()));
             (u.Holds ?? newU.Holds).ForEach(h => newU.Holds.Add(h.Clone()));
-            foreach (var o in u.Orders ?? newU.Orders)
+            /* foreach (var o in u.FireAllocation ?? newU.FireAllocation)
             {
                 // newU.Orders.Add(VolleyOrders.Clone(o));
             }
+            */
 
             return newU;
         }

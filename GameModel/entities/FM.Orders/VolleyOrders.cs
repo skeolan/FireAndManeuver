@@ -15,66 +15,31 @@ namespace FireAndManeuver.GameModel
     {
         public VolleyOrders()
         {
+            this.Volley = 0;
             this.Speed = 0;
             this.Evasion = 0;
-            this.ManeuveringInternal = new List<ManeuverOrder>();
-            this.FiringInternal = new List<FireOrder>();
+            this.ManeuveringOrders = new List<ManeuverOrder>();
+            this.FiringOrders = new List<FireOrder>();
         }
 
         [XmlAttribute("volley")]
         public int Volley { get; set; } = 0;
 
-        [XmlElement("FM.Speed")]
+        [XmlAttribute("speed")]
         public int Speed { get; set; }
 
-        [XmlElement("FM.Evasion")]
+        [XmlAttribute("evasion")]
         public int Evasion { get; set; }
 
-        public List<ManeuverOrder> ManeuveringOrders
-        {
-            get
-            {
-                // Default maneuvering order is "Maintain vs. everyone"
-                if (this.ManeuveringInternal == null || this.ManeuveringInternal.Count == 0)
-                {
-                    this.ManeuveringInternal = new List<ManeuverOrder>() { new ManeuverOrder() { ManeuverType = "Maintain", Priority = "default", TargetID = "*" } };
-                }
+        [XmlElement("Maneuver")]
+        public List<ManeuverOrder> ManeuveringOrders { get; set; }
 
-                return this.ManeuveringInternal.OrderBy(x => x.Priority.ToLowerInvariant() != "primary").ToList();
-            }
-
-            set
-            {
-                this.ManeuveringInternal = value;
-            }
-        }
-
-        public List<FireOrder> FiringOrders
-        {
-            get
-            {
-                return this.FiringInternal.OrderByDescending(x => x.TargetID.ToLowerInvariant() != "pd").OrderByDescending(x => x.Priority.ToLowerInvariant() == "primary").ToList();
-            }
-
-            set
-            {
-                this.FiringInternal = value;
-            }
-        }
-
-        [XmlArray("FM.ManeuveringOrders")]
-        [XmlArrayItemAttribute("FM.Maneuver", Type = typeof(ManeuverOrder))]
-        internal List<ManeuverOrder> ManeuveringInternal { get; set; }
-
-        [XmlArray("FM.FiringOrders")]
-        [XmlArrayItemAttribute("FM.Fire", Type = typeof(FireOrder))]
-        internal List<FireOrder> FiringInternal { get; set; } = new List<FireOrder> { };
+        [XmlElement("Fire")]
+        public List<FireOrder> FiringOrders { get; set; }
 
         public override string ToString()
         {
-            var maneuverStrings = string.Join("; ", this.ManeuveringOrders.Select(m => m.ToString()));
-            var firingStrings = string.Join(";", this.FiringOrders.Select(f => f.ToString()));
-            return $"v{this.Volley} - Speed {this.Speed} - Evasion {this.Evasion} | Maneuvering: [{maneuverStrings}] | Firing: [{firingStrings}]";
+            return $"v{this.Volley} - Speed {this.Speed} - Evasion {this.Evasion} | Maneuvering: [{this.ManeuveringOrders.Count}] | Firing: [{this.FiringOrders.Count}]";
         }
 
         internal static VolleyOrders Clone(VolleyOrders o)
