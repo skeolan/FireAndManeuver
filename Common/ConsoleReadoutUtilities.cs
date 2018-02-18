@@ -19,6 +19,7 @@ namespace FireAndManeuver.Common
         private static string separator = $"* {string.Empty.PadRight(ReadoutWidth - 4, '-')} *";
         private static string outputFormat = "* {0, -19} : {1, -" + (ReadoutWidth - 24 - 2).ToString() + "} *";
         private static string collectionItemOutputFormat = "* {0, -19} > {1, -" + (ReadoutWidth - 24 - 2).ToString() + "} *";
+        private static string itemLeadString = "*                      > ";
 
         public static List<string> GenerateUnitReadout(GameUnit myUnit, List<GameUnit> allUnits = null)
         {
@@ -245,20 +246,30 @@ namespace FireAndManeuver.Common
             foreach (var volleyOrder in f.Orders)
             {
                 readout.AddRange(WrapDecorated(volleyOrder.ToString(), ReadoutWidth, "* ", " *", 5));
-                readout.AddRange(PrintReadoutCollection<ManeuverOrder>(string.Empty, volleyOrder.ManeuveringOrders, true));
+                readout.AddRange(PrintReadoutCollection(string.Empty, volleyOrder.ManeuveringOrders, true));
+
                 foreach (var fire in volleyOrder.FiringOrders)
                 {
-                    readout.AddRange(PrintReadoutCollection<FireOrder>(string.Empty, new List<FireOrder>() { fire }, true));
+                    var leadString = itemLeadString;
+                    var fireOrderString = ToTitleCase($"{fire.FireType} Order: '{fire.Priority}' -- Target: [{fire.TargetID}] {fire.TargetFormationName}{(fire.DiceAssigned > 0 ? $" ({fire.DiceAssigned}D)" : string.Empty)}");
+                    readout.AddRange(WrapDecorated(fireOrderString, ReadoutWidth, itemLeadString, " *", 5));
                     foreach (var unit in f.Units)
                     {
                         var unitForOrder = allUnits.FirstOrDefault(x => x.IdNumeric == unit.UnitId);
                         if (unitForOrder != null)
                         {
-                            var firesForUnit = unitForOrder.FireAllocation.FirstOrDefault(fireAlloc => (fireAlloc.Volley == volleyOrder.Volley || fireAlloc.Volley == 0) && fireAlloc.Priority.ToLowerInvariant() == fire.Priority.ToLowerInvariant());
-                            if (firesForUnit != null)
+                            var unitOrderFireAllocations = unitForOrder.FireAllocation.Where(fireAlloc => (fireAlloc.Volley == volleyOrder.Volley || fireAlloc.Volley == 0) && fireAlloc.Priority.ToLowerInvariant() == fire.Priority.ToLowerInvariant());
+                            foreach (var allocation in unitOrderFireAllocations)
                             {
-                                var line = new List<string>() { $" -- v{firesForUnit.Volley} -- {unit.UnitName} -- FC[{firesForUnit.FireConId}] -- Priority {firesForUnit.Priority} -- Weapons:{string.Join(",", firesForUnit.WeaponIDs)}" };
-                                readout.AddRange(PrintReadoutCollection<string>(string.Empty, line, true));
+                                var fc = unitForOrder.AllSystems.FirstOrDefault(afc => afc.Id == allocation.FireConId) ?? new FireControlSystem() { Status = "N/A" };
+                                var line = new List<string>() { $">     {unit.UnitName} -- FC({fc.Status})" };
+                                foreach (var w in allocation.WeaponIDs)
+                                {
+                                    var wep = unitForOrder.Weapons.First(uw => uw.Id == w);
+                                    line.Add($">>     {wep.ToString()}");
+                                }
+
+                                readout.AddRange(PrintReadoutCollection(string.Empty, line, true));
                             }
                         }
                     }
@@ -304,7 +315,7 @@ namespace FireAndManeuver.Common
 
                 readout.AddRange(WrapDecorated(unitString, ReadoutWidth, "*   ", " *", 5));
 
-                // readout.AddRange(WrapDecorated($"  - {u.ToString()}", ReadoutWidth, "* ", " *"));
+                readout.AddRange(PrintReadoutCollection("Fire Allocations", uR.FireAllocation));
             }
 
             return readout;
@@ -330,6 +341,11 @@ namespace FireAndManeuver.Common
             }
 
             return readout;
+        }
+
+        private static string ToTitleCase(this string s)
+        {
+            return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
         }
     }
 }

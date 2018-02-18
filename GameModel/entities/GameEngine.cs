@@ -151,6 +151,7 @@ namespace FireAndManeuver.GameModel
                 f.Units = newInfo;
                 f.MaxThrust = newInfo.Max(u => u.MaxThrust);
                 f.Units.ForEach(u => u.ExtraThrust = Math.Max(u.MaxThrust - f.MaxThrust, 0));
+
             }
 
             // Distance references -> Formations
@@ -178,6 +179,31 @@ namespace FireAndManeuver.GameModel
 
                 d.SourceFormationName = sourceRealF.FormationName;
                 d.TargetFormationName = targetRealF.FormationName;
+            }
+
+            // Order targets dereference to correct FormationNames by Id
+            foreach (var f in ge.Formations)
+            {
+                foreach (var o in f.Orders)
+                {
+                    foreach (var mo in o.ManeuveringOrders)
+                    {
+                        var targetF = ge.Formations.FirstOrDefault( t => t.FormationId.ToString() == mo.TargetID);
+                        if (targetF != null)
+                        {
+                            mo.TargetFormationName = targetF.FormationName;
+                        }
+                    }
+
+                    foreach (var fo in o.FiringOrders)
+                    {
+                        var targetF = ge.Formations.FirstOrDefault(t => t.FormationId.ToString() == fo.TargetID);
+                        if (targetF != null)
+                        {
+                            fo.TargetFormationName = targetF.FormationName;
+                        }
+                    }
+                }
             }
 
             return ge;

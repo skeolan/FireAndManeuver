@@ -6,6 +6,7 @@ namespace FireAndManeuver.GameModel
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Text;
 
     /// <summary>
@@ -23,5 +24,8 @@ namespace FireAndManeuver.GameModel
         /// Unmodified die roll value that counts as a double-hit or double-success (in FT Continuum, a "natural" 6).
         /// </summary>
         public const int MinRollForDoubleSuccess = 6;
+
+        public static readonly ManeuverOrder DefaultManeuverOrder = new ManeuverOrder() { ManeuverType = "Maintain", Priority = "Default", TargetID = "0", TargetFormationName = "Default Maintain" };
+        public static readonly IList<ManeuverOrder> DefaultManeuverOrders = new ReadOnlyCollection<ManeuverOrder>(new List<ManeuverOrder>() { DefaultManeuverOrder });
     }
 }

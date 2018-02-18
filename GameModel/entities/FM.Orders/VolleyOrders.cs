@@ -13,6 +13,9 @@ namespace FireAndManeuver.GameModel
     [XmlRoot("FM.VolleyOrders")]
     public class VolleyOrders
     {
+        private readonly List<ManeuverOrder> defaultManeuverOrders = new List<ManeuverOrder>(Constants.DefaultManeuverOrders);
+        private List<ManeuverOrder> maneuveringOrders;
+
         public VolleyOrders()
         {
             this.Volley = 0;
@@ -32,7 +35,17 @@ namespace FireAndManeuver.GameModel
         public int Evasion { get; set; }
 
         [XmlElement("Maneuver")]
-        public List<ManeuverOrder> ManeuveringOrders { get; set; }
+        public List<ManeuverOrder> ManeuveringOrders {
+            get
+            {
+                return this.maneuveringOrders.Count == 0 ? this.defaultManeuverOrders : this.maneuveringOrders;
+            }
+
+            set
+            {
+                this.maneuveringOrders = value;
+            }
+        }
 
         [XmlElement("Fire")]
         public List<FireOrder> FiringOrders { get; set; }
