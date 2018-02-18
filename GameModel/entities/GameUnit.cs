@@ -140,7 +140,7 @@ namespace FireAndManeuver.GameModel
         [XmlArrayItem("PointDefense", Type = typeof(PointDefenseSystem))]
         [XmlArrayItem("BeamBattery", Type = typeof(BeamBatterySystem))]
         [XmlArrayItem("AntiMatterTorpedoLauncher", Type = typeof(AntiMatterTorpedoLauncherSystem))]
-        public List<WeaponSystem> Weapons { get; set; }
+        public List<WeaponSystem> Weapons { get; set; } = new List<WeaponSystem>();
 
         [XmlArray]
         [XmlArrayItem("Record", Type = typeof(GameUnitRecord))]

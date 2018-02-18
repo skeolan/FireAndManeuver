@@ -312,7 +312,7 @@ namespace FireAndManeuver.GameModel
                 destFileName);
             ge.SourceFile = destFileFullName;
             Console.WriteLine($" - Volley interim report saving to:");
-            Console.WriteLine($"          {ge.SourceFile}...");
+            Console.WriteLine($"          {ge.SourceFile}");
             ge.SaveToFile(ge.SourceFile);
         }
 
