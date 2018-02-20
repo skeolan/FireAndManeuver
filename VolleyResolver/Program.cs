@@ -87,38 +87,14 @@ namespace FireAndManeuver.Clients
             IDiceUtility roller = new DiceNotationUtility() as IDiceUtility;
             roller.RollFTSuccesses(1);
 
-            var u = new GameUnit() { Name = "Example Unit" };
-            u.MainDrive = new DriveSystem()
-            {
-                Id = 0,
-                DriveType = "Standard",
-                InitialThrust = 6,
-                CurrentThrust = 6,
-                Status = "Operational",
-                Active = true
-            };
-            u.Weapons.Add(new BeamBatterySystem()
-            {
-                Arcs = "(all arcs)",
-                Id = 1,
-                Rating = 1,
-                Status = "Operational",
-            });
+            var units = new List<GameUnit>();
+            var f = GenerateTestFormation(1, "Test Formation", ref units);
+            var fu = f.Units.First();
+            var u = units[0];
 
-            /*
-            u.FireAllocation.Add(
-                new GameUnitFireAllocation()
-                {
-                    Volley = 1,
-                    FireConId = 1,
-                    FireMode = "Normal",
-                    Priority = "Primary",
-                    WeaponIDs = new List<int>() { 1 }
-                });
-            */
+            var result = f.ResolveManeuver(f.Orders.First(), speedDRM: 0, evasionDRM: 0);
+            Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
-            // var result = u.ResolveManeuver(u.FireAllocation.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
-            // Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
             var damageResult = new DiceNotationUtility()
             .RollFTDamage(
@@ -166,6 +142,87 @@ namespace FireAndManeuver.Clients
             Console.WriteLine($"H2a type : [{h2a.HullType}]");
             Console.WriteLine($"A1 totalArmor : [{a1.TotalArmor}]");
             Console.WriteLine($"A2 totalArmor : [{((ArmorSystem)a2).TotalArmor}] (Cloned as DefenseSystem, cast to ArmorSystem)");
+        }
+
+        private static GameFormation GenerateTestFormation(int id, string name, ref List<GameUnit> unitList, int targetFormationId = 0)
+        {
+            GameUnit u = GenerateTestUnit(id: 1, name: $"{name}-1");
+
+            unitList.Add(u);
+
+            var f = new GameFormation()
+            {
+                FormationId = id,
+                FormationName = name,
+                MaxThrust = 99,
+                Orders = new List<VolleyOrders>(),
+                PlayerId = 0,
+                Units = new List<GameUnitFormationInfo>()
+                {
+                    new GameUnitFormationInfo(u)
+                }
+            };
+
+            var fOrder = new VolleyOrders()
+            {
+                Volley = 1,
+                Evasion = 2,
+                Speed = 4,
+                FiringOrders = new List<FireOrder>()
+                {
+                    new FireOrder()
+                    {
+                        TargetID = targetFormationId.ToString(),
+                        FireType = "Normal",
+                        Priority = "Primary",
+                        TargetFormationName = string.Empty,
+                        DiceAssigned = 0
+                    }
+                },
+                ManeuveringOrders = new List<ManeuverOrder>()
+                {
+                    new ManeuverOrder()
+                    {
+                        TargetID = targetFormationId.ToString(),
+                        ManeuverType = "Close",
+                        Priority = "Primary"
+                    }
+                }
+            };
+
+            u.FireAllocation = new List<GameUnitFireAllocation>() { new GameUnitFireAllocation(volley: 1, fireConId: u.Electronics.OfType<FireControlSystem>().First().Id, fireMode: "Normal", priority: "Primary", weaponIds: u.Weapons.Select(w => w.Id).ToList()) };
+
+            f.Orders.Add(fOrder);
+
+            return f;
+        }
+
+        // Produces a NAC Harrison-class Scout Ship, pretty much the simplest FTL-capable ship that can move and shoot
+        private static GameUnit GenerateTestUnit(int id, string name, string faction = null)
+        {
+            int currentSystemId = 1;
+
+            var u = new GameUnit()
+            {
+                IdNumeric = id,
+                Name = string.IsNullOrWhiteSpace(name) ? "Test Unit" : name,
+                ClassName = "Harrison",
+                ShipClass = "Scoutship",
+                ClassAbbrev = "SC",
+                Race = faction ?? "NAC",
+                Status = "OK",
+                CrewQuality = "First Rate",
+                Mass = 6,
+                PointValue = 21,
+
+                Electronics = new List<ElectronicsSystem>() { new FireControlSystem() { Id = currentSystemId++ } },
+                FtlDrive = new FTLDriveSystem() { Id = currentSystemId++ },
+                Hull = new HullSystem() { Id = currentSystemId++, HullClass = "Military", HullType = HullTypeLookup.Average },
+                MainDrive = new DriveSystem(4) { Id = currentSystemId++ },
+                Weapons = new List<WeaponSystem>() { new BeamBatterySystem(1, "(All arcs)") { Id = currentSystemId++ } },
+            };
+
+            return u;
         }
     }
 }

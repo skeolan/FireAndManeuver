@@ -78,24 +78,26 @@ namespace FireAndManeuver.GameModel
             {
                 var dieDamage = CountSuccessesOnRoll(roll.Value, drm, targetScreenRating);
 
-                Console.Write($"{indent}Roll of {roll.Value} deals {dieDamage} damage");
-
-                damageResult.Standard += dieDamage;
-
-                if (roll.Value >= Constants.MinRollForDoubleSuccess && dealPenetrating)
+                if (dieDamage > 0)
                 {
-                    penetrationCount++;
-                    Console.Write($" -- penetration die count: {penetrationCount}");
-                }
+                    Console.Write($"{indent}Roll of {roll.Value} deals {dieDamage} damage");
 
-                Console.WriteLine();
+                    damageResult.Standard += dieDamage;
+
+                    if (roll.Value >= Constants.MinRollForDoubleSuccess && dealPenetrating)
+                    {
+                        penetrationCount++;
+                    }
+
+                    Console.WriteLine();
+                }
 
                 // Exit early if dieDamage == 0, since dice are sorted in descending order?
             }
 
             if (penetrationCount > 0)
             {
-                Console.WriteLine($"{indent}Rolling penetrating dice: [");
+                Console.WriteLine($"{indent}Rolling {penetrationCount} penetrating dice: [");
 
                 // On a "natural" max roll, deal recursive, shield-ignoring, penetrating followup damage
                 var penetrationFollowup = this.RollFTDamage(penetrationCount, drm, 0, true, recursionDepth + 1);

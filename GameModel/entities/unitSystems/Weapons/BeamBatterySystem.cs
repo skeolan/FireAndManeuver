@@ -15,6 +15,22 @@ namespace FireAndManeuver.GameModel
             : base()
         {
             this.SystemName = "Beam Battery System";
+            this.Rating = 1;
+            this.Arcs = "(All arcs)";
+        }
+
+        public BeamBatterySystem(int rating)
+        {
+            this.SystemName = "Beam Battery System";
+            this.Rating = rating;
+            this.Arcs = rating == 1 ? "(All arcs)" : "(F)";
+        }
+
+        public BeamBatterySystem(int rating, string arcs)
+        {
+            this.SystemName = "Beam Battery System";
+            this.Rating = rating;
+            this.Arcs = arcs;
         }
 
         [XmlAttribute("rating")]

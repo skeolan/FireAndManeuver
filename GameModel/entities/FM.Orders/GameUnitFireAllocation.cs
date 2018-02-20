@@ -13,6 +13,30 @@ namespace FireAndManeuver.GameModel
     [XmlRoot("FireAllocation")]
     public class GameUnitFireAllocation
     {
+        public GameUnitFireAllocation()
+        {
+            this.Volley = 0;
+            this.FireConId = 0;
+            this.FireMode = "Normal";
+            this.Priority = "Primary";
+        }
+
+        public GameUnitFireAllocation(int volley = 0, int fireConId = 0, string fireMode = "Normal", string priority = "Primary", List<int> weaponIds = null)
+        {
+            this.Volley = volley;
+            this.FireConId = fireConId;
+            this.FireMode = fireMode;
+            this.Priority = priority;
+            if (weaponIds == null)
+            {
+                this.WeaponIDsRaw = "0";
+            }
+            else
+            {
+                this.WeaponIDs = weaponIds;
+            }
+        }
+
         [XmlAttribute]
         public int Volley { get; set; } = 0;
 
@@ -24,7 +48,14 @@ namespace FireAndManeuver.GameModel
         {
             get
             {
-                return this.WeaponIDsRaw.Split(',').Select(int.Parse).ToList();
+                if (string.IsNullOrWhiteSpace(this.WeaponIDsRaw))
+                {
+                    return new List<int>();
+                }
+                else
+                {
+                    return this.WeaponIDsRaw.Split(',').Select(int.Parse).ToList();
+                }
             }
 
             set
@@ -40,7 +71,7 @@ namespace FireAndManeuver.GameModel
         public string Priority { get; set; } = "Primary";
 
         [XmlAttribute("WeaponIDs")]
-        public string WeaponIDsRaw { get; set; } = "0";
+        public string WeaponIDsRaw { get; set; } = string.Empty;
 
         public override string ToString()
         {

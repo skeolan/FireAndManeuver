@@ -151,7 +151,6 @@ namespace FireAndManeuver.GameModel
                 f.Units = newInfo;
                 f.MaxThrust = newInfo.Max(u => u.MaxThrust);
                 f.Units.ForEach(u => u.ExtraThrust = Math.Max(u.MaxThrust - f.MaxThrust, 0));
-
             }
 
             // Distance references -> Formations
@@ -188,7 +187,7 @@ namespace FireAndManeuver.GameModel
                 {
                     foreach (var mo in o.ManeuveringOrders)
                     {
-                        var targetF = ge.Formations.FirstOrDefault( t => t.FormationId.ToString() == mo.TargetID);
+                        var targetF = ge.Formations.FirstOrDefault(t => t.FormationId.ToString() == mo.TargetID);
                         if (targetF != null)
                         {
                             mo.TargetFormationName = targetF.FormationName;
@@ -360,7 +359,7 @@ namespace FireAndManeuver.GameModel
             // -- Adjudicate all maneuver tests
             foreach (var f in this.Formations)
             {
-                Console.WriteLine($"  -- Process Maneuver orders for {f.ToString()}");
+                Console.WriteLine($"  -- Process Maneuver orders for [{f.FormationId}]{f.FormationName}");
                 var orders = f.Orders.FirstOrDefault(o => o.Volley == currentVolley);
                 var maneuveringOrders = (orders ?? new VolleyOrders()).ManeuveringOrders;
                 foreach (var o in maneuveringOrders)

@@ -90,5 +90,24 @@ namespace FireAndManeuver.GameModel
 
             return hitChance;
         }
+
+        public ManeuverResult ResolveManeuver(VolleyOrders orders, int speedDRM = 0, int evasionDRM = 0)
+        {
+            Console.WriteLine($"Resolving maneuver for [{this.FormationId}]{this.FormationName}");
+
+            var maneuverOrders = orders ?? new VolleyOrders(); // Default to no-maneuver if none specified
+
+            int speedSuccesses = 0;
+            int evasionSuccesses = 0;
+            var roller = new DiceNotationUtility() as IDiceUtility;
+
+            Console.WriteLine("Roll for Speed:");
+            speedSuccesses = roller.RollFTSuccesses(maneuverOrders.Speed);
+
+            Console.WriteLine("Roll for Evasion:");
+            evasionSuccesses = roller.RollFTSuccesses(maneuverOrders.Evasion);
+
+            return new ManeuverResult() { SpeedSuccesses = speedSuccesses, EvasionSuccesses = evasionSuccesses };
+        }
     }
 }

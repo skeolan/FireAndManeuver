@@ -233,26 +233,7 @@ namespace FireAndManeuver.GameModel
             return $"{this.InstanceName} -- {this.Race} {this.ClassName}-class {this.ShipClass} -- TMF:{this.Mass} / NPV:{this.PointValue}";
         }
 
-        public ManeuverResult ResolveManeuver(VolleyOrders orders, int speedDRM = 0, int evasionDRM = 0)
-        {
-            Console.WriteLine($"Resolving maneuver for {this.InstanceName}");
-
-            var maneuverOrders = orders ?? new VolleyOrders(); // Default to no-maneuver if none specified
-
-            int speedSuccesses = 0;
-            int evasionSuccesses = 0;
-            var roller = new DiceNotationUtility() as IDiceUtility;
-
-            // Roll for Speed
-            speedSuccesses = roller.RollFTSuccesses(maneuverOrders.Speed);
-
-            // Roll for Evasion
-            evasionSuccesses = roller.RollFTSuccesses(maneuverOrders.Evasion);
-
-            return new ManeuverResult() { SpeedSuccesses = speedSuccesses, EvasionSuccesses = evasionSuccesses };
-        }
-
-        internal static GameUnit Clone(GameUnit u)
+       internal static GameUnit Clone(GameUnit u)
         {
             // Copy all primitive types...
             var newU = (GameUnit)u.MemberwiseClone();

@@ -35,7 +35,8 @@ namespace FireAndManeuver.GameModel
         public int Evasion { get; set; }
 
         [XmlElement("Maneuver")]
-        public List<ManeuverOrder> ManeuveringOrders {
+        public List<ManeuverOrder> ManeuveringOrders
+        {
             get
             {
                 return this.maneuveringOrders.Count == 0 ? this.defaultManeuverOrders : this.maneuveringOrders;

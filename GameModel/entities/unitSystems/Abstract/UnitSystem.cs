@@ -10,6 +10,7 @@ namespace FireAndManeuver.GameModel
     {
         public UnitSystem()
         {
+            this.Status = "Operational";
         }
 
         [XmlIgnore]

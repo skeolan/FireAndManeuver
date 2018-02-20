@@ -29,7 +29,7 @@ namespace FireAndManeuver.Common
 
             readout.Add(string.Empty);
             readout.Add(boundary);
-            readout.Add($"* {myUnit.ToString(),-(ReadoutWidth - 4)} *");
+            readout.Add($"* {myUnit.ToString(), -(ReadoutWidth - 4)} *");
 
             readout.Add(separator);
 
@@ -53,7 +53,7 @@ namespace FireAndManeuver.Common
             readout.AddRange(PrintReadoutCollection("Log", myUnit.Log));
 
             readout.Add(separator);
-            readout.Add($"* {"Source: " + myUnit.SourceFile,-(ReadoutWidth - 4)} *");
+            readout.Add($"* {"Source: " + myUnit.SourceFile, -(ReadoutWidth - 4)} *");
             readout.Add(boundary);
 
             return readout;
@@ -93,7 +93,7 @@ namespace FireAndManeuver.Common
                     foreach (var u in p.Units)
                     {
                         readout.Add($"* Player [{p.Id}]{p.Name} Unit Detail: *".PadRight(ReadoutWidth, '*'));
-                        readout.Add($"* <{u.ToString(),-(ReadoutWidth - 6)}> *");
+                        readout.Add($"* <{u.ToString(), -(ReadoutWidth - 6)}> *");
                         var unitReadout = GenerateUnitReadout(u, allUnits);
                         readout.AddRange(unitReadout);
                         readout.Add(string.Empty);
@@ -182,7 +182,7 @@ namespace FireAndManeuver.Common
                         // multiple entries needs a multi-line printout
                         if (!suppressTitleLine)
                         {
-                            outputLines.AddRange(WrapDecorated($"{collectionName,-16}({coll.Count,2})", ReadoutWidth, "* ", " *"));
+                            outputLines.AddRange(WrapDecorated($"{collectionName, -16}({coll.Count, 2})", ReadoutWidth, "* ", " *"));
                         }
 
                         foreach (var sys in coll)
@@ -203,7 +203,7 @@ namespace FireAndManeuver.Common
 
             if (coll.Count > 0)
             {
-                output.Add($"* {$"{collectionName,-16}({coll.Count,2})",-(ReadoutWidth - 4)} *");
+                output.Add($"* {$"{collectionName, -16}({coll.Count, 2})", -(ReadoutWidth - 4)} *");
             }
 
             foreach (var orderT in coll)

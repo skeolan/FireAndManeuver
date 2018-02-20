@@ -12,8 +12,22 @@ namespace FireAndManeuver.GameModel
         private int? currentThrustInternal = null;
 
         public DriveSystem()
+            : base()
         {
             this.SystemName = "Standard Drive System";
+            this.DriveType = "Standard";
+            this.InitialThrust = 0;
+            this.CurrentThrust = 0;
+            this.Active = true;
+        }
+
+        public DriveSystem(int thrustRating, bool advanced = false)
+        {
+            this.SystemName = "Standard Drive System";
+            this.DriveType = advanced ? "Advanced" : "Standard";
+            this.InitialThrust = thrustRating;
+            this.CurrentThrust = thrustRating;
+            this.Active = true;
         }
 
         [XmlAttribute("type")]
