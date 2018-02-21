@@ -18,9 +18,19 @@ namespace FireAndManeuver.GameModel
     {
         public GameEngine()
         {
+
+            this.Briefing = string.Empty;
+            this.Combat = false;
+            this.Distances = new List<FormationDistance>();
             this.Exchange = 1;
-            this.Volley = 1;
+            this.Formations = new List<GameFormation>();
+            this.GameOptions = new GameEngineOptions();
+            this.Id = 0;
+            this.Report = string.Empty;
+            this.SourceFile = string.Empty;
+            this.Players = new List<GameEnginePlayer>();
             this.Turn = 1;
+            this.Volley = 1;
         }
 
         [XmlIgnore]
@@ -55,7 +65,7 @@ namespace FireAndManeuver.GameModel
         public string Report { get; set; }
 
         [XmlElement("Player")]
-        public GameEnginePlayer[] Players { get; set; } // TODO: make this a List<GameEnginePlayer>
+        public List<GameEnginePlayer> Players { get; set; } // TODO: make this a List<GameEnginePlayer>
 
         [XmlArray("FM.Distances")]
         [XmlArrayItem("Distance")]
@@ -80,12 +90,9 @@ namespace FireAndManeuver.GameModel
         [XmlArrayItem("Formation")]
         public List<GameFormation> Formations { get; set; } = new List<GameFormation>();
 
-        public static GameEngine LoadFromXml(string sourceFile)
+        public static FileStream GetFileStreamFromPath(string sourceFile)
         {
-            XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
-
             FileStream fs;
-            GameEngine ge = null;
 
             try
             {
@@ -96,16 +103,34 @@ namespace FireAndManeuver.GameModel
                 throw ex;
             }
 
+            return fs;
+        }
+
+        public static GameEngine LoadFromXml(string sourceFile)
+        {
+            Stream stream = GetFileStreamFromPath(sourceFile);
+            return LoadFromStream(stream);
+        }
+
+        public static GameEngine LoadFromStream(Stream sourceXml, string filename = "")
+        {
+            // Ensure incoming stream is reset to starting position for reading
+            sourceXml.Position = 0;
+
+            GameEngine ge = null;
+            XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
+            TextReader reader = new StreamReader(sourceXml);
+
             try
             {
-                ge = (GameEngine)srz.Deserialize(fs);
-                ge.SourceFile = sourceFile;
+                ge = (GameEngine)srz.Deserialize(reader);
+                ge.SourceFile = filename;
             }
             catch (InvalidOperationException ex)
             {
-                Console.Error.WriteLine("XML {0} is not a supported Unit design: {1} -- {2}", sourceFile, ex.Message, ex.InnerException.Message ?? string.Empty);
+                Console.Error.WriteLine("XML input from '{0}' is not a supported Unit design: {1} -- {2}", filename, ex.Message, ex.InnerException.Message ?? string.Empty);
 
-                // throw ex;
+                throw ex;
             }
 
             // Instantiate references
@@ -213,9 +238,9 @@ namespace FireAndManeuver.GameModel
             // Cheat!
             XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
             MemoryStream ms = new MemoryStream();
-            srz.Serialize(ms, ge);
+            ge.SaveToStream(ms);
 
-            var newGE = srz.Deserialize(ms) as GameEngine;
+            var newGE = GameEngine.LoadFromStream(ms);
 
             return newGE;
         }
@@ -241,7 +266,7 @@ namespace FireAndManeuver.GameModel
                 newPlayers.Add(GameEnginePlayer.Clone(p));
             }
 
-            newGE.Players = newPlayers.ToArray();
+            newGE.Players = newPlayers;
 
             // Formations
             newGE.Formations = new List<GameFormation>(oldGE.Formations.Count);
@@ -288,9 +313,19 @@ namespace FireAndManeuver.GameModel
 
         public void SaveToFile(string sourceFile)
         {
-            XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
             FileStream fs = new FileStream(sourceFile, FileMode.Create);
-            srz.Serialize(fs, this);
+            this.SaveToStream(fs);
+        }
+
+        public void SaveToStream(Stream stream)
+        {
+            TextWriter streamWriter = new StreamWriter(stream);
+
+            XmlSerializer srz = new XmlSerializer(typeof(GameEngine));
+            srz.Serialize(streamWriter, this);
+
+            // Reset position so stream is ready for reading
+            stream.Position = 0;
         }
 
         public void ClearOrders()

@@ -77,6 +77,7 @@ namespace FireAndManeuver.GameModel
             foreach (var roll in rolls)
             {
                 var dieDamage = CountSuccessesOnRoll(roll.Value, drm, targetScreenRating);
+                damageResult.StandardRolls.Add(roll.Value);
 
                 if (dieDamage > 0)
                 {
@@ -99,13 +100,16 @@ namespace FireAndManeuver.GameModel
             {
                 Console.WriteLine($"{indent}Rolling {penetrationCount} penetrating dice: [");
 
-                // On a "natural" max roll, deal recursive, shield-ignoring, penetrating followup damage
-                var penetrationFollowup = this.RollFTDamage(penetrationCount, drm, 0, true, recursionDepth + 1);
+                // On a "natural" max roll, deal recursive, shield-ignoring, DRM-ignoring, penetrating followup damage
+                var penetrationFollowup = this.RollFTDamage(penetrationCount, 0, 0, true, recursionDepth + 1);
                 Console.WriteLine($"{indent}]");
                 damageResult.Penetrating += penetrationFollowup.Standard;
 
                 // Penetrating damage could ITSELF penetrate, but it all rolls up to just one count of penetrating damage
                 damageResult.Penetrating += penetrationFollowup.Penetrating;
+
+                damageResult.PenetratingRolls.AddRange(penetrationFollowup.StandardRolls);
+                damageResult.PenetratingRolls.AddRange(penetrationFollowup.PenetratingRolls);
             }
 
             return damageResult;

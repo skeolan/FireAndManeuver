@@ -279,7 +279,7 @@ namespace FireAndManeuver.Common
             return readout;
         }
 
-        private static List<string> GenerateFormationReadout(GameFormation f, List<GameUnit> allUnits, GameEnginePlayer[] players)
+        private static List<string> GenerateFormationReadout(GameFormation f, List<GameUnit> allUnits, List<GameEnginePlayer> players)
         {
             var readout = new List<string>();
 

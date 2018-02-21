@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VolleyResolver", "VolleyResolver\VolleyResolver.csproj", "{CE9DFA43-5A67-46EF-BAF0-A6BCF20F6AFB}"
 EndProject
@@ -61,6 +61,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example-ShipData", "Example
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameEngineReadoutGenerator", "GameEngineReadoutGenerator\GameEngineReadoutGenerator.csproj", "{A11B3D51-C16A-40EC-9436-995CAC740648}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{0CB1EF11-A2C2-444E-9AEE-DB8129265A46}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameModel.Test", "Test\GameModel.Test\GameModel.Test.csproj", "{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,9 +136,24 @@ Global
 		{A11B3D51-C16A-40EC-9436-995CAC740648}.Release|x64.Build.0 = Release|Any CPU
 		{A11B3D51-C16A-40EC-9436-995CAC740648}.Release|x86.ActiveCfg = Release|Any CPU
 		{A11B3D51-C16A-40EC-9436-995CAC740648}.Release|x86.Build.0 = Release|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Debug|x64.Build.0 = Debug|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Debug|x86.Build.0 = Debug|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Release|x64.ActiveCfg = Release|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Release|x64.Build.0 = Release|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{868ABEA4-A2F1-4CD8-ABBD-545DBEC799AF} = {0CB1EF11-A2C2-444E-9AEE-DB8129265A46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51795CDD-CBA4-441E-8F3B-23EA47D7AFD8}
