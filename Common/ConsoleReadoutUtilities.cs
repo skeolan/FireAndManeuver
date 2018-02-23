@@ -131,6 +131,29 @@ namespace FireAndManeuver.Common
             return readout;
         }
 
+        public static List<string> GenerateDistanceReadout(List<FormationDistance> input)
+        {
+            var readout = new List<string>();
+            var distances = new List<FormationDistance>(input);
+            var maxNameLength = input.Max(f => Math.Max(f.SourceFormationName.Length, f.TargetFormationName.Length));
+
+            while (distances.Count > 0)
+            {
+                var node = distances.First();
+                var mirrorNode = distances.Where(n => node.SourceFormationId == n.TargetFormationId && node.TargetFormationId == n.SourceFormationId).FirstOrDefault();
+
+                distances.Remove(node);
+                if (mirrorNode != null)
+                {
+                    distances.Remove(mirrorNode);
+                }
+
+                readout.Add($"[{node.SourceFormationId}]{node.SourceFormationName.PadRight(maxNameLength)} <- {node.Value, 3} MU -> [{node.TargetFormationId}] {node.TargetFormationName.PadRight(maxNameLength)}");
+            }
+
+            return readout;
+        }
+
         public static List<string> WrapDecorated(string text, int margin, string prefix, string suffix, int hangingIndentLength = 0)
         {
             int start = 0, end;
@@ -316,28 +339,6 @@ namespace FireAndManeuver.Common
                 readout.AddRange(WrapDecorated(unitString, ReadoutWidth, "*   ", " *", 5));
 
                 readout.AddRange(PrintReadoutCollection("Fire Allocations", uR.FireAllocation));
-            }
-
-            return readout;
-        }
-
-        private static List<string> GenerateDistanceReadout(List<FormationDistance> input)
-        {
-            var readout = new List<string>();
-            var distances = new List<FormationDistance>(input);
-
-            while (distances.Count > 0)
-            {
-                var node = distances.First();
-                var mirrorNode = distances.Where(n => node.SourceFormationId == n.TargetFormationId && node.TargetFormationId == n.SourceFormationId).FirstOrDefault();
-
-                distances.Remove(node);
-                if (mirrorNode != null)
-                {
-                    distances.Remove(mirrorNode);
-                }
-
-                readout.Add(node.ToString());
             }
 
             return readout;

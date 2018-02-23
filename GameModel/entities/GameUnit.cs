@@ -140,6 +140,7 @@ namespace FireAndManeuver.GameModel
         [XmlArrayItem("PointDefense", Type = typeof(PointDefenseSystem))]
         [XmlArrayItem("BeamBattery", Type = typeof(BeamBatterySystem))]
         [XmlArrayItem("AntiMatterTorpedoLauncher", Type = typeof(AntiMatterTorpedoLauncherSystem))]
+        [XmlArrayItem("PulseTorpedo", Type = typeof(PulseTorpedoSystem))]
         public List<WeaponSystem> Weapons { get; set; } = new List<WeaponSystem>();
 
         [XmlArray]
@@ -235,36 +236,29 @@ namespace FireAndManeuver.GameModel
 
        internal static GameUnit Clone(GameUnit u)
         {
-            // Copy all primitive types...
-            var newU = (GameUnit)u.MemberwiseClone();
+            // Cheat!
+            XmlSerializer srz = new XmlSerializer(typeof(GameUnit));
+            MemoryStream stream = new MemoryStream();
 
-            // ... clone all complex non-collection types...
-            newU.Armor = u.Armor.Clone();
-            newU.FtlDrive = u.FtlDrive.Clone();
-            newU.MainDrive = u.MainDrive.Clone();
+            TextWriter streamWriter = new StreamWriter(stream);
 
-            // ... initialize all collections...
-            newU.Defenses = new List<DefenseSystem>();
-            newU.Electronics = new List<ElectronicsSystem>();
-            newU.Holds = new List<CargoHoldSystem>();
+            srz.Serialize(streamWriter, u);
 
-            newU.FireAllocation = new List<GameUnitFireAllocation>();
+            // Reset position so stream is ready for reading
+            stream.Position = 0;
 
-            // ... and fill all collections with copied values / elements.
-            // TODO: Make a base SystemCollection class for all system collections to derive from
-            // TODO: Implement a 'public T Clone<T>() where T:SystemCollection' method
-            // TODO: Get rid of these system-collection foreach loops once the better Clone<T> method exists
-            // TODO: Fix your Clone() method -- it doesn't work as implemented below for e.g. PointDefenseSystem : DefenseSystem
-            (u.Defenses ?? newU.Defenses).ForEach(d => newU.Defenses.Add(d.Clone()));
-            (u.Electronics ?? newU.Electronics).ForEach(e => newU.Electronics.Add(e.Clone()));
-            (u.Holds ?? newU.Holds).ForEach(h => newU.Holds.Add(h.Clone()));
-            /* foreach (var o in u.FireAllocation ?? newU.FireAllocation)
+            TextReader reader = new StreamReader(stream);
+            try
             {
-                // newU.Orders.Add(VolleyOrders.Clone(o));
+                var newU = (GameUnit)srz.Deserialize(reader);
+                return newU;
             }
-            */
+            catch (InvalidOperationException ex)
+            {
+                Console.Error.WriteLine("XML input from '{0}' is not a supported Unit design: {1} -- {2}", u.SourceFile, ex.Message, ex.InnerException.Message ?? string.Empty);
 
-            return newU;
+                throw ex;
+            }
         }
 
         private List<UnitSystem> ComposeAllSystemsList()

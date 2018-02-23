@@ -16,6 +16,24 @@ namespace FireAndManeuver.GameModel
         {
         }
 
+        public FormationDistance(int sourceFormationId, int targetFormationId, int value, string sourceFormationName = null, string targetFormationName = null)
+        {
+            this.SourceFormationId = sourceFormationId;
+            this.SourceFormationName = sourceFormationName;
+            this.TargetFormationId = targetFormationId;
+            this.TargetFormationName = targetFormationName;
+            this.Value = value;
+        }
+
+        public FormationDistance(GameFormation source, GameFormation target, int value)
+        {
+            this.SourceFormationId = source.FormationId;
+            this.SourceFormationName = source.FormationName;
+            this.TargetFormationId = target.FormationId;
+            this.TargetFormationName = target.FormationName;
+            this.Value = value;
+        }
+
         [XmlAttribute("sourceId")]
         public int SourceFormationId { get; set; } = 0;
 

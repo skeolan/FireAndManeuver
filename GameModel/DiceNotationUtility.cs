@@ -51,11 +51,13 @@ namespace FireAndManeuver.GameModel
 
             var successes = 0;
             var diceRolled = this.dice.Roll($"{numberOfDice}D6", this.roller);
-            Console.WriteLine($"DiceRoller library FTSuccesses die roll [{diceRolled.DiceExpression}]: {string.Join(",", diceRolled.Results.Select(r => r.Value))}");
+            var rollSet = diceRolled.Results.Select(r => r.Value).OrderByDescending(i => i).ToList();
 
-            foreach (var roll in diceRolled.Results)
+            Console.Write($"DiceRoller library FTSuccesses die roll [{diceRolled.DiceExpression}]: {string.Join(",", rollSet)}");
+
+            foreach (var roll in rollSet)
             {
-                successes += CountSuccessesOnRoll(roll.Value, drm, difficultyLevel);
+                successes += CountSuccessesOnRoll(roll, drm, difficultyLevel);
             }
 
             return successes;

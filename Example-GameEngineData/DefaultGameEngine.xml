@@ -186,6 +186,7 @@
       <Orders>
         <VolleyOrders volley="1" speed="4" evasion="2">
           <Maneuver priority="primary" targetId="2" targetName="Zeat 2">Close</Maneuver>          
+          <Maneuver priority="secondary" targetId="3" targetName="Zeat 3">Withdraw</Maneuver>          
           <Fire targetId="2" priority="primary" />             <!-- target for all the weapons on each Unit assigned to "Primary" FireCon -->
           <Fire targetId="-1" priority="B" />                  <!-- no secondary target assigned or no "B" FireCons are available -->
           <Fire type="PD" targetId="0" priority="pdactive" diceAssigned="2" /> <!-- If Target is nonzero, it needs to be the ID of a Formation containing Fighters. -->
@@ -223,11 +224,14 @@
         </VolleyOrders>
       </Orders>
     </Formation>
+    <Formation id="3" playerId="3" name="Decoy Beacon" />
+    
   </FM.Formations>
   <FM.Distances>
     <!-- Incorrect targetFormationName shouldn't matter, matching is by id; should be corrected in output XMLs -->
     <Distance sourceId="1" sourceName="Alhpa-1" targetId="2" targetName="Zeat-2">60</Distance>
     <!-- Should gracefully handle if A->B distance exists with no B->A distance, but not if A->B <> B->A both exist -->
     <Distance sourceId="2" targetId="1">60</Distance>
+    <Distance sourceId="3" targetId="1">60</Distance>
   </FM.Distances>
 </GameEngine>

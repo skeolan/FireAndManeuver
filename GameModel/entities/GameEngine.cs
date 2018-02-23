@@ -18,7 +18,6 @@ namespace FireAndManeuver.GameModel
     {
         public GameEngine()
         {
-
             this.Briefing = string.Empty;
             this.Combat = false;
             this.Distances = new List<FormationDistance>();
@@ -174,7 +173,7 @@ namespace FireAndManeuver.GameModel
 
                 // Calculate formation-wide max-thrust and per-unit Excess Thrust once all units are dereferenced
                 f.Units = newInfo;
-                f.MaxThrust = newInfo.Max(u => u.MaxThrust);
+                f.MaxThrust = newInfo.Select(u => u.MaxThrust).DefaultIfEmpty(0).Max();
                 f.Units.ForEach(u => u.ExtraThrust = Math.Max(u.MaxThrust - f.MaxThrust, 0));
             }
 
@@ -245,70 +244,41 @@ namespace FireAndManeuver.GameModel
             return newGE;
         }
 
-        public static GameEngine DeepClone(GameEngine oldGE, bool forceImplementation = false)
+        public static GameEngine ResolveVolley(GameEngine ge, IConfigurationRoot config, int volley, string sourceFileName)
         {
-            if (!forceImplementation)
-            {
-                throw new NotImplementedException("Finish this method!");
-            }
+            ge.Volley = volley;
 
-            var newGE = (GameEngine)oldGE.MemberwiseClone();
+            // MANEUVER
+            ge.ExecuteManeuversForVolley(ge.Volley);
 
-            // Break connection to source file, if any
-            newGE.SourceFile = string.Empty;
-
-            // Deep copy of complex types
-            newGE.GameOptions = GameEngineOptions.Clone(oldGE.GameOptions);
-
-            List<GameEnginePlayer> newPlayers = new List<GameEnginePlayer>();
-            foreach (var p in oldGE.Players)
-            {
-                newPlayers.Add(GameEnginePlayer.Clone(p));
-            }
-
-            newGE.Players = newPlayers;
-
-            // Formations
-            newGE.Formations = new List<GameFormation>(oldGE.Formations.Count);
-            foreach (var f in oldGE.Formations)
-            {
-                newGE.Formations.Add(f.Clone());
-            }
-
-            return newGE;
-        }
-
-        public static GameEngine ResolveVolleys(GameEngine ge, IConfigurationRoot config, int volleyMax, string sourceFileName)
-        {
-            for (; ge.Volley <= volleyMax; ge.Volley++)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"VOLLEY {ge.Volley}");
-                Console.WriteLine(string.Empty.PadRight(100, '*'));
-
-                // ********
-                // MANEUVER
-                // ********
-                ge.ExecuteManeuversForVolley(ge.Volley);
-
-                // FIRE
-                ge.ExecuteCombatForVolley(ge.Volley);
-
-                // Record Volley Report
-                RecordVolleyReport(ge, sourceFileName);
-
-                Console.WriteLine(string.Empty.PadRight(100, '*'));
-            }
-
-            {
-                // Set up for a new Exchange by clearing out this Exchange's scripting
-                ge.Exchange++;
-                ge.Volley = 1;
-
-                ge.ClearOrders();
-            }
+            // FIRE
+            ge.ExecuteCombatForVolley(ge.Volley);
 
             return ge;
+        }
+
+        public static void RecordVolleyReport(GameEngine ge, string originalSourceFile)
+        {
+            var destFileName = Path.GetFileNameWithoutExtension(originalSourceFile) + $".VolleyResults.{ge.Volley}" + Path.GetExtension(originalSourceFile);
+            var destFileFullName = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+                destFileName);
+            ge.SourceFile = destFileFullName;
+            Console.WriteLine($" - Volley {ge.Volley} interim report saving to:");
+            Console.WriteLine($"          {ge.SourceFile}");
+            ge.SaveToFile(ge.SourceFile);
+        }
+
+        public static void RecordExchangeReport(GameEngine ge, string originalSourceFile)
+        {
+            var destFileName = Path.GetFileNameWithoutExtension(originalSourceFile) + $".ExchangeResults.{ge.Exchange}" + Path.GetExtension(originalSourceFile);
+            var destFileFullName = Path.Combine(
+                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+                destFileName);
+            ge.SourceFile = destFileFullName;
+            Console.WriteLine($" - Exchange {ge.Exchange} completed report saving to:");
+            Console.WriteLine($"          {ge.SourceFile}");
+            ge.SaveToFile(ge.SourceFile);
         }
 
         public void SaveToFile(string sourceFile)
@@ -338,30 +308,20 @@ namespace FireAndManeuver.GameModel
             }
         }
 
-        private static void RecordVolleyReport(GameEngine ge, string originalSourceFile)
+        private static int GetManeuverModifier(string priority)
         {
-            var destFileName = Path.GetFileNameWithoutExtension(originalSourceFile) + $".VolleyResults.{ge.Volley}" + Path.GetExtension(originalSourceFile);
-            var destFileFullName = Path.Combine(
-                Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-                destFileName);
-            ge.SourceFile = destFileFullName;
-            Console.WriteLine($" - Volley interim report saving to:");
-            Console.WriteLine($"          {ge.SourceFile}");
-            ge.SaveToFile(ge.SourceFile);
+            return priority.ToLowerInvariant() == Constants.PrimaryManeuverPriority.ToLowerInvariant() ? 0 : -1;
         }
 
         private bool ExecuteCombatForVolley(int currentVolley)
         {
             Console.WriteLine(" - FIRE SEGMENT");
 
-            //--Point Defense Phase
-            // TODO
+            // TODO -- Point Defense Phase
 
-            //--Weapon Attack Phase
-            // TODO
+            // TODO -- Weapon Attack Phase
 
-            //--Damage and Threshold Checks Phase
-            // TODO
+            // TODO -- Damage and Threshold Checks Phase
 
             //--And return!
             return true;
@@ -371,49 +331,165 @@ namespace FireAndManeuver.GameModel
         {
             Console.WriteLine(" - MANEUVER SEGMENT");
 
-            var speedSuccessesById = new Dictionary<int, int>(this.AllUnits.Count());
-            var evasionSuccessesById = new Dictionary<int, int>(this.AllUnits.Count());
+            Dictionary<int, ManeuverSuccessSet> maneuverResultsById = new Dictionary<int, ManeuverSuccessSet>();
 
             //--Launch Phase (Ordnance, Fighters, Gunboats)
             // TODO
 
             //--Movement Phase
+
+            // --- Determine Speed and Evasion successes for all Units
             foreach (var f in this.Formations)
             {
-                Console.WriteLine($"Resolve maneuver for {f.FormationName}, volley {currentVolley}");
-                /*
-                var result = f.ResolveManeuver(f.Orders.FirstOrDefault(), speedDRM: 0, evasionDRM: 0);
+                Console.WriteLine($"Roll Speed and Evasion for {f.FormationName}, volley {currentVolley}");
+                var formationOrders = f.Orders.Where(o => o.Volley == currentVolley).FirstOrDefault() ?? Constants.DefaultVolleyOrders;
 
-                speedSuccessesById.Add(u.IdNumeric, result.SpeedSuccesses);
-                evasionSuccessesById.Add(u.IdNumeric, result.EvasionSuccesses);
-
-                Console.WriteLine($"{u.InstanceName} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
-                */
+                // Side effect: sets the ManeuverSuccesses and SpeedSuccesses property of the formation's current VolleyOrders.
+                var result = f.RollManeuverSpeedAndEvasion(formationOrders, f.FormationId, currentVolley, speedDRM: 0, evasionDRM: 0);
+                maneuverResultsById.Add(f.FormationId, result);
             }
+
+            Console.WriteLine();
 
             // -- Adjudicate all maneuver tests
             foreach (var f in this.Formations)
             {
-                Console.WriteLine($"  -- Process Maneuver orders for [{f.FormationId}]{f.FormationName}");
-                var orders = f.Orders.FirstOrDefault(o => o.Volley == currentVolley);
-                var maneuveringOrders = (orders ?? new VolleyOrders()).ManeuveringOrders;
-                foreach (var o in maneuveringOrders)
-                {
-                    var type = o.ManeuverType;
-                    var target = o.TargetID;
-                    var priority = o.Priority;
-
-                    Console.WriteLine($"   --- Execute {priority} {type} maneuver against Unit [{target}]");
-                }
+                this.ExecuteManeuversForFormation(currentVolley, f);
             }
-
-            // -- Compare each maneuverer's test successes to its target's test successes
-
-            // -- If a "Close" or "Withdraw" has won, adjust the range accordingly
 
             //--Secondary Movement Phase (Fighters and Gunboats only)
             // TODO
             return true;
+        }
+
+        private void ExecuteManeuversForFormation(int currentVolley, GameFormation f)
+        {
+            var orders = f.Orders.FirstOrDefault(o => o.Volley == currentVolley) ?? Constants.DefaultVolleyOrders;
+            Console.WriteLine($"Execute ({orders.ManeuveringOrders.Count}) Maneuvers for [{f.FormationId}]{f.FormationName} -- Speed {orders.SpeedSuccesses}, Evasion {orders.EvasionSuccesses}");
+
+            // Orders should get evaluated in priority order: Primary, then non-default non-primary, then default
+            var sortedOrders = orders.ManeuveringOrders.OrderByDescending(o => o.Priority.ToLowerInvariant() == Constants.PrimaryManeuverPriority.ToLowerInvariant() && o.Priority.ToLowerInvariant() != Constants.DefaultManeuverPriority.ToLowerInvariant());
+
+            foreach (var o in sortedOrders)
+            {
+                var target = this.Formations.Where(t => t.FormationId.ToString() == o.TargetID).FirstOrDefault();
+
+                var speed = Math.Max(0, orders.SpeedSuccesses + GameEngine.GetManeuverModifier(o.Priority));
+
+                if (target == null || o.ManeuverType == Constants.PassiveManeuverType)
+                {
+                    // Bail early if the maneuver is a passive one, e.g. "Maintain"
+                    // Bail early if the maneuver is not against a valid target Id (e.g. "Target 0" default orders or orders against Formations that have been destroyed)
+                    Console.WriteLine($"   --- Skip {o.Priority} {o.ManeuverType} ({speed}s) vs [{o.TargetID}]");
+
+                    continue;
+                }
+
+                this.ResolveManeuverContest(currentVolley, orders.SpeedSuccesses, o, f, target);
+            }
+        }
+
+        private void ResolveManeuverContest(int currentVolley, int sourceSpeed, ManeuverOrder sourceManeuver, GameFormation source, GameFormation target)
+        {
+            (var rangeBetweenFormations, var rangeReciprocal) = this.GetGraphState(source, target);
+
+            this.SyncGraphState(ref rangeBetweenFormations, ref rangeReciprocal, source, target);
+
+            int rangeShift = this.CalculateRangeShift(currentVolley, source, sourceSpeed, sourceManeuver, target);
+
+            rangeBetweenFormations.Value += rangeShift;
+            rangeReciprocal.Value += rangeShift;
+            Console.WriteLine($"    ---- Range between Formations changes to  [{rangeBetweenFormations.Value}|{rangeReciprocal.Value}]");
+        }
+
+        private int CalculateRangeShift(int currentVolley, GameFormation source, int sourceSpeed, ManeuverOrder sourceManeuver, GameFormation target)
+        {
+            var type = sourceManeuver.ManeuverType;
+            var priority = sourceManeuver.Priority;
+            var speed = Math.Max(0, sourceSpeed + GameEngine.GetManeuverModifier(sourceManeuver.Priority));
+
+            Console.Write($"   --- Execute [{source.FormationId}]{source.FormationName} : {priority} {type} ({speed}s)");
+
+            var targetOrders = target.Orders
+                .Where(tO => tO.Volley == currentVolley)
+                .FirstOrDefault() ?? Constants.DefaultVolleyOrders;
+            var targetManeuver = targetOrders.ManeuveringOrders
+                .Where(tRO => tRO.TargetID == source.FormationId.ToString())
+                .FirstOrDefault() ?? Constants.DefaultManeuverOrder;
+
+            var opposingPriority = targetManeuver.Priority;
+            var opposingType = targetManeuver.ManeuverType;
+            var opposingSpeed = Math.Max(0, targetOrders.SpeedSuccesses + GameEngine.GetManeuverModifier(targetManeuver.Priority));
+
+            Console.WriteLine($" vs {opposingPriority} {opposingType} ({opposingSpeed}s) [{target.FormationId}]{target.FormationName}");
+
+            var margin = speed - opposingSpeed;
+            var marginDescription = margin > 0 ? $"wins by {margin}" : $"loses by {Math.Abs(margin)}";
+            var rangeShift = 0;
+            var successDistance = sourceManeuver.ManeuverType == "Close" ? -Constants.RangeShiftPerSuccess : Constants.RangeShiftPerSuccess;
+
+            var maneuverTypePair = new ValueTuple<string, string>(sourceManeuver.ManeuverType, targetManeuver.ManeuverType);
+
+            // Unopposed auto-successes
+            if (maneuverTypePair.Equals(Constants.CloseVersusClose) || maneuverTypePair.Equals(Constants.WithdrawVersusWithdraw))
+            {
+                // Ignore opponent's Speed successes, they will be resolved separately
+                rangeShift = successDistance * speed;
+                marginDescription = "wins unopposed";
+            }
+
+            // "True" versus test -- if active F got more successes, distance changes; otherwise not.
+            if (maneuverTypePair.Equals(Constants.CloseVersusMaintain) || maneuverTypePair.Equals(Constants.CloseVersusWithdraw) || maneuverTypePair.Equals(Constants.WithdrawVersusClose) || maneuverTypePair.Equals(Constants.WithdrawVersusMaintain))
+            {
+                rangeShift = successDistance * Math.Max(0, margin);
+
+                // Ignore cases where opponent's successes were higher, they will be resolved separately (if not a Maintain already)
+            }
+
+            Console.WriteLine($"    ---- {sourceManeuver.ManeuverType} versus {targetManeuver.ManeuverType} {marginDescription}, range change: {rangeShift} MU");
+
+            return rangeShift;
+        }
+
+        private Tuple<FormationDistance, FormationDistance> GetGraphState(GameFormation source, GameFormation target)
+        {
+            var rangeBetweenFormations = this.Distances.Where(d => d.SourceFormationId == source.FormationId && d.TargetFormationId == target.FormationId).FirstOrDefault();
+            var rangeReciprocal = this.Distances.Where(d => d.SourceFormationId == target.FormationId && d.TargetFormationId == source.FormationId).FirstOrDefault();
+
+            return new Tuple<FormationDistance, FormationDistance>(rangeBetweenFormations, rangeReciprocal);
+        }
+
+        private void SyncGraphState(ref FormationDistance rangeBetweenFormations, ref FormationDistance rangeReciprocal, GameFormation source, GameFormation target)
+        {
+            // If neither the source -> target nor target -> source distances are in the Distances graph, create them at default starting range
+            if (rangeBetweenFormations is null && rangeReciprocal is null)
+            {
+                var newRange = new FormationDistance(source, target, Constants.DefaultStartingRange);
+                var newReciprocal = new FormationDistance(target, source, Constants.DefaultStartingRange);
+
+                this.Distances.Add(newRange);
+            }
+            else
+            {
+                // If either source -> target or target -> source is missing but the other is present, add the missing one
+                if (rangeBetweenFormations is null)
+                {
+                    rangeBetweenFormations = new FormationDistance(source, target, rangeReciprocal.Value);
+                    this.Distances.Add(rangeBetweenFormations);
+                }
+
+                if (rangeReciprocal is null)
+                {
+                    rangeReciprocal = new FormationDistance(target, source, rangeBetweenFormations.Value);
+                    this.Distances.Add(rangeReciprocal);
+                }
+            }
+
+            // If distances don't match, the graph is in a bad state
+            if (rangeBetweenFormations.Value != rangeReciprocal.Value)
+            {
+                throw new InvalidOperationException("Range between Formations is not symmetrical, something went wrong in updating the distance graph.");
+            }
         }
     }
 }

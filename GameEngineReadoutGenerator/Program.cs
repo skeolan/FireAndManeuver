@@ -41,8 +41,11 @@ namespace FireAndManeuver.Clients
             Console.WriteLine(string.Empty);
             ConsoleReadoutUtilities.GenerateGameEngineReadout(ge).ForEach(l => Console.WriteLine(l));
 
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            if (!Console.IsInputRedirected)
+            {
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+            }
         }
     }
 }

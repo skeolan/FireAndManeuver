@@ -13,26 +13,41 @@ namespace FireAndManeuver.GameModel
     [XmlRoot("FM.VolleyOrders")]
     public class VolleyOrders
     {
-        private readonly List<ManeuverOrder> defaultManeuverOrders = new List<ManeuverOrder>(Constants.DefaultManeuverOrders);
+        private readonly List<ManeuverOrder> defaultManeuverOrders = new List<ManeuverOrder>() { Constants.DefaultManeuverOrder };
         private List<ManeuverOrder> maneuveringOrders;
 
         public VolleyOrders()
         {
             this.Volley = 0;
-            this.Speed = 0;
-            this.Evasion = 0;
-            this.ManeuveringOrders = new List<ManeuverOrder>();
+            this.SpeedDice = 0;
+            this.EvasionDice = 0;
+            this.ManeuveringOrders = new List<ManeuverOrder>(Constants.DefaultManeuverOrders);
             this.FiringOrders = new List<FireOrder>();
+        }
+
+        public VolleyOrders(int volley, int speed, int evasion, List<ManeuverOrder> maneuveringOrders, List<FireOrder> firingOrders)
+        {
+            this.Volley = 0;
+            this.SpeedDice = speed;
+            this.EvasionDice = evasion;
+            this.ManeuveringOrders = maneuveringOrders;
+            this.FiringOrders = firingOrders;
         }
 
         [XmlAttribute("volley")]
         public int Volley { get; set; } = 0;
 
-        [XmlAttribute("speed")]
-        public int Speed { get; set; }
-
         [XmlAttribute("evasion")]
-        public int Evasion { get; set; }
+        public int EvasionDice { get; set; }
+
+        [XmlAttribute("speed")]
+        public int SpeedDice { get; set; }
+
+        [XmlIgnore]
+        public int EvasionSuccesses { get; set; } = 0;
+
+        [XmlIgnore]
+        public int SpeedSuccesses { get; set; } = 0;
 
         [XmlElement("Maneuver")]
         public List<ManeuverOrder> ManeuveringOrders
@@ -53,7 +68,7 @@ namespace FireAndManeuver.GameModel
 
         public override string ToString()
         {
-            return $"v{this.Volley} - Speed {this.Speed} - Evasion {this.Evasion} | Maneuvering: [{this.ManeuveringOrders.Count}] | Firing: [{this.FiringOrders.Count}]";
+            return $"v{this.Volley} - Speed {this.SpeedDice} - Evasion {this.EvasionDice} | Maneuvering: [{this.ManeuveringOrders.Count}] | Firing: [{this.FiringOrders.Count}]";
         }
 
         internal static VolleyOrders Clone(VolleyOrders o)

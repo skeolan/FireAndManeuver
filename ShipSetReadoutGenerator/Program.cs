@@ -58,8 +58,11 @@ namespace FireAndManeuver.Clients
 
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
 
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+            if (!Console.IsInputRedirected)
+            {
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+            }
         }
     }
 }

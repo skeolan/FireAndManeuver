@@ -91,23 +91,19 @@ namespace FireAndManeuver.GameModel
             return hitChance;
         }
 
-        public ManeuverResult ResolveManeuver(VolleyOrders orders, int speedDRM = 0, int evasionDRM = 0)
+        public ManeuverSuccessSet RollManeuverSpeedAndEvasion(VolleyOrders formationOrders, int formationId, int currentVolley, int speedDRM = 0, int evasionDRM = 0)
         {
-            Console.WriteLine($"Resolving maneuver for [{this.FormationId}]{this.FormationName}");
-
-            var maneuverOrders = orders ?? new VolleyOrders(); // Default to no-maneuver if none specified
-
-            int speedSuccesses = 0;
-            int evasionSuccesses = 0;
             var roller = new DiceNotationUtility() as IDiceUtility;
 
-            Console.WriteLine("Roll for Speed:");
-            speedSuccesses = roller.RollFTSuccesses(maneuverOrders.Speed);
+            Console.Write($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.SpeedDice}D for Speed: ");
+            formationOrders.SpeedSuccesses = roller.RollFTSuccesses(formationOrders.SpeedDice);
+            Console.WriteLine($" -- {formationOrders.SpeedSuccesses}s");
 
-            Console.WriteLine("Roll for Evasion:");
-            evasionSuccesses = roller.RollFTSuccesses(maneuverOrders.Evasion);
+            Console.Write($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.EvasionDice}D for Evasion: ");
+            formationOrders.EvasionSuccesses = roller.RollFTSuccesses(formationOrders.EvasionDice);
+            Console.WriteLine($" -- {formationOrders.EvasionSuccesses}s");
 
-            return new ManeuverResult() { SpeedSuccesses = speedSuccesses, EvasionSuccesses = evasionSuccesses };
+            return new ManeuverSuccessSet() { FormationId = formationId, Volley = currentVolley, SpeedSuccesses = formationOrders.SpeedSuccesses, EvasionSuccesses = formationOrders.EvasionSuccesses };
         }
     }
 }

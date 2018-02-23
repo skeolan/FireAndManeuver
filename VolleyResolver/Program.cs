@@ -21,6 +21,7 @@ namespace FireAndManeuver.Clients
 
         public static void Main(string[] args)
         {
+            // TODO: add ability to pass an arbitrary GameEngineXML path argument instead of using default
             string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
@@ -51,18 +52,69 @@ namespace FireAndManeuver.Clients
             }
 
             GameEngine ge = GameEngine.LoadFromXml(defaultEngineXML);
+            var originalSource = defaultEngineXML;
+
+            ge.SourceFile = originalSource;
+
             Console.WriteLine($"GameEngine [{ge.Id}] from {ge.SourceFile} loaded successfully.");
             Console.WriteLine("Begin Volley Resolution!");
 
-            ge = GameEngine.ResolveVolleys(ge, config, volleysPerExchange, ge.SourceFile);
+            for (int v = ge.Volley; v <= volleysPerExchange; v++)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"EXCHANGE {ge.Exchange}, VOLLEY {v}");
 
-            Console.WriteLine($"Exchange {ge.Exchange - 1} resolution completed!");
+                PrintDistanceGraph(ge);
+
+                ge = GameEngine.ResolveVolley(ge, config, v, ge.SourceFile);
+
+                PrintDistanceGraph(ge);
+
+                GameEngine.RecordVolleyReport(ge, originalSource);
+            }
+
+            // Set up for a new Exchange by clearing out this Exchange's scripting
+            ge.SourceFile = originalSource;
+            GameEngine.RecordExchangeReport(ge, originalSource);
+
+            var oldFile = new FileInfo(originalSource);
+            var oldFileName = oldFile.Name;
+            var oldFileExt = oldFile.Extension;
+            var oldFilePath = oldFile.DirectoryName;
+
+            var newFileName = $"E{ge.Exchange + 1}-{oldFileName}".Replace($"E{ge.Exchange}", string.Empty);
+            var newFile = new FileInfo(Path.Combine(oldFilePath, newFileName));
+
+            Console.WriteLine();
+            Console.WriteLine($"Exchange {ge.Exchange} resolution completed! Saving resulting state back to enable Exchange {ge.Exchange + 1} scripting:");
+            Console.WriteLine($"     {newFile.FullName}");
+
+            ge.Exchange++;
+            ge.Volley = 1;
+
+            ge.ClearOrders();
+            ge.SourceFile = newFile.FullName;
+            ge.SaveToFile(newFile.FullName);
 
             if (!Console.IsInputRedirected)
             {
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
             }
+        }
+
+        private static void PrintDistanceGraph(GameEngine ge)
+        {
+            Console.WriteLine(string.Empty.PadRight(100, '*'));
+            var distanceGraph = ConsoleReadoutUtilities.GenerateDistanceReadout(ge.Distances);
+            foreach (var d in distanceGraph)
+            {
+                foreach (var line in ConsoleReadoutUtilities.WrapDecorated(d, 100, "* ", " *"))
+                {
+                    Console.WriteLine(line);
+                }
+            }
+            Console.WriteLine(string.Empty.PadRight(100, '*'));
         }
     }
 }
