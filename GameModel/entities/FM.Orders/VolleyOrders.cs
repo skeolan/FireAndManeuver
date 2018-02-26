@@ -71,6 +71,16 @@ namespace FireAndManeuver.GameModel
             return $"v{this.Volley} - Speed {this.SpeedDice} - Evasion {this.EvasionDice} | Maneuvering: [{this.ManeuveringOrders.Count}] | Firing: [{this.FiringOrders.Count}]";
         }
 
+        public IOrderedEnumerable<ManeuverOrder> GetSortedManeuveringOrders()
+        {
+            Console.WriteLine($"({this.ManeuveringOrders.Count}) Maneuvers -- Speed {this.SpeedSuccesses}, Evasion {this.EvasionSuccesses}");
+
+            // Orders should get evaluated in priority order: Primary, then non-default non-primary, then default
+            var sortedOrders = this.ManeuveringOrders.OrderByDescending(o => o.Priority.ToLowerInvariant() == Constants.PrimaryManeuverPriority.ToLowerInvariant() && o.Priority.ToLowerInvariant() != Constants.DefaultManeuverPriority.ToLowerInvariant());
+
+            return sortedOrders;
+        }
+
         internal static VolleyOrders Clone(VolleyOrders o)
         {
             return o.Clone();

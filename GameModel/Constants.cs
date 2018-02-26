@@ -40,9 +40,9 @@ namespace FireAndManeuver.GameModel
         public static readonly List<ManeuverOrder> DefaultManeuverOrders = new List<ManeuverOrder>() { DefaultManeuverOrder };
         public static readonly VolleyOrders DefaultVolleyOrders = new VolleyOrders(volley: 0, speed: 0, evasion: 0, maneuveringOrders: DefaultManeuverOrders, firingOrders: new List<FireOrder>());
 
-        public static readonly ValueTuple<string, string> CloseVersusClose = new ValueTuple<string, string>("Close", "Close"); // Close auto-succeeds
-        public static readonly ValueTuple<string, string> CloseVersusMaintain = new ValueTuple<string, string>("Close", "Maintain"); // Close - Maintain decreases Range if positive
-        public static readonly ValueTuple<string, string> CloseVersusWithdraw = new ValueTuple<string, string>("Close", "Withdraw"); // Close - Withdraw decreases Range if positive
+        public static readonly Tuple<string, string> CloseVersusClose = new Tuple<string, string>("Close", "Close"); // Close auto-succeeds
+        public static readonly Tuple<string, string> CloseVersusMaintain = new Tuple<string, string>("Close", "Maintain"); // Close - Maintain decreases Range if positive
+        public static readonly Tuple<string, string> CloseVersusWithdraw = new Tuple<string, string>("Close", "Withdraw"); // Close - Withdraw decreases Range if positive
 
         /*
          * Maintain v Close is passive
@@ -50,8 +50,8 @@ namespace FireAndManeuver.GameModel
          * Maintain v Maintain is passive
          */
 
-        public static readonly ValueTuple<string, string> WithdrawVersusClose = new ValueTuple<string, string>("Withdraw", "Close"); // Withdraw - Close increases Range if positive
-        public static readonly ValueTuple<string, string> WithdrawVersusMaintain = new ValueTuple<string, string>("Withdraw", "Maintain"); // Withdraw - Maintain increases Range if positive
-        public static readonly ValueTuple<string, string> WithdrawVersusWithdraw = new ValueTuple<string, string>("Withdraw", "Withdraw"); // Withdraw auto-succeeds
+        public static readonly Tuple<string, string> WithdrawVersusClose = new Tuple<string, string>("Withdraw", "Close"); // Withdraw - Close increases Range if positive
+        public static readonly Tuple<string, string> WithdrawVersusMaintain = new Tuple<string, string>("Withdraw", "Maintain"); // Withdraw - Maintain increases Range if positive
+        public static readonly Tuple<string, string> WithdrawVersusWithdraw = new Tuple<string, string>("Withdraw", "Withdraw"); // Withdraw auto-succeeds
     }
 }

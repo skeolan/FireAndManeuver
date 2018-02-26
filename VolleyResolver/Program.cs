@@ -42,8 +42,12 @@ namespace FireAndManeuver.Clients
 
             IConfigurationRoot config = configBuilder.Build();
 
+            // TODO: adapt this so it can take args on the commandline for input-XML and output-XML locations
+            // TODO: adapt this so it can take unit-data XML files / dirs on the commandline and use them to flesh out Player/Ship entries
             string defaultUnitXML = Path.Combine(workingDir, config["Default_Unit_Xml"] ?? "DefaultUnit.xml");
             string defaultEngineXML = Path.Combine(workingDir, config["Default_GameEngine_Xml"] ?? "DefaultGameEngine.xml");
+            string destinationFolder = config["GameEngine_Xml_OutPath"] ?? workingDir;
+
             int volleysPerExchange = DefaultVolleysPerExchange;
             var vPEStr = config["Volleys_Per_Exchange"];
             if (!int.TryParse(vPEStr, out volleysPerExchange))
@@ -70,7 +74,7 @@ namespace FireAndManeuver.Clients
 
                 PrintDistanceGraph(ge);
 
-                GameEngine.RecordVolleyReport(ge, originalSource);
+                GameEngine.RecordVolleyReport(ge, originalSource, destinationFolder);
             }
 
             // Set up for a new Exchange by clearing out this Exchange's scripting
@@ -114,6 +118,7 @@ namespace FireAndManeuver.Clients
                     Console.WriteLine(line);
                 }
             }
+
             Console.WriteLine(string.Empty.PadRight(100, '*'));
         }
     }

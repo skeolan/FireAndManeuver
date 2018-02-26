@@ -105,5 +105,10 @@ namespace FireAndManeuver.GameModel
 
             return new ManeuverSuccessSet() { FormationId = formationId, Volley = currentVolley, SpeedSuccesses = formationOrders.SpeedSuccesses, EvasionSuccesses = formationOrders.EvasionSuccesses };
         }
+
+        internal VolleyOrders GetOrdersForVolley(int currentVolley)
+        {
+            return this.Orders.Where(o => o.Volley == currentVolley).FirstOrDefault() ?? Constants.DefaultVolleyOrders;
+        }
     }
 }

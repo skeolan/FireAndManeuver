@@ -53,7 +53,7 @@ namespace FireAndManeuver.GameModel
             var diceRolled = this.dice.Roll($"{numberOfDice}D6", this.roller);
             var rollSet = diceRolled.Results.Select(r => r.Value).OrderByDescending(i => i).ToList();
 
-            Console.Write($"DiceRoller library FTSuccesses die roll [{diceRolled.DiceExpression}]: {string.Join(",", rollSet)}");
+            Console.Write($"[{diceRolled.DiceExpression}]: {string.Join(",", rollSet)}");
 
             foreach (var roll in rollSet)
             {
@@ -72,8 +72,8 @@ namespace FireAndManeuver.GameModel
             var diceRolled = this.dice.Roll($"{numberOfDice}D6", this.roller);
             var rolls = diceRolled.Results.OrderByDescending(v => v.Value);
 
-            Console.Write($"{indent}DiceRoller library RollFTDamage die roll [{diceRolled.DiceExpression}]");
-            Console.Write($" with DRM {drm}, screen {targetScreenRating}, penetration {dealPenetrating}");
+            Console.Write($"{indent}[{diceRolled.DiceExpression}]");
+            Console.Write($" with DRM {drm}, screen {targetScreenRating}{(dealPenetrating ? ", penetrating" : ", non-penetrating")}");
             Console.WriteLine($": {string.Join(",", rolls.Select(r => r.Value))}");
 
             foreach (var roll in rolls)
