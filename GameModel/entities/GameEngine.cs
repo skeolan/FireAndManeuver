@@ -378,7 +378,8 @@ namespace FireAndManeuver.GameModel
                     continue;
                 }
 
-                this.DistanceGraph.ResolveManeuverContest(currentVolley, orders.SpeedSuccesses, o, f, target);
+                int rangeShift = o.CalculateRangeShift(currentVolley, f, orders.SpeedSuccesses, target);
+                this.DistanceGraph.UpdateDistance(f, target, rangeShift);
             }
         }
     }
