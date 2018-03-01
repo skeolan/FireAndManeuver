@@ -1,0 +1,212 @@
+<?xml version="1.0" standalone="yes" ?>
+<GameEngine id="-1" name="The Captain's Game - Beacon Run" turn="0">
+
+<!-- Insert Game Options here -->
+
+    <Briefing>
+        Destroy all the beacons in five turns.
+    </Briefing>
+
+    <Player id="1" 
+                   name="First Last" 
+                   email="nobody@nobody.com" 
+                   team="Federation">
+        <Objectives>
+            Destroy all the beacons in five turns.
+        </Objectives>
+
+	<Ship id="1">
+            <Name>Kobyashi Can-Do</Name>
+
+            <Status>Ok</Status>
+            <Position x="0.0" y="15.0"/>
+            <Heading heading="3"/>
+            <Speed speed="10"/>
+
+	    <Race>Federation</Race>
+	    <ClassAbbrev>CL</ClassAbbrev>
+	    <ClassName>Kobyashi Can-do</ClassName>
+	    <ShipClass>Light Cruiser</ShipClass>
+	    <Mass>44</Mass>
+	    <PointValue>149</PointValue>
+	    <MainDrive initialThrust="6"/>
+	    <FTLDrive/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="44" type="Average"/>
+	    <Electronics>
+	        <FireControl xSSD="80"  ySSD="160"/>
+	        <FireControl xSSD="100" ySSD="160"/>
+	        <FireControl xSSD="120" ySSD="160"/>
+	    </Electronics>
+	    <Defenses>
+	    </Defenses>
+	    <Weapons>
+		<PulseTorpedo xSSD="100" ySSD="40"  arcs="(F)"/>
+	        <BeamBattery  xSSD="145" ySSD="90"  rating="2" arcs="(F/FS/AS)"/>
+	        <BeamBattery  xSSD="55"  ySSD="90"  rating="2" arcs="(AP/FP/F)"/>
+	        <BeamBattery  xSSD="100" ySSD="90"  rating="1"/>
+	        <PointDefense xSSD="70"  ySSD="130"/>
+	        <PointDefense xSSD="130" ySSD="130"/>
+	    </Weapons>
+	</Ship>
+    </Player>
+
+    <Player id="2" name="Bot Beacon" email="" team="Beacon">
+	<Ship id="4">
+            <Name>Beacon 1</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="10.0" y="0.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+	<Ship id="5">
+            <Name>Beacon 2</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="10.0" y="30.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+	<Ship id="6">
+            <Name>Beacon 3</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="20.0" y="0.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+	<Ship id="7">
+            <Name>Beacon 4</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="20.0" y="30.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+
+	<Ship id="8">
+            <Name>Beacon 5</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="30.0" y="0.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+	<Ship id="9">
+            <Name>Beacon 6</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="30.0" y="30.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+	<Ship id="10">
+            <Name>Beacon 7</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="40.0" y="0.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+	<Ship id="11">
+            <Name>Beacon 8</Name>
+            <Status>Ok</Status>
+	    <Race>Beacon</Race>
+	    <ClassAbbrev>Beacon</ClassAbbrev>
+	    <ClassName>Beacon</ClassName>
+	    <ShipClass>Beacon</ShipClass>
+	    <Mass>10</Mass>
+	    <PointValue>10</PointValue>
+            <Orders></Orders>
+
+            <Position x="40.0" y="30.0"/>
+            <Heading heading="12"/>
+            <Speed speed="0"/>
+
+	    <MainDrive initialThrust="0"/>
+	    <Armor totalArmor="0"/>
+	    <Hull value="10" type="Fragile"/>
+	</Ship>
+
+
+    </Player>	
+</GameEngine>
+
