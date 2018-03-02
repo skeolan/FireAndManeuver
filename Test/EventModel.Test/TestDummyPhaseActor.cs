@@ -1,4 +1,4 @@
-﻿// <copyright file="DummyPhaseActor.cs" company="Patrick Maughan">
+﻿// <copyright file="TestDummyPhaseActor.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ namespace FireAndManeuver.EventModel
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    public class DummyPhaseActor : DummyActor, IEventActor
+    public class TestDummyPhaseActor : TestDummyActor, IEventActor
     {
         public int GamePhaseEventDetectedCount { get; protected set; } = 0;
 

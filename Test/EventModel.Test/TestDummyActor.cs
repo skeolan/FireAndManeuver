@@ -1,4 +1,4 @@
-﻿// <copyright file="DummyActor.cs" company="Patrick Maughan">
+﻿// <copyright file="TestDummyActor.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
@@ -11,9 +11,9 @@ namespace FireAndManeuver.EventModel
     /// <summary>
     /// An IEventActor that never responds to events
     /// </summary>
-    public class DummyActor : IEventActor
+    public class TestDummyActor : IEventActor
     {
-        public DummyActor()
+        public TestDummyActor()
         {
             this.Result = new List<GameEvent>();
         }

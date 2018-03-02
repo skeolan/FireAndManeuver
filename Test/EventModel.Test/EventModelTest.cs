@@ -17,8 +17,8 @@ namespace EventModel.Test
             var phaseEvent = new FiringPhase();
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
-            var totalDummy = new DummyActor();
-            var phaseDummy = new DummyPhaseActor();
+            var totalDummy = new TestDummyActor();
+            var phaseDummy = new TestDummyPhaseActor();
 
             totalDummy.ProcessEvent(phaseEvent);
             Assert.AreEqual(1, totalDummy.EventDetectedCount);
@@ -45,8 +45,8 @@ namespace EventModel.Test
 
             var engine = new EventHandlingEngine();
 
-            var totalDummy = new DummyActor();
-            var phaseDummy = new DummyPhaseActor();
+            var totalDummy = new TestDummyActor();
+            var phaseDummy = new TestDummyPhaseActor();
 
             var actors = new List<IEventActor>()
             {
