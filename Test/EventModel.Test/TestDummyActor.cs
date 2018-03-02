@@ -7,26 +7,21 @@ namespace FireAndManeuver.EventModel
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using FireAndManeuver.EventModel.EventActors;
 
     /// <summary>
     /// An IEventActor that never responds to events
     /// </summary>
-    public class TestDummyActor : IEventActor
+    public class TestDummyActor : EventActorBase, IEventActor
     {
-        public TestDummyActor()
+        public int TestDummyActorEventReceivedCount { get; protected set; } = 0;
+
+        public override List<GameEvent> ProcessEvent(GameEvent evt)
         {
-            this.Result = new List<GameEvent>();
-        }
+            this.Result.AddRange(base.ProcessEvent(evt));
 
-        public int EventDetectedCount { get; protected set; } = 0;
+            this.TestDummyActorEventReceivedCount++;
 
-        protected List<GameEvent> Result { get; set; }
-
-        public virtual List<GameEvent> ProcessEvent(GameEvent evt)
-        {
-            Console.WriteLine($"(Virtual ProcessEvent implementation)");
-            Console.WriteLine($"{this.GetType().Name} detected a {evt.GetType().Name}");
-            this.EventDetectedCount++;
             return this.Result;
         }
     }

@@ -6,12 +6,14 @@ namespace FireAndManeuver.EventModel
 {
     using System.Collections.Generic;
     using FireAndManeuver.Common;
+    using FireAndManeuver.EventModel.EventActors;
 
     // ... more IGameEvent implementations ...
     public class EventHandlingEngine
     {
         public void ExecuteGamePhase(List<IEventActor> actors, GamePhaseEvent currentPhase, int logVerbosity, int consoleVerbosity)
         {
+            // TODO: reimplement this using the "Actor Model via TPL Dataflow" approach from that blog post?
             Queue<GameEvent> eventQueue = new Queue<GameEvent>();
             eventQueue.Enqueue(currentPhase);
 

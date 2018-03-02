@@ -2,7 +2,7 @@
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
-namespace FireAndManeuver.EventModel
+namespace FireAndManeuver.EventModel.EventActors
 {
     using System.Collections.Generic;
 

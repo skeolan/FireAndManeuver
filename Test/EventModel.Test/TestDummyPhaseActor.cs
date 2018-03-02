@@ -7,6 +7,7 @@ namespace FireAndManeuver.EventModel
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using FireAndManeuver.EventModel.EventActors;
 
     public class TestDummyPhaseActor : TestDummyActor, IEventActor
     {
@@ -14,29 +15,7 @@ namespace FireAndManeuver.EventModel
 
         public int WeaponAttackEventDetectedCount { get; private set; } = 0;
 
-        public override List<GameEvent> ProcessEvent(GameEvent evt)
-        {
-            Console.WriteLine($"(DummyPhaseActor override ProcessEvent implementation)");
-            Console.WriteLine($"{this.GetType().Name} detected a {evt.GetType().Name}");
-
-            // Event routing logic -- I do not love this, but I couldn't figure out a better way to do it
-            if (evt is GamePhaseEvent)
-            {
-                return this.ProcessPhaseEvent(evt as GamePhaseEvent);
-            }
-
-            if (evt is WeaponAttackEvent)
-            {
-                return this.ProcessWeaponAttackEvent(evt as WeaponAttackEvent);
-            }
-
-            // Default case - this class does not handle this event
-            // Give the base-class a chance to handle it instead
-            this.Result.AddRange(base.ProcessEvent(evt));
-            return this.Result;
-        }
-
-        public List<GameEvent> ProcessPhaseEvent(GamePhaseEvent evt)
+        protected override void ProcessGamePhaseEvent(GamePhaseEvent evt)
         {
             if (evt == null)
             {
@@ -48,10 +27,9 @@ namespace FireAndManeuver.EventModel
             this.GamePhaseEventDetectedCount++;
 
             // ... but otherwise do nothing
-            return this.Result;
         }
 
-        public List<GameEvent> ProcessWeaponAttackEvent(WeaponAttackEvent evt)
+        protected override void ProcessWeaponAttackEvent(WeaponAttackEvent evt)
         {
             if (evt == null)
             {
@@ -63,7 +41,6 @@ namespace FireAndManeuver.EventModel
             this.WeaponAttackEventDetectedCount++;
 
             // ... but otherwise do nothing
-            return this.Result;
         }
     }
 }

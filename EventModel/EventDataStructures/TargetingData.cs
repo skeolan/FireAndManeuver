@@ -4,6 +4,7 @@
 
 namespace FireAndManeuver.EventModel
 {
+    using FireAndManeuver.EventModel.EventActors;
     using FireAndManeuver.GameModel;
 
     public class TargetingData

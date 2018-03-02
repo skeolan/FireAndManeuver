@@ -6,6 +6,7 @@ namespace EventModel.Test
 {
     using System.Collections.Generic;
     using FireAndManeuver.EventModel;
+    using FireAndManeuver.EventModel.EventActors;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
@@ -21,20 +22,24 @@ namespace EventModel.Test
             var phaseDummy = new TestDummyPhaseActor();
 
             totalDummy.ProcessEvent(phaseEvent);
-            Assert.AreEqual(1, totalDummy.EventDetectedCount);
+            Assert.AreEqual(1, totalDummy.EventReceivedCount);
+            Assert.AreEqual(1, totalDummy.TestDummyActorEventReceivedCount);
 
             phaseDummy.ProcessEvent(phaseEvent);
+            Assert.AreEqual(1, phaseDummy.TestDummyActorEventReceivedCount);
             Assert.AreEqual(1, phaseDummy.GamePhaseEventDetectedCount);
             Assert.AreEqual(0, phaseDummy.WeaponAttackEventDetectedCount);
-            Assert.AreEqual(0, phaseDummy.EventDetectedCount);
+            Assert.AreEqual(1, phaseDummy.EventReceivedCount);
 
             totalDummy.ProcessEvent(attackEvent);
-            Assert.AreEqual(2, totalDummy.EventDetectedCount);
+            Assert.AreEqual(2, totalDummy.TestDummyActorEventReceivedCount);
+            Assert.AreEqual(2, totalDummy.EventReceivedCount);
 
             phaseDummy.ProcessEvent(attackEvent);
             Assert.AreEqual(1, phaseDummy.GamePhaseEventDetectedCount);
             Assert.AreEqual(1, phaseDummy.WeaponAttackEventDetectedCount);
-            Assert.AreEqual(0, phaseDummy.EventDetectedCount);
+            Assert.AreEqual(2, phaseDummy.TestDummyActorEventReceivedCount);
+            Assert.AreEqual(2, phaseDummy.EventReceivedCount);
         }
 
         [TestMethod]
@@ -55,9 +60,13 @@ namespace EventModel.Test
             };
 
             engine.ExecuteGamePhase(actors, phaseEvent, 1, 1);
-            Assert.AreEqual(0, phaseDummy.EventDetectedCount);
+            Assert.AreEqual(1, phaseDummy.EventReceivedCount);
             Assert.AreEqual(1, phaseDummy.GamePhaseEventDetectedCount);
-            Assert.AreEqual(1, totalDummy.EventDetectedCount);
+            Assert.AreEqual(0, phaseDummy.WeaponAttackEventDetectedCount);
+            Assert.AreEqual(1, phaseDummy.TestDummyActorEventReceivedCount);
+
+            Assert.AreEqual(1, totalDummy.EventReceivedCount);
+            Assert.AreEqual(1, totalDummy.TestDummyActorEventReceivedCount);
         }
     }
 }
