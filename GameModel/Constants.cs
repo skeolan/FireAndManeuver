@@ -7,6 +7,7 @@ namespace FireAndManeuver.GameModel
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Linq;
     using System.Text;
 
@@ -16,6 +17,8 @@ namespace FireAndManeuver.GameModel
     /// </summary>
     public static class Constants
     {
+        /* Die roll constants */
+
         /// <summary>
         /// Die roll value that meets minimum for success in a typical roll (in FT Continuum, 4).
         /// </summary>
@@ -26,14 +29,28 @@ namespace FireAndManeuver.GameModel
         /// </summary>
         public const int MinRollForDoubleSuccess = 6;
 
-        public static readonly int DefaultStartingRange = 60;
-        public static readonly int RangeShiftPerSuccess = 3;
+        /* Maneuver constants */
 
-        public static readonly string PassiveManeuverType = "Maintain";
-        public static readonly string PrimaryManeuverPriority = "Primary";
+        public const int DefaultManeuverTargetId = 0;
 
-        public static readonly string DefaultManeuverPriority = "Default";
-        public static readonly int DefaultManeuverTargetId = 0;
+        public const int DefaultStartingRange = 60;
+
+        public const int RangeShiftPerSuccess = 3;
+
+        public const string DefaultManeuverPriority = "Default";
+
+        public const string PassiveManeuverType = "Maintain";
+
+        public const string PrimaryManeuverPriority = "Primary";
+
+        /* Attack constants */
+
+        public const int DefaultAttackTargetUnitId = 0; // Usually indicates a "self" assignment, e.g. for PD weapons
+
+        public const string DefaultAttackPriority = "Primary";
+
+        /* Maneuver non-constant defaults */
+
         public static readonly string DefaultManeuverTarget = $"{DefaultManeuverPriority} {PassiveManeuverType}";
 
         public static readonly ManeuverOrder DefaultManeuverOrder = new ManeuverOrder() { ManeuverType = PassiveManeuverType, Priority = DefaultManeuverPriority, TargetID = DefaultManeuverTargetId.ToString(), TargetFormationName = DefaultManeuverTarget };
@@ -53,5 +70,44 @@ namespace FireAndManeuver.GameModel
         public static readonly Tuple<string, string> WithdrawVersusClose = new Tuple<string, string>("Withdraw", "Close"); // Withdraw - Close increases Range if positive
         public static readonly Tuple<string, string> WithdrawVersusMaintain = new Tuple<string, string>("Withdraw", "Maintain"); // Withdraw - Maintain increases Range if positive
         public static readonly Tuple<string, string> WithdrawVersusWithdraw = new Tuple<string, string>("Withdraw", "Withdraw"); // Withdraw auto-succeeds
+
+        public enum GamePhase
+        {
+            ThrustAllocationPhase,
+            ManeuveringPhase,
+            FiringPhase,
+            DamageControlPhase
+        }
+
+        /// <summary>
+        /// Specifies what damage type(s) apply to a particular weapon attack.
+        /// </summary>
+        /// <remarks>For example, Grasers in the Continuum rules deal Penetrating SAP damage.</remarks>
+        [Flags]
+        public enum DamageType
+        {
+            [Description("Standard Damage")]
+            Standard = 0,
+
+            [Description("Penetrating Beam ('B*') Damage")]
+            Penetrating = 1,
+
+            [Description("Semi-Armor-Piercing Damage")]
+            SAP = 2,
+
+            [Description("Armor-Piercing Damage")]
+            AP = 4
+        }
+
+        [Flags]
+        public enum AttackSpecialProperties
+        {
+            None = 0,
+            Area_Attack = 1, // Affects all Units in the target Formation
+            Ignores_Evasion = 2,
+            Ignores_Screens = 4,
+            Vulnerable_To_ECM = 8,
+            Vulnerable_To_PD = 16
+        }
     }
 }
