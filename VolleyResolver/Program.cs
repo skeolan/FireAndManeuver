@@ -10,6 +10,7 @@ namespace FireAndManeuver.Clients
     using System.IO;
     using System.Linq;
     using FireAndManeuver.Common;
+    using FireAndManeuver.GameEngine;
     using FireAndManeuver.GameModel;
     using Microsoft.Extensions.Configuration;
 
@@ -55,50 +56,50 @@ namespace FireAndManeuver.Clients
                 volleysPerExchange = DefaultVolleysPerExchange;
             }
 
-            GameState ge = GameState.LoadFromXml(defaultEngineXML);
+            GameState gameState = GameStateStreamUtilities.LoadFromXml(defaultEngineXML);
             var originalSource = defaultEngineXML;
 
-            ge.SourceFile = originalSource;
+            gameState.SourceFile = originalSource;
 
-            Console.WriteLine($"GameEngine [{ge.Id}] from {ge.SourceFile} loaded successfully.");
+            Console.WriteLine($"GameEngine [{gameState.Id}] from {gameState.SourceFile} loaded successfully.");
             Console.WriteLine("Begin Volley Resolution!");
 
-            for (int v = ge.Volley; v <= volleysPerExchange; v++)
+            for (int v = gameState.Volley; v <= volleysPerExchange; v++)
             {
                 Console.WriteLine();
-                Console.WriteLine($"EXCHANGE {ge.Exchange}, VOLLEY {v}");
+                Console.WriteLine($"EXCHANGE {gameState.Exchange}, VOLLEY {v}");
 
-                PrintDistanceGraph(ge);
+                PrintDistanceGraph(gameState);
 
-                ge = GameState.ResolveVolley(ge, config, v, ge.SourceFile);
+                gameState = VolleyResolutionEngine.ResolveVolley(gameState, v, gameState.SourceFile);
 
-                PrintDistanceGraph(ge);
+                PrintDistanceGraph(gameState);
 
-                GameState.RecordVolleyReport(ge, originalSource, destinationFolder);
+                VolleyResolutionEngine.RecordVolleyReport(gameState, originalSource, destinationFolder);
             }
 
             // Set up for a new Exchange by clearing out this Exchange's scripting
-            ge.SourceFile = originalSource;
-            GameState.RecordExchangeReport(ge, originalSource);
+            gameState.SourceFile = originalSource;
+            VolleyResolutionEngine.RecordExchangeReport(gameState, originalSource);
 
             var oldFile = new FileInfo(originalSource);
             var oldFileName = oldFile.Name;
             var oldFileExt = oldFile.Extension;
             var oldFilePath = oldFile.DirectoryName;
 
-            var newFileName = $"E{ge.Exchange + 1}-{oldFileName}".Replace($"E{ge.Exchange}", string.Empty);
+            var newFileName = $"E{gameState.Exchange + 1}-{oldFileName}".Replace($"E{gameState.Exchange}", string.Empty);
             var newFile = new FileInfo(Path.Combine(oldFilePath, newFileName));
 
             Console.WriteLine();
-            Console.WriteLine($"Exchange {ge.Exchange} resolution completed! Saving resulting state back to enable Exchange {ge.Exchange + 1} scripting:");
+            Console.WriteLine($"Exchange {gameState.Exchange} resolution completed! Saving resulting state back to enable Exchange {gameState.Exchange + 1} scripting:");
             Console.WriteLine($"     {newFile.FullName}");
 
-            ge.Exchange++;
-            ge.Volley = 1;
+            gameState.Exchange++;
+            gameState.Volley = 1;
 
-            ge.ClearOrders();
-            ge.SourceFile = newFile.FullName;
-            ge.SaveToFile(newFile.FullName);
+            gameState.ClearOrders();
+            gameState.SourceFile = newFile.FullName;
+            GameStateStreamUtilities.SaveToFile(newFile.FullName, gameState);
 
             if (!Console.IsInputRedirected)
             {

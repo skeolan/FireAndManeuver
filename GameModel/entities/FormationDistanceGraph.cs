@@ -22,7 +22,7 @@ namespace FireAndManeuver.GameModel
     ///
     /// Methods that destroy a given edge A->B will also destroy the reciprocal B->A.
     /// </remarks>
-    internal class FormationDistanceGraph
+    public class FormationDistanceGraph
     {
         private List<GameFormation> nodes;
         private List<FormationDistance> edges;

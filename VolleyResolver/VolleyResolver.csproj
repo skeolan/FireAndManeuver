@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\GameModel\GameModel.csproj" />
+    <ProjectReference Include="..\VolleyResolutionEngine\VolleyResolutionEngine.csproj" />
   </ItemGroup>
 
   <ItemGroup>

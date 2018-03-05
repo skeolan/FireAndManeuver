@@ -1,4 +1,4 @@
-﻿// <copyright file="WeaponAttackEvent.cs" company="Patrick Maughan">
+﻿// <copyright file="UnitDestroyedEvent.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,8 @@ namespace FireAndManeuver.EventModel
     using System.ComponentModel;
     using FireAndManeuver.Common;
 
-    public class UnitDestroyedEvent : UnitStatusEvent { /* implementation goes here */ }
-
+    public class UnitDestroyedEvent : UnitStatusEvent
+    {
+        // TODO: Implementation
+    }
 }
-

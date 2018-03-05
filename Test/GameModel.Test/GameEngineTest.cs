@@ -28,9 +28,9 @@ namespace FireAndManeuver.GameModel.Test
 
             var stream = new MemoryStream();
 
-            ge.SaveToStream(stream);
+            GameStateStreamUtilities.SaveToStream(stream, ge);
 
-            var newGE = GameState.LoadFromStream(stream);
+            var newGE = GameStateStreamUtilities.LoadFromStream(stream);
 
             Assert.AreEqual(newGE.Id, ge.Id);
             Assert.AreEqual(newGE.Exchange, ge.Exchange);
@@ -137,7 +137,7 @@ namespace FireAndManeuver.GameModel.Test
                 Volley = 99,
                 Turn = 99
             };
-            GameState newGE = GameState.Clone(ge);
+            GameState newGE = GameStateStreamUtilities.CloneGameState(ge);
             newGE.Id = 0;
             newGE.Volley = 0;
 

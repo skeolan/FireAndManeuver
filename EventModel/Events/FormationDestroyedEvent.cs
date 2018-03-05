@@ -1,4 +1,4 @@
-﻿// <copyright file="GameEvent.cs" company="Patrick Maughan">
+﻿// <copyright file="FormationDestroyedEvent.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
@@ -10,6 +10,6 @@ namespace FireAndManeuver.EventModel
 
     public class FormationDestroyedEvent : FormationStatusEvent
     {
-        /* ... */
+        // TODO: Implementation
     }
 }

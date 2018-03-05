@@ -10,6 +10,6 @@ namespace FireAndManeuver.EventModel
 
     public class FormationStatusEvent : GameEvent
     {
-        /* ... */
+        // TODO: Implementation
     }
 }

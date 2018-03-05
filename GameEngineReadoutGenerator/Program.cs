@@ -36,10 +36,10 @@ namespace FireAndManeuver.Clients
             string defaultUnitXML = Path.Combine(workingDir, config["Default_Unit_Xml"] ?? "DefaultUnit.xml");
             string defaultEngineXML = Path.Combine(workingDir, config["Default_GameEngine_Xml"] ?? "DefaultGameEngine.xml");
 
-            GameState ge = GameState.LoadFromXml(defaultEngineXML);
-            Console.WriteLine($"GameEngine [{ge.Id}] from {ge.SourceFile} loaded successfully.");
+            GameState gameState = GameStateStreamUtilities.LoadFromXml(defaultEngineXML);
+            Console.WriteLine($"GameEngine [{gameState.Id}] from {gameState.SourceFile} loaded successfully.");
             Console.WriteLine(string.Empty);
-            ConsoleReadoutUtilities.GenerateGameEngineReadout(ge).ForEach(l => Console.WriteLine(l));
+            ConsoleReadoutUtilities.GenerateGameEngineReadout(gameState).ForEach(l => Console.WriteLine(l));
 
             if (!Console.IsInputRedirected)
             {

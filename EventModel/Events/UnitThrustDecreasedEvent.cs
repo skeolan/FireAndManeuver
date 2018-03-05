@@ -11,6 +11,6 @@ namespace FireAndManeuver.EventModel
 
     public class UnitThrustDecreasedEvent : UnitStatusEvent
     {
-        /* implementation goes here */
+        // TODO: Implementation
     }
 }
