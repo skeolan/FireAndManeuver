@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\GameModel\GameModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,5 +9,7 @@ namespace FireAndManeuver.EventModel.EventActors
     public interface IEventActor
     {
         IList<GameEvent> ReceiveEvent(GameEvent evt);
+
+        // TODO: add other receiver methods to interface
     }
 }

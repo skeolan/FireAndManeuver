@@ -9,6 +9,8 @@ namespace FireAndManeuver.GameEngine
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using FireAndManeuver.EventModel;
+    using FireAndManeuver.EventModel.EventActors;
     using FireAndManeuver.GameModel;
 
     public class VolleyResolutionEngine
@@ -55,10 +57,24 @@ namespace FireAndManeuver.GameEngine
         {
             Console.WriteLine(" - FIRE SEGMENT");
 
-            // var FirePhase = new FireAndManeuver.EventModel.FirePhaseEvent();
+            // TODO: DI this interaction -- pass in EventHandlingEngine as a parameter
+            // TODO: EventHandlingEngine should populate its own IList<GameActor> property
+            var eventEngine = new EventHandlingEngine();
+
+            eventEngine.ExecuteGamePhase(GetActors(gameState), new FiringPhaseEvent(), 1, 1);
 
             //--And return!
             return true;
+        }
+
+        private static IList<IEventActor> GetActors(GameState gameState)
+        {
+            var actors = new List<IEventActor>();
+
+            actors.AddRange(gameState.Formations.Select(f => new GameFormationActor(f)));
+
+            // TODO: Similarly add IEventActors for Units, and for the gameState itself
+            return actors;
         }
 
         private static bool ExecuteManeuversForVolley(int currentVolley, GameState gameState)

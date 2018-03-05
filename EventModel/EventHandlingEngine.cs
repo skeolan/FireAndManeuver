@@ -11,7 +11,7 @@ namespace FireAndManeuver.EventModel
     // ... more IGameEvent implementations ...
     public class EventHandlingEngine
     {
-        public void ExecuteGamePhase(List<IEventActor> actors, GamePhaseEvent currentPhase, int logVerbosity, int consoleVerbosity)
+        public void ExecuteGamePhase(IList<IEventActor> actors, GamePhaseEvent currentPhase, int logVerbosity, int consoleVerbosity)
         {
             // TODO: reimplement this using the "Actor Model via TPL Dataflow" approach from that blog post?
             Queue<GameEvent> eventQueue = new Queue<GameEvent>();
