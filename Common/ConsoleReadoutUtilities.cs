@@ -59,7 +59,7 @@ namespace FireAndManeuver.Common
             return readout;
         }
 
-        public static List<string> GenerateGameEngineReadout(GameEngine ge, bool printUnitDetails = false)
+        public static List<string> GenerateGameEngineReadout(GameState ge, bool printUnitDetails = false)
         {
             List<string> readout = new List<string>();
             var allUnits = ge.AllUnits.ToList<GameUnit>();
@@ -302,11 +302,11 @@ namespace FireAndManeuver.Common
             return readout;
         }
 
-        private static List<string> GenerateFormationReadout(GameFormation f, List<GameUnit> allUnits, List<GameEnginePlayer> players)
+        private static List<string> GenerateFormationReadout(GameFormation f, List<GameUnit> allUnits, List<GamePlayer> players)
         {
             var readout = new List<string>();
 
-            var player = players.Where(p => p.Id == f.PlayerId.ToString()).FirstOrDefault() ?? new GameEnginePlayer() { Name = "Unknown Player" };
+            var player = players.Where(p => p.Id == f.PlayerId.ToString()).FirstOrDefault() ?? new GamePlayer() { Name = "Unknown Player" };
 
             var playerStrings = new List<string>()
             {

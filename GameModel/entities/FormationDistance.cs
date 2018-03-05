@@ -47,7 +47,7 @@ namespace FireAndManeuver.GameModel
         public string TargetFormationName { get; set; } = string.Empty;
 
         [XmlText]
-        public int Value { get; set; } = FireAndManeuver.GameModel.GameEngineOptions.DefaultStartingRange;
+        public int Value { get; set; } = FireAndManeuver.GameModel.GameOptions.DefaultStartingRange;
 
         public override string ToString()
         {

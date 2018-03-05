@@ -55,7 +55,7 @@ namespace FireAndManeuver.Clients
                 volleysPerExchange = DefaultVolleysPerExchange;
             }
 
-            GameEngine ge = GameEngine.LoadFromXml(defaultEngineXML);
+            GameState ge = GameState.LoadFromXml(defaultEngineXML);
             var originalSource = defaultEngineXML;
 
             ge.SourceFile = originalSource;
@@ -70,16 +70,16 @@ namespace FireAndManeuver.Clients
 
                 PrintDistanceGraph(ge);
 
-                ge = GameEngine.ResolveVolley(ge, config, v, ge.SourceFile);
+                ge = GameState.ResolveVolley(ge, config, v, ge.SourceFile);
 
                 PrintDistanceGraph(ge);
 
-                GameEngine.RecordVolleyReport(ge, originalSource, destinationFolder);
+                GameState.RecordVolleyReport(ge, originalSource, destinationFolder);
             }
 
             // Set up for a new Exchange by clearing out this Exchange's scripting
             ge.SourceFile = originalSource;
-            GameEngine.RecordExchangeReport(ge, originalSource);
+            GameState.RecordExchangeReport(ge, originalSource);
 
             var oldFile = new FileInfo(originalSource);
             var oldFileName = oldFile.Name;
@@ -107,7 +107,7 @@ namespace FireAndManeuver.Clients
             }
         }
 
-        private static void PrintDistanceGraph(GameEngine ge)
+        private static void PrintDistanceGraph(GameState ge)
         {
             Console.WriteLine(string.Empty.PadRight(100, '*'));
             var distanceGraph = ConsoleReadoutUtilities.GenerateDistanceReadout(ge.Distances);

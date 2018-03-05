@@ -18,7 +18,7 @@ namespace FireAndManeuver.GameModel.Test
         [TestMethod]
         public void GameEngineFileSerializeDeserializeTest()
         {
-            GameEngine ge = new GameEngine()
+            GameState ge = new GameState()
             {
                 Id = 99,
                 Exchange = 99,
@@ -30,7 +30,7 @@ namespace FireAndManeuver.GameModel.Test
 
             ge.SaveToStream(stream);
 
-            var newGE = GameEngine.LoadFromStream(stream);
+            var newGE = GameState.LoadFromStream(stream);
 
             Assert.AreEqual(newGE.Id, ge.Id);
             Assert.AreEqual(newGE.Exchange, ge.Exchange);
@@ -130,14 +130,14 @@ namespace FireAndManeuver.GameModel.Test
         public void TestCloning()
         {
             // GameEngine uses a "cheat" and routes its clone method through a serialize/deserialize operation:
-            GameEngine ge = new GameEngine()
+            GameState ge = new GameState()
             {
                 Id = 99,
                 Exchange = 99,
                 Volley = 99,
                 Turn = 99
             };
-            GameEngine newGE = GameEngine.Clone(ge);
+            GameState newGE = GameState.Clone(ge);
             newGE.Id = 0;
             newGE.Volley = 0;
 
