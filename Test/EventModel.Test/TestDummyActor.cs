@@ -16,9 +16,9 @@ namespace FireAndManeuver.EventModel
     {
         public int TestDummyActorEventReceivedCount { get; protected set; } = 0;
 
-        public override List<GameEvent> ProcessEvent(GameEvent evt)
+        protected override IList<GameEvent> ReceiveGameEvent(GameEvent evt)
         {
-            this.Result.AddRange(base.ProcessEvent(evt));
+            this.Result.AddRange(base.ReceiveGameEvent(evt));
 
             this.TestDummyActorEventReceivedCount++;
 

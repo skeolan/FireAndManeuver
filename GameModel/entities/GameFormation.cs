@@ -12,7 +12,7 @@ namespace FireAndManeuver.GameModel
     using System.Xml.Serialization;
 
     [XmlRoot("Formation")]
-    public class GameFormation
+    public partial class GameFormation
     {
         private int maxThrust = 0;
 

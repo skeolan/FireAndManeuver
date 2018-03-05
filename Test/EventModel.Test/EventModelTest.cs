@@ -15,37 +15,41 @@ namespace EventModel.Test
         [TestMethod]
         public void TestDummyActors()
         {
-            var phaseEvent = new FiringPhase();
+            var phaseEvent = new FiringPhaseEvent() as GamePhaseEvent;
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
             var totalDummy = new TestDummyActor();
             var phaseDummy = new TestDummyPhaseActor();
 
-            totalDummy.ProcessEvent(phaseEvent);
-            Assert.AreEqual(1, totalDummy.EventReceivedCount);
-            Assert.AreEqual(1, totalDummy.TestDummyActorEventReceivedCount);
+            totalDummy.ReceiveEvent(phaseEvent);
 
-            phaseDummy.ProcessEvent(phaseEvent);
-            Assert.AreEqual(1, phaseDummy.TestDummyActorEventReceivedCount);
+            // Base class received event
+            Assert.AreEqual(1, totalDummy.EventReceivedCount);
+
+            // ... but TestDummyActor doesn't have an override for FiringPhaseEvent
+            Assert.AreEqual(0, totalDummy.TestDummyActorEventReceivedCount);
+
+            phaseDummy.ReceiveEvent(phaseEvent);
+            Assert.AreEqual(0, phaseDummy.TestDummyActorEventReceivedCount);
             Assert.AreEqual(1, phaseDummy.GamePhaseEventDetectedCount);
             Assert.AreEqual(0, phaseDummy.WeaponAttackEventDetectedCount);
             Assert.AreEqual(1, phaseDummy.EventReceivedCount);
 
-            totalDummy.ProcessEvent(attackEvent);
-            Assert.AreEqual(2, totalDummy.TestDummyActorEventReceivedCount);
+            totalDummy.ReceiveEvent(attackEvent);
+            Assert.AreEqual(0, totalDummy.TestDummyActorEventReceivedCount);
             Assert.AreEqual(2, totalDummy.EventReceivedCount);
 
-            phaseDummy.ProcessEvent(attackEvent);
+            phaseDummy.ReceiveEvent(attackEvent);
             Assert.AreEqual(1, phaseDummy.GamePhaseEventDetectedCount);
             Assert.AreEqual(1, phaseDummy.WeaponAttackEventDetectedCount);
-            Assert.AreEqual(2, phaseDummy.TestDummyActorEventReceivedCount);
+            Assert.AreEqual(0, phaseDummy.TestDummyActorEventReceivedCount);
             Assert.AreEqual(2, phaseDummy.EventReceivedCount);
         }
 
         [TestMethod]
         public void TestDummyActorEventHandlerTypeRouting()
         {
-            var phaseEvent = new FiringPhase();
+            var phaseEvent = new FiringPhaseEvent();
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
             var engine = new EventHandlingEngine();
@@ -63,10 +67,10 @@ namespace EventModel.Test
             Assert.AreEqual(1, phaseDummy.EventReceivedCount);
             Assert.AreEqual(1, phaseDummy.GamePhaseEventDetectedCount);
             Assert.AreEqual(0, phaseDummy.WeaponAttackEventDetectedCount);
-            Assert.AreEqual(1, phaseDummy.TestDummyActorEventReceivedCount);
+            Assert.AreEqual(0, phaseDummy.TestDummyActorEventReceivedCount);
 
             Assert.AreEqual(1, totalDummy.EventReceivedCount);
-            Assert.AreEqual(1, totalDummy.TestDummyActorEventReceivedCount);
+            Assert.AreEqual(0, totalDummy.TestDummyActorEventReceivedCount);
         }
     }
 }

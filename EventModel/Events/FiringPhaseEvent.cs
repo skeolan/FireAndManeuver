@@ -1,4 +1,4 @@
-﻿// <copyright file="FiringPhase.cs" company="Patrick Maughan">
+﻿// <copyright file="FiringPhaseEvent.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
@@ -6,9 +6,9 @@ namespace FireAndManeuver.EventModel
 {
     using FireAndManeuver.GameModel;
 
-    public class FiringPhase : GamePhaseEvent
+    public class FiringPhaseEvent : GamePhaseEvent
     {
-        public FiringPhase()
+        public FiringPhaseEvent()
             : base()
         {
             this.GamePhase = Constants.GamePhase.FiringPhase;

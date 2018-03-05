@@ -8,6 +8,6 @@ namespace FireAndManeuver.EventModel.EventActors
 
     public interface IEventActor
     {
-        List<GameEvent> ProcessEvent(GameEvent evt);
+        IList<GameEvent> ReceiveEvent(GameEvent evt);
     }
 }

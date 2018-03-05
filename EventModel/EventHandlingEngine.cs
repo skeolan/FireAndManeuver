@@ -23,7 +23,7 @@ namespace FireAndManeuver.EventModel
                 foreach (IEventActor actor in actors)
                 {
                     // Could be an asynchronous method as long as eventQueue is a thread-safe queue implementation
-                    List<GameEvent> result = actor.ProcessEvent(evt);
+                    IList<GameEvent> result = actor.ReceiveEvent(evt);
                     if (result != null)
                     {
                         eventQueue.EnqueueRange(result);

@@ -9,16 +9,14 @@ namespace FireAndManeuver.EventModel
     using System.ComponentModel;
     using FireAndManeuver.Common;
 
-    public class WeaponAttackEvent : GameEvent
+    public class WeaponAttackEvent : AttackEvent
     {
         public WeaponAttackEvent(TargetingData targetingData, AttackData attackData)
-            : base("Weapon Attack Event")
+            : base(targetingData)
         {
-            this.TargetingData = targetingData;
+            this.Description = "Weapon Attack Event";
             this.AttackData = attackData;
         }
-
-        public TargetingData TargetingData { get; set; }
 
         public AttackData AttackData { get; set; }
     }
