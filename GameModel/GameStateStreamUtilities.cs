@@ -146,7 +146,7 @@ using System.Collections.Generic;
                 {
                     foreach (var mo in o.ManeuveringOrders)
                     {
-                        var targetF = ge.Formations.FirstOrDefault(t => t.FormationId.ToString() == mo.TargetID);
+                        var targetF = ge.Formations.FirstOrDefault(t => t.FormationId == mo.TargetID);
                         if (targetF != null)
                         {
                             mo.TargetFormationName = targetF.FormationName;
@@ -155,7 +155,7 @@ using System.Collections.Generic;
 
                     foreach (var fo in o.FiringOrders)
                     {
-                        var targetF = ge.Formations.FirstOrDefault(t => t.FormationId.ToString() == fo.TargetID);
+                        var targetF = ge.Formations.FirstOrDefault(t => t.FormationId == fo.TargetID);
                         if (targetF != null)
                         {
                             fo.TargetFormationName = targetF.FormationName;

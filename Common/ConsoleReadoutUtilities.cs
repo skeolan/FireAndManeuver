@@ -231,12 +231,12 @@ namespace FireAndManeuver.Common
 
             foreach (var orderT in coll)
             {
-                var o = (UnitOrders)(object)orderT;
+                var o = (FormationOrder)(object)orderT;
                 string readoutLine = o.ToString();
                 readoutLine = readoutLine.Replace("Target:[PD]", "PD");
                 if (allUnits != null)
                 {
-                    var orderTarget = allUnits.Where(u => u.IdNumeric.ToString() == o.TargetID).FirstOrDefault();
+                    var orderTarget = allUnits.Where(u => u.IdNumeric == o.TargetID).FirstOrDefault();
 
                     if (orderTarget != null)
                     {

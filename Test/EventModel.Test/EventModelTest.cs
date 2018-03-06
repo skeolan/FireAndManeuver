@@ -15,7 +15,7 @@ namespace EventModel.Test
         [TestMethod]
         public void TestDummyActors()
         {
-            var phaseEvent = new FiringPhaseEvent() as GamePhaseEvent;
+            var phaseEvent = new FiringPhaseEvent(1, 1) as GamePhaseEvent;
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
             var totalDummy = new TestDummyActor();
@@ -49,7 +49,7 @@ namespace EventModel.Test
         [TestMethod]
         public void TestDummyActorEventHandlerTypeRouting()
         {
-            var phaseEvent = new FiringPhaseEvent();
+            var phaseEvent = new FiringPhaseEvent(1, 1);
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
             var engine = new EventHandlingEngine();

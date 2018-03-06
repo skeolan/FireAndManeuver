@@ -8,12 +8,17 @@ namespace FireAndManeuver.EventModel
 
     public abstract class GamePhaseEvent : GameEvent
     {
-        public GamePhaseEvent()
+        public GamePhaseEvent(int volley, int exchange)
             : base("Abstract Game Phase Start Event")
         {
-            // No-op
+            this.Volley = volley;
+            this.Exchange = exchange;
         }
 
         public Constants.GamePhase GamePhase { get; set; }
+
+        public int Exchange { get; private set; } = 0;
+
+        public int Volley { get; private set; } = 0;
     }
 }

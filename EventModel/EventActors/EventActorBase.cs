@@ -14,12 +14,14 @@ namespace FireAndManeuver.EventModel.EventActors
     {
         public int EventReceivedCount { get; protected set; } = 0;
 
-        protected List<GameEvent> Result { get; set; } = new List<GameEvent>();
+        protected List<GameEvent> FinalResult { get; set; } = new List<GameEvent>();
 
-        /* Non-virtual method -- canNOT be overridden in subclasses, all event routing should happen consistently here */
-        public IList<GameEvent> ReceiveEvent(GameEvent evt)
+        /* Other than special "catch-all" actors, this should NOT be overridden in subclasses: all event routing should happen consistently here */
+        public virtual IList<GameEvent> ReceiveEvent(GameEvent evt)
         {
             this.EventReceivedCount++;
+
+            this.FinalResult.Clear(); // Don't let events hang around between returns
 
             var functionLookup = new Dictionary<Type, Func<GameEvent, IList<GameEvent>>>()
             {
@@ -54,10 +56,10 @@ namespace FireAndManeuver.EventModel.EventActors
                     newEvents = functionLookup[typeof(GameEvent)].Invoke(evt);
                 }
 
-                newEvents.AddTo(this.Result);
+                newEvents.AddTo(this.FinalResult);
             }
 
-            return this.Result;
+            return this.FinalResult;
         }
 
         protected static ArgumentException ReceiverArgumentMismatch(string argName, Type argType, string methodName, Type expectedType)

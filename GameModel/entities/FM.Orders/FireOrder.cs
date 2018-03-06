@@ -7,10 +7,10 @@ namespace FireAndManeuver.GameModel
     using System.Xml.Serialization;
 
     /// <summary>
-    /// Orders for a single weapons fire execution in a single volley for a single Unit.
+    /// Orders for a weapons-fire targeting assignment in a single volley for a single Formation.
     /// </summary>
     [XmlRoot("Fire")]
-    public class FireOrder : UnitOrders
+    public class FireOrder : FormationOrder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FireOrder"/> class.

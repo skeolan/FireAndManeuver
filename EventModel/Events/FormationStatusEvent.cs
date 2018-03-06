@@ -10,6 +10,25 @@ namespace FireAndManeuver.EventModel
 
     public class FormationStatusEvent : GameEvent
     {
-        // TODO: Implementation
+        public FormationStatusEvent()
+        {
+            this.Description = "FormationStatusEvent";
+        }
+
+        public FormationStatusEvent(string descr)
+        {
+            this.Description = descr;
+        }
+
+        public FormationStatusEvent(int formationId, string formationName)
+        {
+            this.FormationId = formationId;
+            this.FormationName = formationName;
+        }
+
+        // TODO: further implementation?
+        public int FormationId { get; protected set; } = 0;
+
+        public string FormationName { get; protected set; } = null;
     }
 }

@@ -86,7 +86,7 @@ namespace FireAndManeuver.GameModel.Test
                 {
                     new FireOrder()
                     {
-                        TargetID = targetFormationId.ToString(),
+                        TargetID = targetFormationId,
                         FireType = "Normal",
                         Priority = "Primary",
                         TargetFormationName = string.Empty,
@@ -97,7 +97,7 @@ namespace FireAndManeuver.GameModel.Test
                 {
                     new ManeuverOrder()
                     {
-                        TargetID = targetFormationId.ToString(),
+                        TargetID = targetFormationId,
                         ManeuverType = "Close",
                         Priority = "Primary"
                     }

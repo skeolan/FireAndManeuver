@@ -31,7 +31,7 @@ namespace FireAndManeuver.EventModel
             this.GamePhaseEventDetectedCount++;
 
             // ... but otherwise do nothing
-            return this.Result;
+            return base.ReceiveGamePhaseEvent(arg);
         }
 
         protected override IList<GameEvent> ReceiveWeaponAttackEvent(GameEvent arg)
@@ -44,7 +44,7 @@ namespace FireAndManeuver.EventModel
             this.WeaponAttackEventDetectedCount++;
 
             // ... but otherwise do nothing
-            return this.Result;
+            return base.ReceiveWeaponAttackEvent(arg);
         }
     }
 }

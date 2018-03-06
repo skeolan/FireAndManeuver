@@ -12,6 +12,9 @@ namespace FireAndManeuver.GameEngine
     using FireAndManeuver.EventModel;
     using FireAndManeuver.EventModel.EventActors;
     using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Console;
+    using Microsoft.Extensions.Logging.Debug;
 
     public class VolleyResolutionEngine
     {
@@ -19,11 +22,13 @@ namespace FireAndManeuver.GameEngine
         {
             gameState.Volley = volley;
 
+            var actors = GetActors(gameState);
+
             // MANEUVER
             ExecuteManeuversForVolley(gameState.Volley, gameState);
 
             // FIRE
-            ExecuteCombatForVolley(gameState.Volley, gameState);
+            ExecuteCombatForVolley(gameState.Volley, gameState.Exchange, gameState, actors);
 
             return gameState;
         }
@@ -53,7 +58,7 @@ namespace FireAndManeuver.GameEngine
             GameStateStreamUtilities.SaveToFile(gameState.SourceFile, gameState);
         }
 
-        private static bool ExecuteCombatForVolley(int currentVolley, GameState gameState)
+        private static bool ExecuteCombatForVolley(int currentVolley, int currentExchange, GameState gameState, IList<IEventActor> actors)
         {
             Console.WriteLine(" - FIRE SEGMENT");
 
@@ -61,7 +66,7 @@ namespace FireAndManeuver.GameEngine
             // TODO: EventHandlingEngine should populate its own IList<GameActor> property
             var eventEngine = new EventHandlingEngine();
 
-            eventEngine.ExecuteGamePhase(GetActors(gameState), new FiringPhaseEvent(), 1, 1);
+            eventEngine.ExecuteGamePhase(actors, new FiringPhaseEvent(currentVolley, currentExchange), 1, 1);
 
             //--And return!
             return true;
@@ -70,6 +75,13 @@ namespace FireAndManeuver.GameEngine
         private static IList<IEventActor> GetActors(GameState gameState)
         {
             var actors = new List<IEventActor>();
+
+            var loggerFactory = new LoggerFactory()
+                .AddConsole()
+                .AddDebug();
+            var logger = loggerFactory.CreateLogger("VolleyResolutionEngine");
+
+            actors.Add(new EventLoggingActor(logger));
 
             actors.AddRange(gameState.Formations.Select(f => new GameFormationActor(f)));
 
@@ -115,7 +127,7 @@ namespace FireAndManeuver.GameEngine
             VolleyOrders orders = f.GetOrdersForVolley(currentVolley);
             foreach (var o in orders.GetSortedManeuveringOrders())
             {
-                var target = gameState.Formations.Where(t => t.FormationId.ToString() == o.TargetID).FirstOrDefault();
+                var target = gameState.Formations.Where(t => t.FormationId == o.TargetID).FirstOrDefault();
 
                 var speed = Math.Max(0, orders.SpeedSuccesses + ManeuverOrder.GetManeuverModifier(o.Priority));
 

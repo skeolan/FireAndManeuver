@@ -18,11 +18,11 @@ namespace FireAndManeuver.EventModel
 
         protected override IList<GameEvent> ReceiveGameEvent(GameEvent evt)
         {
-            this.Result.AddRange(base.ReceiveGameEvent(evt));
+            var result = base.ReceiveGameEvent(evt);
 
             this.TestDummyActorEventReceivedCount++;
 
-            return this.Result;
+            return result;
         }
     }
 }

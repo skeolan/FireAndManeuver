@@ -9,7 +9,7 @@ namespace FireAndManeuver.GameModel
     using System.Xml.Serialization;
 
     [XmlRoot("Maneuver")]
-    public class ManeuverOrder : UnitOrders
+    public class ManeuverOrder : FormationOrder
     {
         public ManeuverOrder()
         {
@@ -37,7 +37,7 @@ namespace FireAndManeuver.GameModel
                 .Where(tO => tO.Volley == currentVolley)
                 .FirstOrDefault() ?? Constants.DefaultVolleyOrders;
             var targetManeuver = targetOrders.ManeuveringOrders
-                .Where(tRO => tRO.TargetID == source.FormationId.ToString())
+                .Where(tRO => tRO.TargetID == source.FormationId)
                 .FirstOrDefault() ?? Constants.DefaultManeuverOrder;
 
             var opposingPriority = targetManeuver.Priority;

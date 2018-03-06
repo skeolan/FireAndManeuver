@@ -10,6 +10,10 @@ namespace FireAndManeuver.EventModel
 
     public class FormationDestroyedEvent : FormationStatusEvent
     {
-        // TODO: Implementation
+        public FormationDestroyedEvent(int formationId, string formationName)
+            : base(formationId, formationName)
+        {
+            this.Description = $"Formation [{this.FormationId}]{this.FormationName} destroyed!";
+        }
     }
 }
