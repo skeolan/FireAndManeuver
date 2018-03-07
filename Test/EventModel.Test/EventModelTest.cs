@@ -54,7 +54,10 @@ namespace EventModel.Test
 
             var engine = new EventHandlingEngine();
 
+            // Processes pretty much nothing
             var totalDummy = new TestDummyActor();
+
+            // Processes GamePhase, FiringPhase, and WeaponAttack events
             var phaseDummy = new TestDummyPhaseActor();
 
             var actors = new List<IEventActor>()
