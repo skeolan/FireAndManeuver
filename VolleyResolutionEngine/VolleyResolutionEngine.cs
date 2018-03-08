@@ -9,6 +9,7 @@ namespace FireAndManeuver.GameEngine
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using FireAndManeuver.EventModel;
     using FireAndManeuver.EventModel.EventActors;
     using FireAndManeuver.GameModel;
@@ -18,22 +19,22 @@ namespace FireAndManeuver.GameEngine
 
     public class VolleyResolutionEngine
     {
-        public static GameState ResolveVolley(GameState gameState, int volley, string sourceFileName)
+        public static GameState ResolveVolley(GameState gameState, int volley, string sourceFileName, ILogger logger)
         {
             gameState.Volley = volley;
 
-            var actors = GetActors(gameState);
+            var actors = GetActors(gameState, logger);
 
             // MANEUVER
-            ExecuteManeuversForVolley(gameState.Volley, gameState);
+            ExecuteManeuversForVolley(gameState.Volley, gameState, logger);
 
             // FIRE
-            ExecuteCombatForVolley(gameState.Volley, gameState.Exchange, gameState, actors);
+            ExecuteCombatForVolley(gameState.Volley, gameState.Exchange, gameState, actors, logger);
 
             return gameState;
         }
 
-        public static void RecordVolleyReport(GameState gameState, string originalSourceFile, string destinationFolder)
+        public static void RecordVolleyReport(GameState gameState, string originalSourceFile, string destinationFolder, ILogger logger)
         {
             var destFileName = $"Game-{gameState.Id}.{Path.GetFileNameWithoutExtension(originalSourceFile)}.VolleyResults.E{gameState.Exchange}V{gameState.Volley}" + Path.GetExtension(originalSourceFile);
             destFileName = destFileName.Replace($"Game-{gameState.Id}.Game-{gameState.Id}.", $"Game-{gameState.Id}.");
@@ -41,26 +42,26 @@ namespace FireAndManeuver.GameEngine
                 destinationFolder,
                 destFileName);
             gameState.SourceFile = destFileFullName;
-            Console.WriteLine($" - Volley {gameState.Volley} interim report saving to:");
-            Console.WriteLine($"          {gameState.SourceFile}");
+            logger.LogInformation($" - Volley {gameState.Volley} interim report saving to:" +
+                $"\n          {gameState.SourceFile}");
             GameStateStreamUtilities.SaveToFile(gameState.SourceFile, gameState);
         }
 
-        public static void RecordExchangeReport(GameState gameState, string originalSourceFile)
+        public static void RecordExchangeReport(GameState gameState, string originalSourceFile, ILogger logger)
         {
             var destFileName = Path.GetFileNameWithoutExtension(originalSourceFile) + $".ExchangeResults.{gameState.Exchange}" + Path.GetExtension(originalSourceFile);
             var destFileFullName = Path.Combine(
                 Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
                 destFileName);
             gameState.SourceFile = destFileFullName;
-            Console.WriteLine($" - Exchange {gameState.Exchange} completed report saving to:");
-            Console.WriteLine($"          {gameState.SourceFile}");
+            logger.LogInformation($" - Exchange {gameState.Exchange} completed report saving to:" +
+                $"\n          {gameState.SourceFile}");
             GameStateStreamUtilities.SaveToFile(gameState.SourceFile, gameState);
         }
 
-        private static bool ExecuteCombatForVolley(int currentVolley, int currentExchange, GameState gameState, IList<IEventActor> actors)
+        private static bool ExecuteCombatForVolley(int currentVolley, int currentExchange, GameState gameState, IList<IEventActor> actors, ILogger logger)
         {
-            Console.WriteLine(" - FIRE SEGMENT");
+            logger.LogInformation(" - FIRE SEGMENT");
 
             // TODO: DI this interaction -- pass in EventHandlingEngine as a parameter
             // TODO: EventHandlingEngine should populate its own IList<GameActor> property
@@ -72,16 +73,12 @@ namespace FireAndManeuver.GameEngine
             return true;
         }
 
-        private static IList<IEventActor> GetActors(GameState gameState)
+        private static IList<IEventActor> GetActors(GameState gameState, ILogger logger)
         {
-            var actors = new List<IEventActor>();
-
-            var loggerFactory = new LoggerFactory()
-                .AddConsole()
-                .AddDebug();
-            var logger = loggerFactory.CreateLogger("VolleyResolutionEngine");
-
-            actors.Add(new EventLoggingActor(logger));
+            var actors = new List<IEventActor>
+            {
+                new EventLoggingActor(logger)
+            };
 
             actors.AddRange(gameState.Formations.Select(f => new GameFormationActor(f)));
 
@@ -89,9 +86,11 @@ namespace FireAndManeuver.GameEngine
             return actors;
         }
 
-        private static bool ExecuteManeuversForVolley(int currentVolley, GameState gameState)
+        private static bool ExecuteManeuversForVolley(int currentVolley, GameState gameState, ILogger logger)
         {
-            Console.WriteLine(" - MANEUVER SEGMENT");
+            var builder = new StringBuilder();
+
+            builder.AppendLine(" - MANEUVER SEGMENT");
 
             Dictionary<int, ManeuverSuccessSet> maneuverResultsById = new Dictionary<int, ManeuverSuccessSet>();
 
@@ -102,7 +101,7 @@ namespace FireAndManeuver.GameEngine
             // --- Determine Speed and Evasion successes for all Units
             foreach (var f in gameState.Formations)
             {
-                Console.WriteLine($"Roll Speed and Evasion for {f.FormationName}, volley {currentVolley}");
+                builder.AppendLine($"Roll Speed and Evasion for {f.FormationName}, volley {currentVolley}");
                 var formationOrders = f.Orders.Where(o => o.Volley == currentVolley).FirstOrDefault() ?? Constants.DefaultVolleyOrders;
 
                 // Side effect: sets the ManeuverSuccesses and SpeedSuccesses property of the formation's current VolleyOrders.
@@ -110,13 +109,13 @@ namespace FireAndManeuver.GameEngine
                 maneuverResultsById.Add(f.FormationId, result);
             }
 
-            Console.WriteLine();
-
             // -- Adjudicate all maneuver tests
             foreach (var f in gameState.Formations)
             {
                 ExecuteManeuversForFormation(currentVolley, f, gameState);
             }
+
+            logger.LogInformation(builder.ToString());
 
             // TODO --Secondary Movement Phase (Fighters and Gunboats only)
             return true;

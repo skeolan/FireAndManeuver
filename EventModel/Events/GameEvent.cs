@@ -10,11 +10,17 @@ namespace FireAndManeuver.EventModel
 
     public abstract class GameEvent
     {
-        public GameEvent(string description = "Abstract base GameEvent")
+        public GameEvent(string description = "Abstract base GameEvent", int exchange = 0, int volley = 0)
         {
             this.Description = description;
+            this.Exchange = exchange;
+            this.Volley = volley;
         }
 
         public string Description { get; set; }
+
+        public int Exchange { get; set; }
+
+        public int Volley { get; set; }
     }
 }

@@ -9,10 +9,12 @@ namespace FireAndManeuver.Clients
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using FireAndManeuver.Common;
     using FireAndManeuver.GameEngine;
     using FireAndManeuver.GameModel;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
 
     public class Program
     {
@@ -22,13 +24,19 @@ namespace FireAndManeuver.Clients
 
         public static void Main(string[] args)
         {
+            var loggerFactory = new LoggerFactory()
+                .AddConsole()
+                .AddDebug();
+
+            var logger = loggerFactory.CreateLogger("VolleyResolver");
+
             // TODO: add ability to pass an arbitrary GameEngineXML path argument instead of using default
             string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
             {
                 // Print help
-                Console.WriteLine("??? NEEDS HELP TEXT");
+                logger.LogInformation("??? NEEDS HELP TEXT");
 
                 // Exit early
                 return;
@@ -61,26 +69,26 @@ namespace FireAndManeuver.Clients
 
             gameState.SourceFile = originalSource;
 
-            Console.WriteLine($"GameEngine [{gameState.Id}] from {gameState.SourceFile} loaded successfully.");
-            Console.WriteLine("Begin Volley Resolution!");
+            logger.LogInformation($"GameEngine [{gameState.Id}] from {gameState.SourceFile} loaded successfully.");
+            logger.LogInformation("Begin Volley Resolution!");
 
             for (int v = gameState.Volley; v <= volleysPerExchange; v++)
             {
-                Console.WriteLine();
-                Console.WriteLine($"EXCHANGE {gameState.Exchange}, VOLLEY {v}");
+                logger.LogInformation("***");
+                logger.LogInformation($"EXCHANGE {gameState.Exchange}, VOLLEY {v}");
 
-                PrintDistanceGraph(gameState);
+                PrintDistanceGraph(gameState, logger);
 
-                gameState = VolleyResolutionEngine.ResolveVolley(gameState, v, gameState.SourceFile);
+                gameState = VolleyResolutionEngine.ResolveVolley(gameState, v, gameState.SourceFile, logger);
 
-                PrintDistanceGraph(gameState);
+                PrintDistanceGraph(gameState, logger);
 
-                VolleyResolutionEngine.RecordVolleyReport(gameState, originalSource, destinationFolder);
+                VolleyResolutionEngine.RecordVolleyReport(gameState, originalSource, destinationFolder, logger);
             }
 
             // Set up for a new Exchange by clearing out this Exchange's scripting
             gameState.SourceFile = originalSource;
-            VolleyResolutionEngine.RecordExchangeReport(gameState, originalSource);
+            VolleyResolutionEngine.RecordExchangeReport(gameState, originalSource, logger);
 
             var oldFile = new FileInfo(originalSource);
             var oldFileName = oldFile.Name;
@@ -90,9 +98,10 @@ namespace FireAndManeuver.Clients
             var newFileName = $"E{gameState.Exchange + 1}-{oldFileName}".Replace($"E{gameState.Exchange}", string.Empty);
             var newFile = new FileInfo(Path.Combine(oldFilePath, newFileName));
 
-            Console.WriteLine();
-            Console.WriteLine($"Exchange {gameState.Exchange} resolution completed! Saving resulting state back to enable Exchange {gameState.Exchange + 1} scripting:");
-            Console.WriteLine($"     {newFile.FullName}");
+            logger.LogInformation("***");
+            logger.LogInformation($"Exchange {gameState.Exchange} resolution completed! " +
+                $"\n     Saving resulting state back to enable Exchange {gameState.Exchange + 1} scripting:" +
+                $"\n     {newFile.FullName}");
 
             gameState.Exchange++;
             gameState.Volley = 1;
@@ -103,24 +112,28 @@ namespace FireAndManeuver.Clients
 
             if (!Console.IsInputRedirected)
             {
-                Console.WriteLine("Press any key to exit...");
+                logger.LogInformation("Press any key to exit...");
                 Console.ReadKey();
             }
         }
 
-        private static void PrintDistanceGraph(GameState ge)
+        private static void PrintDistanceGraph(GameState gameState, ILogger logger)
         {
-            Console.WriteLine(string.Empty.PadRight(100, '*'));
-            var distanceGraph = ConsoleReadoutUtilities.GenerateDistanceReadout(ge.Distances);
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine(string.Empty.PadRight(100, '*'));
+            var distanceGraph = ConsoleReadoutUtilities.GenerateDistanceReadout(gameState.Distances);
             foreach (var d in distanceGraph)
             {
                 foreach (var line in ConsoleReadoutUtilities.WrapDecorated(d, 100, "* ", " *"))
                 {
-                    Console.WriteLine(line);
+                    builder.AppendLine(line);
                 }
             }
 
-            Console.WriteLine(string.Empty.PadRight(100, '*'));
+            builder.AppendLine(string.Empty.PadRight(100, '*'));
+
+            logger.LogInformation(builder.ToString());
         }
     }
 }

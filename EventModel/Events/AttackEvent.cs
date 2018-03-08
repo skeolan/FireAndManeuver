@@ -14,26 +14,35 @@ namespace FireAndManeuver.EventModel
     public class AttackEvent : GameEvent
     {
         public AttackEvent()
-            : base()
+            : base("Attack Event")
         {
-            this.Description = "Attack Event";
+            // ...
         }
 
-        public AttackEvent(TargetingData targetingData)
+        public AttackEvent(TargetingData targetingData, int exchange = 0, int volley = 0)
+            : base("Attack Event", exchange, volley)
         {
             this.TargetingData = targetingData;
         }
 
-        public AttackEvent(FireOrder fo, GameFormationActor source)
+        public AttackEvent(FireOrder fo, GameFormationActor source, int exchange = 0, int volley = 0)
+           : base("Attack Event", exchange, volley)
         {
+            this.Description = "Attack Event";
             this.TargetingData = new TargetingData(source, fo.TargetID, fo.TargetFormationName, fo.Priority, fo.DiceAssigned, fo.FireType);
         }
 
-        public AttackEvent(FireOrder fo, GameFormationActor source, GameFormationActor target)
+        public AttackEvent(FireOrder fo, GameFormationActor source, GameFormationActor target, int exchange = 0, int volley = 0)
+               : base("Attack Event", exchange, volley)
         {
             this.TargetingData = new TargetingData(source, target, fo.Priority, fo.DiceAssigned, fo.FireType);
         }
 
         public TargetingData TargetingData { get; protected set; }
+
+        public override string ToString()
+        {
+            return $"E{this.Exchange} V{this.Volley} -- {this.Description}: {this.TargetingData.ToString()}";
+        }
     }
 }

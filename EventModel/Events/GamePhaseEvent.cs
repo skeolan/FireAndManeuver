@@ -16,9 +16,5 @@ namespace FireAndManeuver.EventModel
         }
 
         public Constants.GamePhase GamePhase { get; set; }
-
-        public int Exchange { get; private set; } = 0;
-
-        public int Volley { get; private set; } = 0;
     }
 }

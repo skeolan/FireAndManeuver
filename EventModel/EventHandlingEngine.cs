@@ -22,6 +22,8 @@ namespace FireAndManeuver.EventModel
                 GameEvent evt = eventQueue.Dequeue();
                 foreach (IEventActor actor in actors)
                 {
+                    var isLogger = actor is EventLoggingActor;
+
                     // Could be an asynchronous method as long as eventQueue is a thread-safe queue implementation
                     IList<GameEvent> result = actor.ReceiveEvent(evt);
                     if (result != null)

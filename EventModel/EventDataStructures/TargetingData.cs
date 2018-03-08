@@ -64,5 +64,26 @@ namespace FireAndManeuver.EventModel
         public string TargetName { get; internal set; } = null;
 
         public GameUnitFormationActor TargetFormationUnit { get; internal set; } = null;
+
+        public override string ToString()
+        {
+            string sourceStr = $"[{this.SourceId}]{this.SourceName}";
+            string targetStr = $"[{this.TargetId}]{this.TargetName}";
+            string diceStr = this.DiceAssigned == 0 ? string.Empty : $" ({this.DiceAssigned}D)";
+
+            if (this.SourceFormationUnit != null)
+            {
+                var sfu = this.SourceFormationUnit as GameUnitFormationActor;
+                sourceStr += $":[{sfu.UnitId}]{sfu.UnitName}";
+            }
+
+            if (this.TargetFormationUnit != null)
+            {
+                var tfu = this.TargetFormationUnit as GameUnitFormationActor;
+                targetStr += $":[{tfu.UnitId}]{tfu.UnitName}";
+            }
+
+            return $"Targeting data: [{sourceStr}] -> [{targetStr}] | {this.TargetingPriority} {this.FireType}{diceStr}";
+        }
     }
 }

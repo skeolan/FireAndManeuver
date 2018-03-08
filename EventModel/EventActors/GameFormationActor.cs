@@ -44,14 +44,23 @@ namespace FireAndManeuver.EventModel.EventActors
             var evt = arg as FiringPhaseEvent ??
                 throw ReceiverArgumentMismatch(nameof(arg), arg.GetType(), MethodBase.GetCurrentMethod().Name, typeof(GameEvent));
 
+            var fireOrders = this.formation.Orders.Where(o => o.Volley == evt.Volley).Select(o => o.FiringOrders).FirstOrDefault() ?? new List<FireOrder>();
+
             var result = new List<GameEvent>
             {
-                new FormationStatusEvent($"FormationActor for [{this.formation.FormationId}]{this.formation.FormationName} received {arg.GetType().Name}, taking appropriate actions...")
+                new FormationStatusEvent(
+                    $"FormationActor for [{this.formation.FormationId}]{this.formation.FormationName}" +
+                    $" received {arg.GetType().Name} - E{arg.Exchange}V{arg.Volley}:" +
+                    $" found {fireOrders.Count} FireOrders for current volley.",
+                    arg.Exchange,
+                    arg.Volley,
+                    this.formationId,
+                    this.formationName)
             };
 
-            var fireOrders = this.formation.Orders.Where(o => o.Volley == evt.Volley).Select(o => o.FiringOrders).FirstOrDefault() ?? new List<FireOrder>();
-            result.Add(new FormationStatusEvent($"... found {fireOrders.Count} FireOrders for current volley."));
-            var attackOrders = fireOrders.Select(fo => new AttackEvent(fo, this));
+            IEnumerable<AttackEvent> attackOrders = fireOrders.Select(fo => new AttackEvent(fo, this, arg.Exchange, arg.Volley));
+
+            result.AddRange(attackOrders);
 
             return result;
         }
