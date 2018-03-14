@@ -19,6 +19,8 @@ namespace FireAndManeuver.GameModel
         {
         }
 
+        public int RollPercentile() => 99;
+
         public int RollD6() => 6;
 
         public int RollDie(int sides) => 6;
@@ -31,9 +33,10 @@ namespace FireAndManeuver.GameModel
 
         public int RollSuccesses(int numberOfDice, int dRM = 0) => (int)(numberOfDice * 1.5);
 
-        public int RollFTSuccesses(int numberOfDice, int dRM = 0, int difficultyLevel = 0)
+        public int RollFTSuccesses(int numberOfDice, out List<int> rolls, int dRM = 0, int difficultyLevel = 0)
         {
             Console.WriteLine($"MOCK DICE FTSuccesses die roll : {numberOfDice}D6 with DRM {dRM}");
+            rolls = new List<int>();
             return (int)(numberOfDice * 1.5);
         }
     }

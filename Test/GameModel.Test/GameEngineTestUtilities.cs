@@ -10,6 +10,9 @@ namespace FireAndManeuver.GameModel.Test
     using System.Linq;
     using System.Text;
     using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public static class GameEngineTestUtilities
     {
@@ -71,10 +74,11 @@ namespace FireAndManeuver.GameModel.Test
                 MaxThrust = 99,
                 Orders = new List<VolleyOrders>(),
                 PlayerId = 0,
-                Units = new List<GameUnitFormationInfo>()
-                {
-                    new GameUnitFormationInfo(u)
-                }
+            };
+
+            f.Units = new List<GameUnitFormationInfo>()
+            {
+                new GameUnitFormationInfo(u, f)
             };
 
             var fOrder = new VolleyOrders()
@@ -116,6 +120,23 @@ namespace FireAndManeuver.GameModel.Test
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(tempDirectory);
             return tempDirectory;
+        }
+
+        public static IServiceProvider InitTestServices()
+        {
+            // Woohoo Dependency Injection!
+            var configBuilder = new ConfigurationBuilder();
+
+            var services = new ServiceCollection()
+                .AddLogging()
+                .AddSingleton<IDiceUtility, DiceNotationUtility>()
+                .AddSingleton(configBuilder.Build())
+                .BuildServiceProvider();
+
+            services.GetService<ILoggerFactory>()
+                .AddConsole();
+
+            return services;
         }
     }
 }

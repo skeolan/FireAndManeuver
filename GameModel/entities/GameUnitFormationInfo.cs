@@ -12,6 +12,7 @@ namespace FireAndManeuver.GameModel
     public class GameUnitFormationInfo
     {
         private GameUnit unitReference;
+        private GameFormation formationReference;
         private int unitId;
         private int unitMass;
         private string unitName;
@@ -20,21 +21,28 @@ namespace FireAndManeuver.GameModel
         public GameUnitFormationInfo()
         {
             this.unitReference = new GameUnit();
+            this.formationReference = new GameFormation();
             this.Refresh();
         }
 
-        public GameUnitFormationInfo(GameUnit unit)
+        public GameUnitFormationInfo(GameUnit unit, GameFormation formation)
         {
             this.unitReference = unit;
+            this.formationReference = formation;
             this.Refresh();
         }
 
-        public GameUnitFormationInfo(List<GameUnit> units, int unitId)
+        public GameUnitFormationInfo(List<GameUnit> units, int unitId, GameFormation formation)
         {
-            var unit = units.Find(u => u.IdNumeric == unitId) ??
-                throw new System.InvalidOperationException($"Unit with ID {unitId} not found in Unit list.");
+            this.unitReference = GetUnitById(units, unitId);
+            this.formationReference = formation;
+            this.Refresh();
+        }
 
-            this.unitReference = unit;
+        public GameUnitFormationInfo(List<GameUnit> units, int unitId, List<GameFormation> formations, int formationId)
+        {
+            this.unitReference = GetUnitById(units, unitId);
+            this.formationReference = GetFormationById(formations, formationId);
             this.Refresh();
         }
 
@@ -42,6 +50,12 @@ namespace FireAndManeuver.GameModel
         public int UnitId
         {
             get => this.unitId; set => this.unitId = value;
+        }
+
+        [XmlIgnore]
+        public int FormationId
+        {
+            get => this.formationReference.FormationId;
         }
 
         [XmlAttribute("mass")]
@@ -69,15 +83,27 @@ namespace FireAndManeuver.GameModel
                  + $"{(this.IsFormationFlag ? " (Flagship)" : string.Empty)}";
         }
 
-        private void GetGameUnitFormationInfo(GameUnit unit)
+        public GameUnit GetUnitReference()
         {
-            this.unitReference = unit;
-            this.Refresh();
+            return this.unitReference;
+        }
+
+        private static GameUnit GetUnitById(List<GameUnit> units, int unitId)
+        {
+            return units.Find(u => u.IdNumeric == unitId) ??
+                            throw new System.InvalidOperationException($"Unit with ID {unitId} not found in Unit list.");
+        }
+
+        private static GameFormation GetFormationById(List<GameFormation> formations, int id)
+        {
+            return formations.Find(f => f.FormationId == id) ??
+                            throw new System.InvalidOperationException($"Formation with ID {id} not found in Formation list.");
         }
 
         private void Refresh() // Consider redirecting getters/setters to work on the reference object instead?
         {
             var u = this.unitReference;
+            var f = this.formationReference;
             this.Mass = u.Mass;
             this.MaxThrust = u.GetCurrentThrust();
             this.UnitId = u.IdNumeric;

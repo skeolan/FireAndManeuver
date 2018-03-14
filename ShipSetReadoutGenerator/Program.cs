@@ -9,7 +9,7 @@ namespace FireAndManeuver.Clients
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using FireAndManeuver.Common;
+    using FireAndManeuver.Common.ConsoleUtilities;
     using FireAndManeuver.GameModel;
     using Microsoft.Extensions.Configuration;
 
@@ -57,12 +57,6 @@ namespace FireAndManeuver.Clients
             }
 
             Console.WriteLine("{0} Unit(s) loaded and displayed successfully.", unitSet.Count);
-
-            if (!Console.IsInputRedirected)
-            {
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
-            }
         }
     }
 }

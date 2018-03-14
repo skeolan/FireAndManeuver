@@ -2,24 +2,39 @@
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
-namespace EventModel.Test
+namespace FireAndManeuver.EventModel.Test
 {
+    using System;
     using System.Collections.Generic;
     using FireAndManeuver.EventModel;
     using FireAndManeuver.EventModel.EventActors;
+    using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class EventModelTest
     {
+        public IServiceProvider InitServices()
+        {
+            var services = new ServiceCollection()
+                .AddLogging()
+                .AddSingleton<IDiceUtility, MockDice>() // Always rolls sixes on d6; always rolls 99 on d100
+                .BuildServiceProvider();
+
+            return services;
+        }
+
         [TestMethod]
         public void TestDummyActors()
         {
+            var services = this.InitServices();
+
             var phaseEvent = new FiringPhaseEvent(1, 1) as GamePhaseEvent;
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
-            var totalDummy = new TestDummyActor();
-            var phaseDummy = new TestDummyPhaseActor();
+            var totalDummy = new TestDummyActor(services);
+            var phaseDummy = new TestDummyPhaseActor(services);
 
             totalDummy.ReceiveEvent(phaseEvent);
 
@@ -49,16 +64,18 @@ namespace EventModel.Test
         [TestMethod]
         public void TestDummyActorEventHandlerTypeRouting()
         {
+            var services = this.InitServices();
+
             var phaseEvent = new FiringPhaseEvent(1, 1);
             var attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData());
 
             var engine = new EventHandlingEngine();
 
             // Processes pretty much nothing
-            var totalDummy = new TestDummyActor();
+            var totalDummy = new TestDummyActor(services);
 
             // Processes GamePhase, FiringPhase, and WeaponAttack events
-            var phaseDummy = new TestDummyPhaseActor();
+            var phaseDummy = new TestDummyPhaseActor(services);
 
             var actors = new List<IEventActor>()
             {

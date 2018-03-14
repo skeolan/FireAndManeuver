@@ -10,12 +10,22 @@ namespace FireAndManeuver.GameModel
     using System.Diagnostics;
     using System.Linq;
     using OnePlat.DiceNotation;
+    using OnePlat.DiceNotation.DiceTerms;
     using OnePlat.DiceNotation.DieRoller;
 
     public class DiceNotationUtility : IDiceUtility
     {
         private RandomDieRoller roller = new RandomDieRoller();
         private IDice dice = new Dice();
+
+        public int RollPercentile()
+        {
+            var r = this.dice.Roll("1d100", this.roller);
+
+            Debug.WriteLine($"RollPercentile: {r.Value}");
+
+            return r.Value;
+        }
 
         public int RollD6()
         {
@@ -42,20 +52,20 @@ namespace FireAndManeuver.GameModel
             throw new NotImplementedException();
         }
 
-        public int RollFTSuccesses(int numberOfDice, int drm = 0, int difficultyLevel = 0)
+        public int RollFTSuccesses(int numberOfDice, out List<int> rolls, int drm = 0, int difficultyLevel = 0)
         {
             if (numberOfDice == 0)
             {
+                rolls = new List<int>();
                 return 0; // No successes possible if no dice rolled!
             }
 
-            var successes = 0;
-            var diceRolled = this.dice.Roll($"{numberOfDice}D6", this.roller);
-            var rollSet = diceRolled.Results.Select(r => r.Value).OrderByDescending(i => i).ToList();
+            int successes = 0;
+            string expression = $"{numberOfDice}D6";
+            DiceResult diceRolled = this.dice.Roll(expression, this.roller);
+            rolls = diceRolled.Results.Select(tr => tr.Value).OrderByDescending(i => i).ToList();
 
-            Console.Write($"[{diceRolled.DiceExpression}]: {string.Join(",", rollSet)}");
-
-            foreach (var roll in rollSet)
+            foreach (int roll in rolls)
             {
                 successes += CountSuccessesOnRoll(roll, drm, difficultyLevel);
             }

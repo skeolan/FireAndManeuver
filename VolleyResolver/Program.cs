@@ -11,9 +11,11 @@ namespace FireAndManeuver.Clients
     using System.Linq;
     using System.Text;
     using FireAndManeuver.Common;
+    using FireAndManeuver.Common.ConsoleUtilities;
     using FireAndManeuver.GameEngine;
     using FireAndManeuver.GameModel;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
     public class Program
@@ -24,14 +26,32 @@ namespace FireAndManeuver.Clients
 
         public static void Main(string[] args)
         {
-            var loggerFactory = new LoggerFactory()
+            // TODO: add ability to pass an arbitrary GameEngineXML path argument instead of using default
+            string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+
+            var configBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+            configBuilder.AddJsonFile(Path.Combine(workingDir, "appsettings.json"), true, true);
+            foreach (var jsonConfig in args.Where(a => a.EndsWith(".json")))
+            {
+                configBuilder.AddJsonFile(jsonConfig);
+            }
+
+            // Woohoo Dependency Injection!
+            var services = new ServiceCollection()
+                .AddLogging()
+                .AddSingleton<IDiceUtility, DiceNotationUtility>()
+                .AddSingleton(configBuilder.Build())
+                .BuildServiceProvider();
+
+            services.GetService<ILoggerFactory>()
                 .AddConsole()
                 .AddDebug();
 
-            var logger = loggerFactory.CreateLogger("VolleyResolver");
+            var logger = services.GetLogger("VolleyResolver");
 
-            // TODO: add ability to pass an arbitrary GameEngineXML path argument instead of using default
-            string workingDir = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            logger.LogInformation("Service Collection initialized successfully");
+
+            IConfigurationRoot config = services.GetService<IConfigurationRoot>();
 
             if (args.Any(a => a.ToLowerInvariant().StartsWith("-help") || a.ToLowerInvariant().StartsWith("-?")))
             {
@@ -41,15 +61,6 @@ namespace FireAndManeuver.Clients
                 // Exit early
                 return;
             }
-
-            var configBuilder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
-            configBuilder.AddJsonFile(Path.Combine(workingDir, "appsettings.json"), true, true);
-            foreach (var jsonConfig in args.Where(a => a.EndsWith(".json")))
-            {
-                configBuilder.AddJsonFile(jsonConfig);
-            }
-
-            IConfigurationRoot config = configBuilder.Build();
 
             // TODO: adapt this so it can take args on the commandline for input-XML and output-XML locations
             // TODO: adapt this so it can take unit-data XML files / dirs on the commandline and use them to flesh out Player/Ship entries
@@ -79,7 +90,7 @@ namespace FireAndManeuver.Clients
 
                 PrintDistanceGraph(gameState, logger);
 
-                gameState = VolleyResolutionEngine.ResolveVolley(gameState, v, gameState.SourceFile, logger);
+                gameState = VolleyResolutionEngine.ResolveVolley(gameState, v, gameState.SourceFile, services);
 
                 PrintDistanceGraph(gameState, logger);
 
@@ -109,12 +120,6 @@ namespace FireAndManeuver.Clients
             gameState.ClearOrders();
             gameState.SourceFile = newFile.FullName;
             GameStateStreamUtilities.SaveToFile(newFile.FullName, gameState);
-
-            if (!Console.IsInputRedirected)
-            {
-                logger.LogInformation("Press any key to exit...");
-                Console.ReadKey();
-            }
         }
 
         private static void PrintDistanceGraph(GameState gameState, ILogger logger)

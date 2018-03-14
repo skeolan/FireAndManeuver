@@ -1,4 +1,4 @@
-﻿// <copyright file="ExtensionMethods.cs" company="Patrick Maughan">
+﻿// <copyright file="CommonExtensions.cs" company="Patrick Maughan">
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
@@ -7,8 +7,10 @@ namespace FireAndManeuver.Common
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
-    public static class ExtensionMethods
+    public static class CommonExtensions
     {
         public static void EnqueueRange<T>(this Queue<T> queue, IEnumerable<T> items)
         {
@@ -24,6 +26,11 @@ namespace FireAndManeuver.Common
             {
                 destination.AddRange(self);
             }
+        }
+
+        public static ILogger GetLogger(this IServiceProvider services, string loggerTitle = "VolleyResolver")
+        {
+            return services.GetService<ILoggerFactory>().CreateLogger(loggerTitle);
         }
     }
 }

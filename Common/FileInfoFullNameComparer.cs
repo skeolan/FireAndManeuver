@@ -10,7 +10,6 @@ namespace FireAndManeuver.Common
     using System.IO;
     using System.Linq;
     using System.Text;
-    using FireAndManeuver.GameModel;
 
     public class FileInfoFullNameComparer : IEqualityComparer<FileInfo>
     {

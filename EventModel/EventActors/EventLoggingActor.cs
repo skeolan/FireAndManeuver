@@ -4,24 +4,24 @@
 
 namespace FireAndManeuver.EventModel.EventActors
 {
+    using System;
     using System.Collections.Generic;
     using FireAndManeuver.EventModel;
     using Microsoft.Extensions.Logging;
 
     public class EventLoggingActor : EventActorBase, IEventActor
     {
-        private ILogger logger;
-
-        public EventLoggingActor(ILogger logger)
+        public EventLoggingActor(IServiceProvider services)
+            : base(services)
         {
-            this.logger = logger;
+            // No-op
         }
 
         public override IList<GameEvent> ReceiveEvent(GameEvent arg)
         {
             var argString = arg.ToString();
             var argTypeString = arg.GetType().ToString();
-            this.logger.LogInformation($"'{arg.Description}'{(argString == argTypeString ? string.Empty : $" -- {arg.ToString()}")}");
+            this.Logger.LogInformation($"'{arg.Description}'{(argString == argTypeString ? string.Empty : $" -- {arg.ToString()}")}");
 
             return null; // Logger never spawns new events
         }

@@ -2,7 +2,7 @@
 // Copyright (c) Patrick Maughan. All rights reserved.
 // </copyright>
 
-namespace FireAndManeuver.Common
+namespace FireAndManeuver.Common.ConsoleUtilities
 {
     using System;
     using System.Collections.Generic;

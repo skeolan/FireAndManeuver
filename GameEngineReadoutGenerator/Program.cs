@@ -9,7 +9,7 @@ namespace FireAndManeuver.Clients
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using FireAndManeuver.Common;
+    using FireAndManeuver.Common.ConsoleUtilities;
     using FireAndManeuver.GameModel;
     using Microsoft.Extensions.Configuration;
 
@@ -40,12 +40,6 @@ namespace FireAndManeuver.Clients
             Console.WriteLine($"GameEngine [{gameState.Id}] from {gameState.SourceFile} loaded successfully.");
             Console.WriteLine(string.Empty);
             ConsoleReadoutUtilities.GenerateGameEngineReadout(gameState).ForEach(l => Console.WriteLine(l));
-
-            if (!Console.IsInputRedirected)
-            {
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
-            }
         }
     }
 }

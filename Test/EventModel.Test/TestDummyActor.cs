@@ -14,7 +14,13 @@ namespace FireAndManeuver.EventModel
     /// </summary>
     public class TestDummyActor : EventActorBase, IEventActor
     {
-        public int TestDummyActorEventReceivedCount { get; protected set; } = 0;
+        public TestDummyActor(IServiceProvider services)
+            : base(services)
+        {
+            this.TestDummyActorEventReceivedCount = 0;
+        }
+
+        public int TestDummyActorEventReceivedCount { get; protected set; }
 
         protected override IList<GameEvent> ReceiveGameEvent(GameEvent evt)
         {

@@ -10,26 +10,27 @@ namespace FireAndManeuver.GameEngine
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using FireAndManeuver.Common;
+    using FireAndManeuver.Common.ConsoleUtilities;
     using FireAndManeuver.EventModel;
     using FireAndManeuver.EventModel.EventActors;
     using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Logging.Console;
-    using Microsoft.Extensions.Logging.Debug;
 
     public class VolleyResolutionEngine
     {
-        public static GameState ResolveVolley(GameState gameState, int volley, string sourceFileName, ILogger logger)
+        public static GameState ResolveVolley(GameState gameState, int volley, string sourceFileName, IServiceProvider services)
         {
             gameState.Volley = volley;
 
-            var actors = GetActors(gameState, logger);
+            var actors = GetActors(gameState, services);
 
             // MANEUVER
-            ExecuteManeuversForVolley(gameState.Volley, gameState, logger);
+            ExecuteManeuversForVolley(gameState.Volley, gameState, services);
 
             // FIRE
-            ExecuteCombatForVolley(gameState.Volley, gameState.Exchange, gameState, actors, logger);
+            ExecuteCombatForVolley(gameState.Volley, gameState.Exchange, gameState, actors, services);
 
             return gameState;
         }
@@ -59,8 +60,9 @@ namespace FireAndManeuver.GameEngine
             GameStateStreamUtilities.SaveToFile(gameState.SourceFile, gameState);
         }
 
-        private static bool ExecuteCombatForVolley(int currentVolley, int currentExchange, GameState gameState, IList<IEventActor> actors, ILogger logger)
+        private static bool ExecuteCombatForVolley(int currentVolley, int currentExchange, GameState gameState, IList<IEventActor> actors, IServiceProvider services)
         {
+            var logger = services.GetLogger();
             logger.LogInformation(" - FIRE SEGMENT");
 
             // TODO: DI this interaction -- pass in EventHandlingEngine as a parameter
@@ -73,21 +75,23 @@ namespace FireAndManeuver.GameEngine
             return true;
         }
 
-        private static IList<IEventActor> GetActors(GameState gameState, ILogger logger)
+        private static IList<IEventActor> GetActors(GameState gameState, IServiceProvider services)
         {
             var actors = new List<IEventActor>
             {
-                new EventLoggingActor(logger)
+                new EventLoggingActor(services)
             };
 
-            actors.AddRange(gameState.Formations.Select(f => new GameFormationActor(f)));
+            actors.AddRange(gameState.Formations.Select(f => new GameFormationActor(f, services)));
+            actors.AddRange(gameState.Formations.SelectMany(f => f.Units).Select(fu => new GameUnitFormationActor(fu, services)));
 
-            // TODO: Similarly add IEventActors for Units, and for the gameState itself
+            // TODO: Similarly add IEventActors for the gameState itself and any other root actor types
             return actors;
         }
 
-        private static bool ExecuteManeuversForVolley(int currentVolley, GameState gameState, ILogger logger)
+        private static bool ExecuteManeuversForVolley(int currentVolley, GameState gameState, IServiceProvider services)
         {
+            var logger = services.GetLogger("VolleyResolver");
             var builder = new StringBuilder();
 
             builder.AppendLine(" - MANEUVER SEGMENT");
@@ -105,7 +109,7 @@ namespace FireAndManeuver.GameEngine
                 var formationOrders = f.Orders.Where(o => o.Volley == currentVolley).FirstOrDefault() ?? Constants.DefaultVolleyOrders;
 
                 // Side effect: sets the ManeuverSuccesses and SpeedSuccesses property of the formation's current VolleyOrders.
-                var result = f.RollManeuverSpeedAndEvasion(formationOrders, f.FormationId, currentVolley, speedDRM: 0, evasionDRM: 0);
+                var result = f.RollManeuverSpeedAndEvasion(services, formationOrders, f.FormationId, currentVolley, speedDRM: 0, evasionDRM: 0);
                 maneuverResultsById.Add(f.FormationId, result);
             }
 

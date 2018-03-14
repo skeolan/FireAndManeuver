@@ -4,11 +4,16 @@
 
 namespace FireAndManeuver.EventModel
 {
+    using System;
+    using System.Collections.Generic;
     using FireAndManeuver.EventModel.EventActors;
     using FireAndManeuver.GameModel;
 
     public class TargetingData
     {
+        public const string DefaultFireType = "Fire";
+        public const int DefaultFireConId = 0;
+
         public TargetingData()
         {
             // defaults!
@@ -16,60 +21,73 @@ namespace FireAndManeuver.EventModel
 
         public TargetingData(GameFormationActor source, int targetId, string targetName, string priority, int diceAssigned, string fireType)
         {
+            this.FireConId = TargetingData.DefaultFireConId;
+            this.FireDiceAssigned = diceAssigned;
+            this.FirePriority = priority;
+            this.FireType = fireType;
+            this.FireWeapons = new List<int>();
+
+            this.Source = source;
+            this.SourceFormationUnit = null; // Can't be resolved yet.
             this.SourceId = source.GetFormationId();
             this.SourceName = source.GetFormationName();
+
+            this.Target = null; // Can't be resolved yet.
+            this.TargetFormationUnit = null; // Can't be resolved yet.
             this.TargetId = targetId;
             this.TargetName = targetName;
-            this.Source = source;
-            this.TargetingPriority = priority;
-            this.DiceAssigned = diceAssigned;
-            this.FireType = fireType;
-
-            // Leaves this.Target null since it can't be resolved yet; this is intentional.
         }
 
         public TargetingData(GameFormationActor source, GameFormationActor target, string priority, int diceAssigned, string fireType)
         {
+            this.FireConId = TargetingData.DefaultFireConId;
+            this.FireDiceAssigned = diceAssigned;
+            this.FirePriority = priority;
+            this.FireType = fireType;
+            this.FireWeapons = new List<int>();
+
+            this.Source = source;
+            this.SourceFormationUnit = null; // Can't be resolved yet
             this.SourceId = source.GetFormationId();
             this.SourceName = source.GetFormationName();
-            this.Source = source;
 
+            this.Target = target;
+            this.TargetFormationUnit = null; // Can't be resolved yet
             this.TargetId = target.GetFormationId();
             this.TargetName = target.GetFormationName();
-            this.Target = target;
-
-            this.TargetingPriority = priority;
-            this.DiceAssigned = diceAssigned;
-            this.FireType = fireType;
         }
 
-        public string TargetingPriority { get; internal set; } = Constants.DefaultAttackPriority;
+        public int FireConId { get; internal set; } = TargetingData.DefaultFireConId;
 
-        public int DiceAssigned { get; internal set; } = 0;
+        public int FireDiceAssigned { get; internal set; } = 0;
 
-        public string FireType { get; internal set; } = "Fire";
+        public string FirePriority { get; internal set; } = Constants.DefaultAttackPriority;
 
-        public int SourceId { get; internal set; } = 0;
+        public string FireType { get; internal set; } = TargetingData.DefaultFireType;
+
+        public List<int> FireWeapons { get; internal set; }
 
         public GameFormationActor Source { get; internal set; } // Typically a Formation
 
-        public string SourceName { get; internal set; } = null;
-
         public GameUnitFormationActor SourceFormationUnit { get; internal set; } = null;
 
-        public int TargetId { get; internal set; } = 0;
+        public int SourceId { get; internal set; } = 0;
+
+        public string SourceName { get; internal set; } = null;
 
         public GameFormationActor Target { get; internal set; } // Typically a Formation
 
+        public GameUnitFormationActor TargetFormationUnit { get; internal set; } = null;
+
         public string TargetName { get; internal set; } = null;
 
-        public GameUnitFormationActor TargetFormationUnit { get; internal set; } = null;
+        public int TargetId { get; internal set; } = 0;
 
         public override string ToString()
         {
             string sourceStr = $"[{this.SourceId}]{this.SourceName}";
             string targetStr = $"[{this.TargetId}]{this.TargetName}";
-            string diceStr = this.DiceAssigned == 0 ? string.Empty : $" ({this.DiceAssigned}D)";
+            string diceStr = this.FireDiceAssigned == 0 ? string.Empty : $" ({this.FireDiceAssigned}D)";
 
             if (this.SourceFormationUnit != null)
             {
@@ -83,7 +101,12 @@ namespace FireAndManeuver.EventModel
                 targetStr += $":[{tfu.UnitId}]{tfu.UnitName}";
             }
 
-            return $"Targeting data: [{sourceStr}] -> [{targetStr}] | {this.TargetingPriority} {this.FireType}{diceStr}";
+            return $"Targeting data: [{sourceStr}] -> [{targetStr}] | {this.FirePriority} {this.FireType}{diceStr}";
+        }
+
+        internal static TargetingData Clone(TargetingData td)
+        {
+            return (TargetingData)td.MemberwiseClone();
         }
     }
 }

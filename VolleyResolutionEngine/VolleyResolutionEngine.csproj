@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>FireAndManeuver.VolleyResolutionEngine</AssemblyName>
+    <RootNamespace>FireAndManeuver.VolleyResolutionEngine</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

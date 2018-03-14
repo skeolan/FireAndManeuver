@@ -80,7 +80,7 @@ using System.Collections.Generic;
                 {
                     try
                     {
-                        var newFu = new GameUnitFormationInfo(allUnits, fu.UnitId)
+                        var newFu = new GameUnitFormationInfo(allUnits, fu.UnitId, f)
                         {
                             IsFormationFlag = fu.IsFormationFlag,
                             HitModifier = fu.HitModifier

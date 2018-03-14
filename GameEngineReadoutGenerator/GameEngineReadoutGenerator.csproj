@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>GameEngineReadoutGenerator</AssemblyName>
+    <AssemblyName>FireAndManeuver.GameEngineReadoutGenerator</AssemblyName>
     <OutputType>Exe</OutputType>
+    <RootNamespace>FireAndManeuver.GameEngineReadoutGenerator</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\ConsoleUtilities\ConsoleUtilities.csproj" />
     <ProjectReference Include="..\GameModel\GameModel.csproj" />
   </ItemGroup>
 

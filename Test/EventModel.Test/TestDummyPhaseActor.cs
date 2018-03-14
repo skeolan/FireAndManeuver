@@ -12,9 +12,16 @@ namespace FireAndManeuver.EventModel
 
     public class TestDummyPhaseActor : TestDummyActor, IEventActor
     {
-        public int GamePhaseEventDetectedCount { get; protected set; } = 0;
+        public TestDummyPhaseActor(IServiceProvider services)
+            : base(services)
+        {
+            this.GamePhaseEventDetectedCount = 0;
+            this.WeaponAttackEventDetectedCount = 0;
+        }
 
-        public int WeaponAttackEventDetectedCount { get; private set; } = 0;
+        public int GamePhaseEventDetectedCount { get; protected set; }
+
+        public int WeaponAttackEventDetectedCount { get; private set; }
 
         protected override IList<GameEvent> ReceiveFiringPhaseEvent(GameEvent arg)
         {

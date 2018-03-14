@@ -10,6 +10,9 @@ namespace FireAndManeuver.GameModel
     using System.Linq;
     using System.Text;
     using System.Xml.Serialization;
+    using FireAndManeuver.Common;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     [XmlRoot("Formation")]
     public class GameFormation
@@ -91,17 +94,22 @@ namespace FireAndManeuver.GameModel
             return hitChance;
         }
 
-        public ManeuverSuccessSet RollManeuverSpeedAndEvasion(VolleyOrders formationOrders, int formationId, int currentVolley, int speedDRM = 0, int evasionDRM = 0)
+        public ManeuverSuccessSet RollManeuverSpeedAndEvasion(IServiceProvider services, VolleyOrders formationOrders, int formationId, int currentVolley, int speedDRM = 0, int evasionDRM = 0)
         {
-            var roller = new DiceNotationUtility() as IDiceUtility;
+            var logger = services.GetLogger();
+            var roller = services.GetService<IDiceUtility>();
+            var rolls = new List<int>();
+            var builder = new StringBuilder();
 
-            Console.Write($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.SpeedDice}D for Speed: ");
-            formationOrders.SpeedSuccesses = roller.RollFTSuccesses(formationOrders.SpeedDice);
-            Console.WriteLine($" -- {formationOrders.SpeedSuccesses}s");
+            builder.Append($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.SpeedDice}D for Speed: ");
+            formationOrders.SpeedSuccesses = roller.RollFTSuccesses(formationOrders.SpeedDice, out rolls);
+            builder.AppendLine($" -- {formationOrders.SpeedSuccesses}s ({string.Join(", ", rolls)}");
 
-            Console.Write($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.EvasionDice}D for Evasion: ");
-            formationOrders.EvasionSuccesses = roller.RollFTSuccesses(formationOrders.EvasionDice);
-            Console.WriteLine($" -- {formationOrders.EvasionSuccesses}s");
+            builder.Append($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.EvasionDice}D for Evasion: ");
+            formationOrders.EvasionSuccesses = roller.RollFTSuccesses(formationOrders.EvasionDice, out rolls);
+            builder.AppendLine($" -- {formationOrders.EvasionSuccesses}s ({string.Join(", ", rolls)}");
+
+            logger.LogInformation(builder.ToString());
 
             return new ManeuverSuccessSet() { FormationId = formationId, Volley = currentVolley, SpeedSuccesses = formationOrders.SpeedSuccesses, EvasionSuccesses = formationOrders.EvasionSuccesses };
         }

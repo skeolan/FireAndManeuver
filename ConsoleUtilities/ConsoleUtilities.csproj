@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>FireAndManeuver.GameModel</AssemblyName>
-    <RootNamespace>FireAndManeuver.GameModel</RootNamespace>
+    <RootNamespace>FireAndManeuver.Common.ConsoleUtilities</RootNamespace>
+    <AssemblyName>FireAndManeuver.Common.ConsoleUtilities</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,14 +17,15 @@
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
-    <PackageReference Include="OnePlat.DiceNotation" Version="1.0.5" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\GameModel\GameModel.csproj" />
   </ItemGroup>
 
 </Project>

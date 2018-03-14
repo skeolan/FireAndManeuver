@@ -40,8 +40,10 @@ namespace FireAndManeuver.GameModel
         /// <returns>List of integer die-roll results</returns>
         List<int> RollExplodingDice(int numberOfDice, int numberOfSides = 6, int explodeMinimum = 6);
 
+        int RollPercentile();
+
         int RollSuccesses(int numberOfDice, int dRM = 0);
 
-        int RollFTSuccesses(int numberOfDice, int dRM = 0, int difficultyLevel = 0);
+        int RollFTSuccesses(int numberOfDice, out List<int> rolls, int dRM = 0, int difficultyLevel = 0);
     }
 }

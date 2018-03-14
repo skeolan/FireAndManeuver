@@ -9,10 +9,24 @@ namespace FireAndManeuver.EventModel.EventActors
     using System.Reflection;
     using System.Text;
     using FireAndManeuver.Common;
+    using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public abstract class EventActorBase : IEventActor
     {
+        public EventActorBase(IServiceProvider services)
+        {
+            this.DiceUtility = services.GetRequiredService<IDiceUtility>();
+
+            this.Logger = services.GetLogger();
+        }
+
         public int EventReceivedCount { get; protected set; } = 0;
+
+        protected IDiceUtility DiceUtility { get; set; } = null;
+
+        protected ILogger Logger { get; set; }
 
         protected List<GameEvent> FinalResult { get; set; } = new List<GameEvent>();
 

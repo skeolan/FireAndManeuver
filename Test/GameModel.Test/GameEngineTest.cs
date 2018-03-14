@@ -8,13 +8,19 @@ namespace FireAndManeuver.GameModel.Test
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using FireAndManeuver.Common;
     using FireAndManeuver.GameModel;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class GameEngineTest
     {
+        private IServiceProvider services = GameEngineTestUtilities.InitTestServices();
+
         [TestMethod]
         public void GameEngineFileSerializeDeserializeTest()
         {
@@ -41,15 +47,16 @@ namespace FireAndManeuver.GameModel.Test
         [TestMethod]
         public void TestPenetratingDamageRollup_Screen2_DRM_Minus_One()
         {
-            IDiceUtility roller = new DiceNotationUtility() as IDiceUtility;
-            roller.RollFTSuccesses(1);
+            IDiceUtility roller = this.services.GetService<IDiceUtility>();
+            var rolls = new List<int>();
+            roller.RollFTSuccesses(1, out rolls);
 
             var units = new List<GameUnit>();
             var f = GameEngineTestUtilities.GenerateTestFormation(1, "Test Formation", ref units);
             var fu = f.Units.First();
             var u = units[0];
 
-            var result = f.RollManeuverSpeedAndEvasion(f.Orders.First(), 1, f.FormationId, speedDRM: 0, evasionDRM: 0);
+            var result = f.RollManeuverSpeedAndEvasion(services: this.services, formationOrders: f.Orders.First(), currentVolley: 1, formationId: f.FormationId, speedDRM: 0, evasionDRM: 0);
             Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
@@ -82,15 +89,15 @@ namespace FireAndManeuver.GameModel.Test
         [TestMethod]
         public void TestPenetratingDamageRollup_Screen1_DRM_Zero()
         {
-            IDiceUtility roller = new DiceNotationUtility() as IDiceUtility;
-            roller.RollFTSuccesses(1);
+            IDiceUtility roller = this.services.GetService<IDiceUtility>();
+            roller.RollFTSuccesses(1, out List<int> rolls);
 
             var units = new List<GameUnit>();
             var f = GameEngineTestUtilities.GenerateTestFormation(1, "Test Formation", ref units);
             var fu = f.Units.First();
             var u = units[0];
 
-            var result = f.RollManeuverSpeedAndEvasion(f.Orders.First(), f.FormationId, 1, speedDRM: 0, evasionDRM: 0);
+            var result = f.RollManeuverSpeedAndEvasion(this.services, f.Orders.First(), f.FormationId, 1, speedDRM: 0, evasionDRM: 0);
             Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
