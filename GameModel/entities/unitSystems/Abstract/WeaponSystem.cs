@@ -21,5 +21,21 @@ namespace FireAndManeuver.GameModel
 
             return damageMatrix;
         }
+
+        public virtual Constants.DamageType GetDamageType()
+        {
+            return Constants.DamageType.Standard;
+        }
+
+        public virtual AttackSpecialProperties GetAttackProperties()
+        {
+            return AttackSpecialProperties.None;
+        }
+
+        public virtual TrackRating GetTrackRating()
+        {
+            // Since the abstract default is a "non-arc" weapon, treat as if it fires into all arcs.
+            return TrackRating.FiveOrSixArc;
+        }
     }
 }

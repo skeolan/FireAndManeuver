@@ -8,9 +8,13 @@ namespace FireAndManeuver.GameModel
 
     public abstract class UnitSystem
     {
+        public const string StatusOperational = "Operational";
+        public const string StatusDamaged = "Damaged";
+        public const string StatusDestroyed = "Destroyed";
+
         public UnitSystem()
         {
-            this.Status = "Operational";
+            this.Status = UnitSystem.StatusOperational;
         }
 
         [XmlIgnore]

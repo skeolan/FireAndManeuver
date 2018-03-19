@@ -32,14 +32,9 @@ namespace FireAndManeuver.EventModel.EventActors
 
             var evt = arg as AttackEvent ??
                 throw ReceiverArgumentMismatch(nameof(arg), arg.GetType(), MethodBase.GetCurrentMethod().Name, typeof(AttackEvent));
-            if (evt.TargetingData == null || evt.TargetingData.SourceFormationUnit != null)
-            {
-                // UnitFormationActors pick up only targeted attack orders with no unit assigned yet...
-                return null;
-            }
 
-            // ... from their parent Formation
-            if (evt.TargetingData.SourceId == this.unitFormationInfo.FormationId)
+            // If Attack is assigned to this Unit's Formation, but not to another Unit
+            if (evt.TargetingData != null && evt.TargetingData.SourceId == this.unitFormationInfo.FormationId && evt.TargetingData.SourceFormationUnit == null)
             {
                 var unit = this.unitFormationInfo.GetUnitReference();
                 var applicableWeaponAllocations = new List<GameUnitFireAllocation>();
@@ -56,14 +51,27 @@ namespace FireAndManeuver.EventModel.EventActors
 
                 foreach (var allocation in applicableWeaponAllocations)
                 {
-                    // TODO: Check for damage to the governing FireCon -- if it's damaged or destroyed, weapons don't fire.
-                    // TODO: Get target unit based on percentile roll once per fire allocation.
+                    if (allocation.FireConId != 0)
+                    {
+                        var allocatedFireCon = unit.Electronics.Where(s => s.Id == allocation.FireConId).FirstOrDefault()
+                            ?? throw new InvalidOperationException("FireAllocation instance has an invalid System ID assigned for its Fire Control");
+                        if (allocatedFireCon.Status != UnitSystem.StatusOperational)
+                        {
+                            continue;
+                        }
+                    }
+
                     // TODO: Multiple fire allocations with the same FireCon in the same Volley should be illegal.
-                    // TODO: Change this into a new Unit-to-Unit "WeaponAttackEvent" type and spawn one per weapon in the fire allocation.
-                    AttackEvent newAttack = new AttackEvent(evt, percentileRoll: this.DiceUtility.RollPercentile(), sourceUnit: this);
-                    newAttack.TargetingData.FireConId = allocation.FireConId;
-                    newAttack.TargetingData.FireWeapons = allocation.WeaponIDs;
-                    this.FinalResult.Add(newAttack);
+                    TargetingData newTargeting = TargetingData.Clone(evt.TargetingData);
+                    newTargeting.TargetFormationUnitId = evt.TargetingData.Target.GetUnitByPercentile(this.DiceUtility.RollPercentile()).UnitId;
+
+                    foreach (var weaponId in allocation.WeaponIDs)
+                    {
+                        var weapon = unit.Weapons.Where(w => w.Id == weaponId).FirstOrDefault();
+                        AttackData attackData = new AttackData(weapon, allocation);
+                        WeaponAttackEvent weaponAttack = new WeaponAttackEvent(newTargeting, attackData);
+                        this.FinalResult.Add(weaponAttack);
+                    }
                 }
             }
 

@@ -21,11 +21,9 @@ namespace FireAndManeuver.EventModel
 
         public TargetingData(GameFormationActor source, int targetId, string targetName, string priority, int diceAssigned, string fireType)
         {
-            this.FireConId = TargetingData.DefaultFireConId;
             this.FireDiceAssigned = diceAssigned;
             this.FirePriority = priority;
             this.FireType = fireType;
-            this.FireWeapons = new List<int>();
 
             this.Source = source;
             this.SourceFormationUnit = null; // Can't be resolved yet.
@@ -40,11 +38,9 @@ namespace FireAndManeuver.EventModel
 
         public TargetingData(GameFormationActor source, GameFormationActor target, string priority, int diceAssigned, string fireType)
         {
-            this.FireConId = TargetingData.DefaultFireConId;
             this.FireDiceAssigned = diceAssigned;
             this.FirePriority = priority;
             this.FireType = fireType;
-            this.FireWeapons = new List<int>();
 
             this.Source = source;
             this.SourceFormationUnit = null; // Can't be resolved yet
@@ -57,15 +53,11 @@ namespace FireAndManeuver.EventModel
             this.TargetName = target.GetFormationName();
         }
 
-        public int FireConId { get; internal set; } = TargetingData.DefaultFireConId;
-
         public int FireDiceAssigned { get; internal set; } = 0;
 
         public string FirePriority { get; internal set; } = Constants.DefaultAttackPriority;
 
         public string FireType { get; internal set; } = TargetingData.DefaultFireType;
-
-        public List<int> FireWeapons { get; internal set; }
 
         public GameFormationActor Source { get; internal set; } // Typically a Formation
 
@@ -78,6 +70,8 @@ namespace FireAndManeuver.EventModel
         public GameFormationActor Target { get; internal set; } // Typically a Formation
 
         public GameUnitFormationActor TargetFormationUnit { get; internal set; } = null;
+
+        public int TargetFormationUnitId { get; internal set; }
 
         public string TargetName { get; internal set; } = null;
 
@@ -106,7 +100,14 @@ namespace FireAndManeuver.EventModel
 
         internal static TargetingData Clone(TargetingData td)
         {
-            return (TargetingData)td.MemberwiseClone();
+            var newTD = (TargetingData)td.MemberwiseClone();
+
+            newTD.Source = td.Source;
+            newTD.SourceFormationUnit = td.SourceFormationUnit;
+            newTD.Target = td.Target;
+            newTD.TargetFormationUnit = td.TargetFormationUnit;
+
+            return newTD;
         }
     }
 }

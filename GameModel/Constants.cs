@@ -7,15 +7,15 @@ namespace FireAndManeuver.GameModel
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Linq;
     using System.Text;
+    using FireAndManeuver.Common;
 
     /// <summary>
     /// Set of known constant values for the Game Model
     /// TODO: Combine this with the GameModelOptions class.
     /// </summary>
-    public static class Constants
+    public static partial class Constants
     {
         /* Die roll constants */
 
@@ -71,43 +71,31 @@ namespace FireAndManeuver.GameModel
         public static readonly Tuple<string, string> WithdrawVersusMaintain = new Tuple<string, string>("Withdraw", "Maintain"); // Withdraw - Maintain increases Range if positive
         public static readonly Tuple<string, string> WithdrawVersusWithdraw = new Tuple<string, string>("Withdraw", "Withdraw"); // Withdraw auto-succeeds
 
-        public enum GamePhase
+        public static readonly Dictionary<string, TrackRating> ArcRatingLookup = new Dictionary<string, TrackRating>()
         {
-            ThrustAllocationPhase,
-            ManeuveringPhase,
-            FiringPhase,
-            DamageControlPhase
-        }
+            { "(*)", TrackRating.OneOrTwoArc },
+            { "(*/*)", TrackRating.OneOrTwoArc },
+            { "(*/*/*)", TrackRating.ThreeOrFourArc },
+            { "(*/*/*/*)", TrackRating.ThreeOrFourArc },
+            { "(*/*/*/*/*)", TrackRating.FiveOrSixArc },
+            { "(*/*/*/*/*/*)", TrackRating.FiveOrSixArc },
+            { "(All)", TrackRating.FiveOrSixArc }
+        };
 
-        /// <summary>
-        /// Specifies what damage type(s) apply to a particular weapon attack.
-        /// </summary>
-        /// <remarks>For example, Grasers in the Continuum rules deal Penetrating SAP damage.</remarks>
-        [Flags]
-        public enum DamageType
+        public static TrackRating LookupArcRatingByArcString(string arg)
         {
-            [Description("Standard Damage")]
-            Standard = 0,
+            var rating = TrackRating.NotFound;
 
-            [Description("Penetrating Beam ('B*') Damage")]
-            Penetrating = 1,
+            foreach (var expr in ArcRatingLookup.Keys)
+            {
+                if (RegexUtils.WildCardMatch(arg, expr) && (int)ArcRatingLookup[expr] > (int)rating)
+                {
+                    rating = ArcRatingLookup[expr];
+                }
+            }
 
-            [Description("Semi-Armor-Piercing Damage")]
-            SAP = 2,
-
-            [Description("Armor-Piercing Damage")]
-            AP = 4
-        }
-
-        [Flags]
-        public enum AttackSpecialProperties
-        {
-            None = 0,
-            Area_Attack = 1, // Affects all Units in the target Formation
-            Ignores_Evasion = 2,
-            Ignores_Screens = 4,
-            Vulnerable_To_ECM = 8,
-            Vulnerable_To_PD = 16
+            // else
+            return rating;
         }
     }
 }

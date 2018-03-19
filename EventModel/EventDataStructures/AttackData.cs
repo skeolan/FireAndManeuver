@@ -12,20 +12,20 @@ namespace FireAndManeuver.EventModel
 
     public class AttackData
     {
-        public AttackData()
+        public AttackData(WeaponSystem weapon, GameUnitFireAllocation allocation, AttackSpecialProperties specialProperties = AttackSpecialProperties.None)
         {
-            this.DamageType = Constants.DamageType.Standard;
-            this.AttackProperties = Constants.AttackSpecialProperties.None;
+            this.DamageType = weapon.GetDamageType();
+            this.AttackProperties = weapon.GetAttackProperties() & specialProperties;
             this.DieRolls = new List<int>();
-            this.TrackRating = 0;
+            this.TrackRating = weapon.GetTrackRating();
         }
 
         public Constants.DamageType DamageType { get; private set; }
 
-        public Constants.AttackSpecialProperties AttackProperties { get; private set; }
+        public AttackSpecialProperties AttackProperties { get; private set; }
 
         public List<int> DieRolls { get; private set; }
 
-        public int TrackRating { get; private set; }
+        public TrackRating TrackRating { get; private set; }
     }
 }

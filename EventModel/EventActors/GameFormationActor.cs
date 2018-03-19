@@ -42,6 +42,37 @@ namespace FireAndManeuver.EventModel.EventActors
             return this.formation;
         }
 
+        public GameUnitFormationInfo GetUnitByPercentile(int unitAssignmentPercentile)
+        {
+            StringBuilder logMsg = new StringBuilder();
+
+            decimal percentRemaining = (decimal)unitAssignmentPercentile;
+
+            var targetedUnit = this.formation.Units.FirstOrDefault();
+
+            foreach (var unit in this.formation.Units)
+            {
+                // This unit "takes up" the next N points of the percentage spread
+                // ... which either makes it the target, or accounts for N points of
+                // ... the roll.
+                decimal hitShare = this.formation.GetHitChancePercentage(unit.UnitId);
+                percentRemaining -= hitShare;
+
+                logMsg.Append($"{hitShare:N0} of rolled {unitAssignmentPercentile} goes to [{unit.UnitId}]{unit.UnitName}, {percentRemaining:N0} remaining");
+
+                if (percentRemaining <= 0)
+                {
+                    logMsg.AppendLine(" -- target found!");
+                    targetedUnit = unit;
+                    break; // target found, don't continue looping
+                }
+
+                logMsg.AppendLine();
+            }
+
+            return targetedUnit;
+        }
+
         protected override IList<GameEvent> ReceiveFiringPhaseEvent(GameEvent arg)
         {
             var evt = arg as FiringPhaseEvent ??
@@ -115,37 +146,6 @@ namespace FireAndManeuver.EventModel.EventActors
 
             // Else
             return result;
-        }
-
-        private GameUnitFormationInfo GetUnitByPercentile(int unitAssignmentPercentile)
-        {
-            StringBuilder logMsg = new StringBuilder();
-
-            decimal percentRemaining = (decimal)unitAssignmentPercentile;
-
-            var targetedUnit = this.formation.Units.FirstOrDefault();
-
-            foreach (var unit in this.formation.Units)
-            {
-                // This unit "takes up" the next N points of the percentage spread
-                // ... which either makes it the target, or accounts for N points of
-                // ... the roll.
-                decimal hitShare = this.formation.GetHitChancePercentage(unit.UnitId);
-                percentRemaining -= hitShare;
-
-                logMsg.Append($"{hitShare:N0} of rolled {unitAssignmentPercentile} goes to [{unit.UnitId}]{unit.UnitName}, {percentRemaining:N0} remaining");
-
-                if (percentRemaining <= 0)
-                {
-                    logMsg.AppendLine(" -- target found!");
-                    targetedUnit = unit;
-                    break; // target found, don't continue looping
-                }
-
-                logMsg.AppendLine();
-            }
-
-            return targetedUnit;
         }
     }
 }
