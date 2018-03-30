@@ -80,18 +80,55 @@ namespace FireAndManeuver.GameModel
             return newF;
         }
 
-        public decimal GetTotalMass()
+        public int GetTotalMass()
         {
             return this.Units.Sum(u => u.Mass);
         }
 
-        public decimal GetHitChancePercentage(int unitID)
+        public Tuple<int, int> GetHitRangeForUnit(int targetUnitId)
+        {
+            // Default case: unit is the only one in the Formation
+            Tuple<int, int> hitRange = new Tuple<int, int>(1, 100);
+
+            // Don't bother evaluating unless there are >1 units
+            if (this.Units.Count > 1)
+            {
+                int hitFloor = 0;
+                int hitCeiling = 0;
+
+                foreach (var formationMember in this.Units)
+                {
+                    var hitCoverage = this.GetHitChancePercentage(formationMember.UnitId);
+
+                    if (formationMember.UnitId != targetUnitId)
+                    {
+                        // Target lies further down the list, exclude percentage covered by this unit
+                        hitFloor += hitCoverage;
+                        hitCeiling = hitFloor;
+                    }
+                    else
+                    {
+                        hitCeiling = Math.Min(hitFloor + hitCoverage, 100);
+
+                        hitFloor = hitFloor + 1;
+
+                        hitRange = new Tuple<int, int>(hitFloor, hitCeiling);
+
+                        break;
+                    }
+                }
+            }
+
+            return hitRange;
+        }
+
+        public int GetHitChancePercentage(int unitID)
         {
             var unit = this.Units.Where(u => u.UnitId == unitID).FirstOrDefault() ?? throw new InvalidOperationException($"ID provided ({unitID}) is not found in Formation's Unit list");
 
-            var hitChance = ((decimal)unit.Mass / this.GetTotalMass() * (decimal)100) + (decimal)unit.HitModifier;
+            var hitChance = (int)Math.Round(((decimal)unit.Mass / this.GetTotalMass() * (decimal)100) + (decimal)unit.HitModifier);
 
-            return hitChance;
+            return Math.Max(hitChance, 1); // Hit chance is never less than 1%
         }
 
         public ManeuverSuccessSet RollManeuverSpeedAndEvasion(IServiceProvider services, VolleyOrders formationOrders, int formationId, int currentVolley, int speedDRM = 0, int evasionDRM = 0)
@@ -103,11 +140,11 @@ namespace FireAndManeuver.GameModel
 
             builder.Append($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.SpeedDice}D for Speed: ");
             formationOrders.SpeedSuccesses = roller.RollFTSuccesses(formationOrders.SpeedDice, out rolls);
-            builder.AppendLine($" -- {formationOrders.SpeedSuccesses}s ({string.Join(", ", rolls)}");
+            builder.AppendLine($" -- {formationOrders.SpeedSuccesses}s ({string.Join(", ", rolls)})");
 
             builder.Append($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.EvasionDice}D for Evasion: ");
             formationOrders.EvasionSuccesses = roller.RollFTSuccesses(formationOrders.EvasionDice, out rolls);
-            builder.AppendLine($" -- {formationOrders.EvasionSuccesses}s ({string.Join(", ", rolls)}");
+            builder.AppendLine($" -- {formationOrders.EvasionSuccesses}s ({string.Join(", ", rolls)})");
 
             logger.LogInformation(builder.ToString());
 

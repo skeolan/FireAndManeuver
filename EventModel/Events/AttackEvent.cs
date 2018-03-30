@@ -31,21 +31,30 @@ namespace FireAndManeuver.EventModel
             this.TargetingData.SourceFormationUnit = sourceUnit;
             this.TargetingData.TargetFormationUnit = targetUnit;
             this.UnitAssignmentPercentile = percentileRoll;
+
+            // Just to avoid any confusion
+            this.TargetingData.TargetUnitPercentileRoll = percentileRoll;
         }
 
-        public AttackEvent(TargetingData targetingData, int exchange = 0, int volley = 0)
+        public AttackEvent(TargetingData targetingData, int percentileRoll = AttackEvent.PercentileNotRolled, int exchange = 0, int volley = 0)
             : base("Attack Event", exchange, volley)
         {
-            this.TargetingData = targetingData;
-            this.UnitAssignmentPercentile = PercentileNotRolled;
+            this.TargetingData = TargetingData.Clone(targetingData);
+            this.UnitAssignmentPercentile = percentileRoll;
+
+            // Just to avoid any confusion
+            this.TargetingData.TargetUnitPercentileRoll = percentileRoll;
         }
 
-        public AttackEvent(FireOrder fo, GameFormationActor source, int exchange = 0, int volley = 0, int percentileRoll = PercentileNotRolled)
+        public AttackEvent(FireOrder fo, GameFormationActor source, int percentileRoll = PercentileNotRolled, int exchange = 0, int volley = 0)
            : base("Attack Event", exchange, volley)
         {
             this.Description = "Attack Event";
             this.TargetingData = new TargetingData(source, fo.TargetID, fo.TargetFormationName, fo.Priority, fo.DiceAssigned, fo.FireType);
             this.UnitAssignmentPercentile = percentileRoll;
+
+            // Just to avoid any confusion
+            this.TargetingData.TargetUnitPercentileRoll = percentileRoll;
         }
 
         public AttackEvent(FireOrder fo, GameFormationActor source, GameFormationActor target, int exchange = 0, int volley = 0, int percentileRoll = PercentileNotRolled)
@@ -61,8 +70,7 @@ namespace FireAndManeuver.EventModel
 
         public override string ToString()
         {
-            var percentileStr = this.UnitAssignmentPercentile == PercentileNotRolled ? string.Empty : $" (Rolled {this.UnitAssignmentPercentile})";
-            return $"E{this.Exchange} V{this.Volley} -- {this.Description}: {this.TargetingData.ToString()}{percentileStr}";
+            return $"E{this.Exchange} V{this.Volley} -- {this.Description}: {this.TargetingData.ToString().Replace("Targeting data:", string.Empty).Trim()}";
         }
     }
 }

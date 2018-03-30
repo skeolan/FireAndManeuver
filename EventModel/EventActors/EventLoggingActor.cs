@@ -21,7 +21,7 @@ namespace FireAndManeuver.EventModel.EventActors
         {
             var argString = arg.ToString();
             var argTypeString = arg.GetType().ToString();
-            this.Logger.LogInformation($"'{arg.Description}'{(argString == argTypeString ? string.Empty : $" -- {arg.ToString()}")}");
+            this.Logger.LogInformation($"LOGGER: '{arg.Description}'{(argString == argTypeString ? string.Empty : $" -- {arg.ToString()}")}");
 
             return null; // Logger never spawns new events
         }

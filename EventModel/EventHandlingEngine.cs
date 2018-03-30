@@ -26,7 +26,7 @@ namespace FireAndManeuver.EventModel
 
                     // Could be an asynchronous method as long as eventQueue is a thread-safe queue implementation
                     IList<GameEvent> result = actor.ReceiveEvent(evt);
-                    if (result != null)
+                    if (result != null && result.Count > 0)
                     {
                         eventQueue.EnqueueRange(result);
                     }

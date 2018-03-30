@@ -42,7 +42,7 @@ namespace FireAndManeuver.EventModel.EventActors
             return this.formation;
         }
 
-        public GameUnitFormationInfo GetUnitByPercentile(int unitAssignmentPercentile)
+        public int GetUnitIdByPercentile(int unitAssignmentPercentile)
         {
             StringBuilder logMsg = new StringBuilder();
 
@@ -70,7 +70,7 @@ namespace FireAndManeuver.EventModel.EventActors
                 logMsg.AppendLine();
             }
 
-            return targetedUnit;
+            return targetedUnit.UnitId;
         }
 
         protected override IList<GameEvent> ReceiveFiringPhaseEvent(GameEvent arg)
@@ -81,7 +81,7 @@ namespace FireAndManeuver.EventModel.EventActors
             var fireOrders = this.formation.Orders.Where(o => o.Volley == evt.Volley).Select(o => o.FiringOrders).FirstOrDefault() ?? new List<FireOrder>();
 
             // Don't roll percentile yet, GameUnits roll a percentile for the AttackEvent(s) they produce instead
-            IEnumerable<AttackEvent> attackOrders = fireOrders.Select(fo => new AttackEvent(fo, this, arg.Exchange, arg.Volley, AttackEvent.PercentileNotRolled));
+            IEnumerable<AttackEvent> attackOrders = fireOrders.Select(fo => new AttackEvent(fo, this, percentileRoll: AttackEvent.PercentileNotRolled, exchange: evt.Exchange, volley: evt.Volley));
 
             StringBuilder statusMsg = new StringBuilder();
 
@@ -105,46 +105,6 @@ namespace FireAndManeuver.EventModel.EventActors
 
             result.AddRange(attackOrders);
 
-            return result;
-        }
-
-        protected override IList<GameEvent> ReceiveAttackEvent(GameEvent arg)
-        {
-            var evt = arg as AttackEvent ??
-                throw ReceiverArgumentMismatch(nameof(arg), arg.GetType(), MethodBase.GetCurrentMethod().Name, typeof(AttackEvent));
-            var result = new List<GameEvent>();
-
-            /* Formations respond to an attack event IFF
-             * 1. Formation is the target of the event (ID match)
-             * 2. Attack event has populated *all of* these fields:
-             *    a) a source Formation ID
-             *    b) a source Unit ID
-             *    c) a percentile roll for Unit targeting
-             * ... otherwise, you'll presumably see this event again
-             * later, with that information populated.
-             */
-
-            TargetingData tD = evt.TargetingData;
-            int percentile = evt.UnitAssignmentPercentile;
-
-            if (
-                tD.TargetId == this.formationId
-                && tD.SourceId != 0
-                && tD.SourceFormationUnit != null
-                && tD.SourceFormationUnit.UnitId != 0
-                && evt.UnitAssignmentPercentile != AttackEvent.PercentileNotRolled)
-            {
-                // Event has found its target Formation and is ready to execute!
-                // Route it to the corresponding Unit by percentile roll
-                GameUnitFormationInfo targetUnit = this.GetUnitByPercentile(evt.UnitAssignmentPercentile);
-
-                this.Logger.LogInformation($"AttackEvent received by [{this.formationId}]{this.formationName} " +
-                    $"with roll {evt.UnitAssignmentPercentile} assigned to unit [{targetUnit.UnitId}]{targetUnit.UnitName}");
-
-                return null;
-            }
-
-            // Else
             return result;
         }
     }

@@ -14,21 +14,23 @@ namespace FireAndManeuver.GameModel
         public BeamBatterySystem()
             : base()
         {
-            this.SystemName = "Beam Battery System";
+            this.SystemName = "Class-1 Beam Battery System";
             this.Rating = 1;
             this.Arcs = "(All arcs)";
         }
 
         public BeamBatterySystem(int rating)
         {
-            this.SystemName = "Beam Battery System";
+            this.SystemName = $"Class-{rating} Beam Battery System";
             this.Rating = rating;
+
+            // Default is "all arcs" for a B1, 
             this.Arcs = rating == 1 ? "(All arcs)" : "(F)";
         }
 
         public BeamBatterySystem(int rating, string arcs)
         {
-            this.SystemName = "Beam Battery System";
+            this.SystemName = $"Class-{rating} Beam Battery System";
             this.Rating = rating;
             this.Arcs = arcs;
         }

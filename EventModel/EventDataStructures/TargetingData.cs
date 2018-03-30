@@ -34,6 +34,7 @@ namespace FireAndManeuver.EventModel
             this.TargetFormationUnit = null; // Can't be resolved yet.
             this.TargetId = targetId;
             this.TargetName = targetName;
+            this.TargetFormationUnitId = -1;
         }
 
         public TargetingData(GameFormationActor source, GameFormationActor target, string priority, int diceAssigned, string fireType)
@@ -77,11 +78,14 @@ namespace FireAndManeuver.EventModel
 
         public int TargetId { get; internal set; } = 0;
 
+        public int TargetUnitPercentileRoll { get; internal set; } = AttackEvent.PercentileNotRolled;
+
         public override string ToString()
         {
             string sourceStr = $"[{this.SourceId}]{this.SourceName}";
             string targetStr = $"[{this.TargetId}]{this.TargetName}";
             string diceStr = this.FireDiceAssigned == 0 ? string.Empty : $" ({this.FireDiceAssigned}D)";
+            string percentileStr = this.TargetUnitPercentileRoll == -1 ? string.Empty : $" -- Rolled {this.TargetUnitPercentileRoll} to hit";
 
             if (this.SourceFormationUnit != null)
             {
@@ -95,7 +99,7 @@ namespace FireAndManeuver.EventModel
                 targetStr += $":[{tfu.UnitId}]{tfu.UnitName}";
             }
 
-            return $"Targeting data: [{sourceStr}] -> [{targetStr}] | {this.FirePriority} {this.FireType}{diceStr}";
+            return $"Targeting data: [{sourceStr}] -> [{targetStr}] | {this.FirePriority} {this.FireType}{diceStr}{percentileStr}";
         }
 
         internal static TargetingData Clone(TargetingData td)

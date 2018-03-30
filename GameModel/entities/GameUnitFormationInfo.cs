@@ -76,6 +76,12 @@ namespace FireAndManeuver.GameModel
         [XmlText]
         public string UnitName { get => this.unitName; set => this.unitName = value; }
 
+        [XmlIgnore]
+        public int PercentileLowerBound { get; private set; } = 1;
+
+        [XmlIgnore]
+        public int PercentileUpperBound { get; private set; } = 100;
+
         public override string ToString()
         {
             return $"[{this.UnitId, 2}] {this.UnitName} - {this.Mass, 3} MU - "
@@ -86,6 +92,18 @@ namespace FireAndManeuver.GameModel
         public GameUnit GetUnitReference()
         {
             return this.unitReference;
+        }
+
+        public GameFormation GetFormationReference()
+        {
+            return this.formationReference;
+        }
+
+        public bool CoversPercentile(int unitAssignmentPercentile)
+        {
+            (this.PercentileLowerBound, this.PercentileUpperBound) = this.formationReference.GetHitRangeForUnit(this.UnitId);
+
+            return this.PercentileLowerBound <= unitAssignmentPercentile && this.PercentileUpperBound >= unitAssignmentPercentile;
         }
 
         private static GameUnit GetUnitById(List<GameUnit> units, int unitId)
