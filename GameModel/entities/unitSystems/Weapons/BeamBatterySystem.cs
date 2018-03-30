@@ -9,28 +9,31 @@ namespace FireAndManeuver.GameModel
     public class BeamBatterySystem : ArcWeaponSystem
     {
         [XmlIgnore]
+        private const string BaseSystemName = "Beam Battery System";
+
+        [XmlIgnore]
         private string arcs;
 
         public BeamBatterySystem()
             : base()
         {
-            this.SystemName = "Class-1 Beam Battery System";
+            this.SystemName = "Beam Battery System";
             this.Rating = 1;
             this.Arcs = "(All arcs)";
         }
 
         public BeamBatterySystem(int rating)
         {
-            this.SystemName = $"Class-{rating} Beam Battery System";
+            this.SystemName = $"Beam Battery System";
             this.Rating = rating;
 
-            // Default is "all arcs" for a B1, 
+            // Default is "all arcs" for a B1
             this.Arcs = rating == 1 ? "(All arcs)" : "(F)";
         }
 
         public BeamBatterySystem(int rating, string arcs)
         {
-            this.SystemName = $"Class-{rating} Beam Battery System";
+            this.SystemName = $"Beam Battery System";
             this.Rating = rating;
             this.Arcs = arcs;
         }
@@ -51,6 +54,12 @@ namespace FireAndManeuver.GameModel
             {
                 this.arcs = value;
             }
+        }
+
+        public override string ToString()
+        {
+            this.SystemName = $"Class-{this.Rating} {BaseSystemName}";
+            return base.ToString();
         }
     }
 }
