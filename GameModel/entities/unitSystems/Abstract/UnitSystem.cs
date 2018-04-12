@@ -8,13 +8,9 @@ namespace FireAndManeuver.GameModel
 
     public abstract class UnitSystem
     {
-        public const string StatusOperational = "Operational";
-        public const string StatusDamaged = "Damaged";
-        public const string StatusDestroyed = "Destroyed";
-
         public UnitSystem()
         {
-            this.Status = UnitSystem.StatusOperational;
+            this.Status = UnitSystemStatus.Operational;
         }
 
         [XmlIgnore]
@@ -30,12 +26,19 @@ namespace FireAndManeuver.GameModel
         public int SSDYCoordinate { get; set; }
 
         [XmlAttribute("status")]
-        public string Status { get; set; } = "Operational";
+        public string StatusString
+        {
+            get => this.Status.ToString();
+            set => this.Status = (UnitSystemStatus)System.Enum.Parse(typeof(UnitSystemStatus), value, true);
+        }
+
+        [XmlIgnore]
+        public UnitSystemStatus Status { get; set; }
 
         public override string ToString()
         {
             string idStr = this.Id == -1 ? string.Empty : string.Format("[{0:00}]", this.Id);
-            return $"{idStr, 2} - {this.SystemName, -30} - {this.Status, -12}";
+            return $"{idStr, 2} - {this.SystemName, -30} - {this.StatusString, -12}";
         }
 
         // As long as all properties are primitive type, no need to override this for derived classes

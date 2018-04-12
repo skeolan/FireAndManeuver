@@ -43,7 +43,7 @@ namespace FireAndManeuver.GameModel.Test
 
                 Electronics = new List<ElectronicsSystem>() { new FireControlSystem() { Id = currentSystemId++ } },
                 FtlDrive = new FTLDriveSystem() { Id = currentSystemId++ },
-                Hull = new HullSystem() { Id = currentSystemId++, HullClass = "Military", HullType = HullTypeLookup.Average },
+                Hull = new HullSystem() { Id = currentSystemId++, HullClass = "Military", HullType = HullTypeProperty.Average },
                 MainDrive = new DriveSystem(4) { Id = currentSystemId++ },
                 Weapons = new List<WeaponSystem>() { new BeamBatterySystem(1, "(All arcs)") { Id = currentSystemId++ } },
             };

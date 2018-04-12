@@ -106,6 +106,31 @@ namespace FireAndManeuver.GameModel
             return this.PercentileLowerBound <= unitAssignmentPercentile && this.PercentileUpperBound >= unitAssignmentPercentile;
         }
 
+        internal int GetAreaScreenRating()
+        {
+            int areaScreenRating = 0;
+
+            if (this.unitReference != null)
+            {
+                areaScreenRating = this.unitReference.GetAreaScreenRating();
+            }
+
+            return areaScreenRating;
+        }
+
+        internal int GetUnitScreenRating()
+        {
+            int unitScreenRating = 0;
+            int formationScreenRating = this.formationReference.GetFormationAreaScreenRating();
+
+            if (this.unitReference != null)
+            {
+                unitScreenRating = Math.Max(formationScreenRating, this.unitReference.GetScreenRating());
+            }
+
+            return unitScreenRating;
+        }
+
         private static GameUnit GetUnitById(List<GameUnit> units, int unitId)
         {
             return units.Find(u => u.IdNumeric == unitId) ??

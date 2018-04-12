@@ -68,7 +68,7 @@ namespace FireAndManeuver.EventModel.EventActors
                 {
                     var allocatedFireCon = unit.Electronics.Where(s => s.Id == allocation.FireConId).FirstOrDefault()
                         ?? throw new InvalidOperationException("FireAllocation instance has an invalid System ID assigned for its Fire Control");
-                    if (allocatedFireCon.Status != UnitSystem.StatusOperational)
+                    if (allocatedFireCon.Status != UnitSystemStatus.Operational)
                     {
                         continue;
                     }

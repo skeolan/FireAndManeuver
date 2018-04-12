@@ -154,15 +154,15 @@ namespace FireAndManeuver.GameModel.Test
             Assert.AreEqual(newGE.Turn, ge.Turn);
 
             BeamBatterySystem b1 = new BeamBatterySystem() { Arcs = "FP,F,FS", Rating = 2 };
-            ScreenSystem d1 = new ScreenSystem() { Status = "Operational" };
-            HullSystem h1 = new HullSystem() { HullType = HullTypeLookup.Average };
+            ScreenSystem d1 = new ScreenSystem() { StatusString = "Operational" };
+            HullSystem h1 = new HullSystem() { HullType = HullTypeProperty.Average };
 
             var b2 = b1.Clone() as ArcWeaponSystem;
             var d2 = d1.Clone() as DefenseSystem;
             var h2 = h1.Clone() as HullSystem;
-            h1.HullType = HullTypeLookup.Strong;
+            h1.HullType = HullTypeProperty.Strong;
             var h1a = h1.Clone() as HullSystem;
-            h1a.HullType = HullTypeLookup.Super;
+            h1a.HullType = HullTypeProperty.Super;
             var h2a = h2.Clone() as HullSystem;
             var a1 = new ArmorSystem() { TotalArmor = "4,5", RemainingArmor = "4,5" };
             DefenseSystem a2 = (DefenseSystem)a1.Clone();
@@ -171,7 +171,7 @@ namespace FireAndManeuver.GameModel.Test
             var a2a = a1.Clone() as DefenseSystem;
 
             b2.Arcs = "AP, P, FP";
-            d2.Status = "Damaged";
+            d2.StatusString = "Damaged";
 
             Console.WriteLine($"B1 is a {b1.GetType().FullName} and its clone B2 is a {b2.GetType().FullName}");
             Assert.AreEqual(b1.GetType(), b2.GetType());
@@ -182,8 +182,8 @@ namespace FireAndManeuver.GameModel.Test
             Console.WriteLine($"Making a clone of H2 H2a, which is also a {h2a.GetType().FullName}");
             Console.WriteLine($"B1 arcs  : [{b1.Arcs}]");
             Console.WriteLine($"B2 arcs  : [{b2.Arcs}]");
-            Console.WriteLine($"D1 status: [{d1.Status}]");
-            Console.WriteLine($"D2 status: [{d2.Status}]");
+            Console.WriteLine($"D1 status: [{d1.StatusString}]");
+            Console.WriteLine($"D2 status: [{d2.StatusString}]");
             Console.WriteLine($"H1 type  : [{h1.HullType}]");
             Console.WriteLine($"H1a type : [{h1a.HullType}]");
             Console.WriteLine($"H2 type  : [{h2.HullType}]");

@@ -144,7 +144,7 @@
         <FireControl id="6" xSSD="90" ySSD="180" status="Operational"/>
       </Electronics>
       <Defenses>
-        <Screen id="7" xSSD="80" ySSD="160" status="Operational"/>
+        <!-- <Screen id="7" xSSD="80" ySSD="160" status="Operational"/> -->
       </Defenses>
       <Holds></Holds>
       <Weapons>
@@ -167,6 +167,9 @@
       <CrewQuality>First Rate</CrewQuality>
       <Mass>40</Mass>
       <PointValue>133</PointValue>
+      <Defenses>
+        <AreaScreen id="7" xSSD="80" ySSD="160" status="Operational"/>
+      </Defenses>
       <MainDrive id="3" type="Standard" initialThrust="8" currentThrust="8" status="Operational" active="true" />
       <FTLDrive id="4" status="Operational" active="false"/>
       <Armor totalArmor="0" remainingArmor="0"/>

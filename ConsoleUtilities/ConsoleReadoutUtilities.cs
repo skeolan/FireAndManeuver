@@ -34,6 +34,8 @@ namespace FireAndManeuver.Common.ConsoleUtilities
             readout.Add(separator);
 
             readout.Add(string.Format(outputFormat, "Status", myUnit.Status));
+            readout.Add(string.Format(outputFormat, "Screen Rating", myUnit.GetScreenRating()));
+            readout.Add(string.Format(outputFormat, "Area Screen Rating", myUnit.GetAreaScreenRating()));
             readout.Add(string.Format(outputFormat, "Armor", myUnit.Armor.ToString()));
             readout.Add(string.Format(outputFormat, "Hull", myUnit.Hull.ToString()));
             readout.AddRange(PrintReadoutCollection("Hull", myUnit.Hull.HullDisplay(), SuppressTitleLineForHullMatrix));
@@ -284,8 +286,8 @@ namespace FireAndManeuver.Common.ConsoleUtilities
                             var unitOrderFireAllocations = unitForOrder.FireAllocation.Where(fireAlloc => (fireAlloc.Volley == volleyOrder.Volley || fireAlloc.Volley == 0) && fireAlloc.Priority.ToLowerInvariant() == fire.Priority.ToLowerInvariant());
                             foreach (var allocation in unitOrderFireAllocations)
                             {
-                                var fc = unitForOrder.AllSystems.FirstOrDefault(afc => afc.Id == allocation.FireConId) ?? new FireControlSystem() { Status = "N/A" };
-                                var line = new List<string>() { $">     {unit.UnitName} -- FC({fc.Status})" };
+                                var fc = unitForOrder.AllSystems.FirstOrDefault(afc => afc.Id == allocation.FireConId) ?? new FireControlSystem() { Status = UnitSystemStatus.Operational };
+                                var line = new List<string>() { $">     {unit.UnitName} -- FC({fc.StatusString})" };
                                 foreach (var w in allocation.WeaponIDs)
                                 {
                                     var wep = unitForOrder.Weapons.First(uw => uw.Id == w);
@@ -318,6 +320,7 @@ namespace FireAndManeuver.Common.ConsoleUtilities
             }.Where(s => !string.IsNullOrWhiteSpace(s));
             readout.AddRange(WrapDecorated(string.Join(" -- ", playerStrings), ReadoutWidth, "* ", " *", 5));
 
+            readout.AddRange(WrapDecorated($"Area Screen Rating '{f.GetFormationAreaScreenRating()}'", ReadoutWidth, "* ", " *"));
             readout.AddRange(WrapDecorated($"MaxThrust '{f.MaxThrust}'", ReadoutWidth, "* ", " *"));
             readout.AddRange(WrapDecorated($"Units ({f.Units.Count})", ReadoutWidth, "* ", " *"));
             foreach (var u in f.Units)

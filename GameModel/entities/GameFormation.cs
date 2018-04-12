@@ -80,6 +80,18 @@ namespace FireAndManeuver.GameModel
             return newF;
         }
 
+        public int GetFormationAreaScreenRating()
+        {
+            if (this.Units.Count > 0)
+            {
+                return this.Units.Max(unitFormationInfo => unitFormationInfo.GetAreaScreenRating());
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         public int GetTotalMass()
         {
             return this.Units.Sum(u => u.Mass);

@@ -10,6 +10,7 @@ namespace FireAndManeuver.GameModel
     {
         public ScreenSystem()
         {
+            this.Rating = 1;
             this.SystemName = "Screen System";
         }
     }

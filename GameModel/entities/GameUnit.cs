@@ -130,6 +130,9 @@ namespace FireAndManeuver.GameModel
 
         [XmlArray]
         [XmlArrayItem("Screen", Type = typeof(ScreenSystem))]
+        [XmlArrayItem("AreaScreen", Type = typeof(AreaScreenSystem))]
+        [XmlArrayItem("AdvancedScreen", Type = typeof(AdvancedScreenSystem))]
+        [XmlArrayItem("AdvancedAreaScreen", Type = typeof(AdvancedAreaScreenSystem))]
         public List<DefenseSystem> Defenses { get; set; }
 
         [XmlArray]
@@ -234,7 +237,34 @@ namespace FireAndManeuver.GameModel
             return $"{this.InstanceName} -- {this.Race} {this.ClassName}-class {this.ShipClass} -- TMF:{this.Mass} / NPV:{this.PointValue}";
         }
 
-       internal static GameUnit Clone(GameUnit u)
+        public int GetScreenRating()
+        {
+            int screenRating = 0;
+
+            foreach (var def in this.Defenses.Where(d => d is ScreenSystem && d.StatusString == "Operational"))
+            {
+                screenRating = Math.Max(screenRating, def.Rating);
+            }
+
+            return screenRating;
+        }
+
+        public int GetAreaScreenRating()
+        {
+            int areaScreenRating = 0;
+
+            foreach (var def in this.Defenses.Where(d => d is ScreenSystem && d.StatusString == "Operational"))
+            {
+                if (def.SpecialProperties.HasFlag(DefenseSpecialProperties.Area_Defense))
+                {
+                    areaScreenRating = Math.Max(areaScreenRating, def.Rating);
+                }
+            }
+
+            return areaScreenRating;
+        }
+
+        internal static GameUnit Clone(GameUnit u)
         {
             // Cheat!
             XmlSerializer srz = new XmlSerializer(typeof(GameUnit));

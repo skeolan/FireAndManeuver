@@ -12,5 +12,11 @@ namespace FireAndManeuver.GameModel
         {
             this.SystemName = "Abstract Defense System";
         }
+
+        [XmlIgnore]
+        public DefenseSpecialProperties SpecialProperties { get; set; } = DefenseSpecialProperties.None;
+
+        [XmlIgnore]
+        public int Rating { get; set; } = 0;
     }
 }
