@@ -68,8 +68,9 @@ namespace FireAndManeuver.GameEngine
             // TODO: DI this interaction -- pass in EventHandlingEngine as a parameter
             // TODO: EventHandlingEngine should populate its own IList<GameActor> property
             var eventEngine = new EventHandlingEngine();
+            var distanceGraph = gameState.DistanceGraph;
 
-            eventEngine.ExecuteGamePhase(actors, new FiringPhaseEvent(currentVolley, currentExchange), 1, 1);
+            eventEngine.ExecuteGamePhase(actors, new FiringPhaseEvent(currentVolley, currentExchange, distanceGraph), 1, 1);
 
             //--And return!
             return true;

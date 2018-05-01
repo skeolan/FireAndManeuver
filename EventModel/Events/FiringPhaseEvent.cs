@@ -8,8 +8,8 @@ namespace FireAndManeuver.EventModel
 
     public class FiringPhaseEvent : GamePhaseEvent
     {
-        public FiringPhaseEvent(int volley, int exchange)
-            : base(volley, exchange)
+        public FiringPhaseEvent(int volley, int exchange, FormationDistanceGraph distanceGraph)
+            : base(volley, exchange, distanceGraph)
         {
             this.GamePhase = Constants.GamePhase.FiringPhase;
             this.Description = $"Firing Phase Begun for E{exchange} V{volley}";

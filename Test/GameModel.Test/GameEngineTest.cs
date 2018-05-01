@@ -11,6 +11,7 @@ namespace FireAndManeuver.GameModel.Test
     using System.Text;
     using FireAndManeuver.Common;
     using FireAndManeuver.GameModel;
+    using FireAndManeuver.GameModel.GameMechanics;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -48,8 +49,8 @@ namespace FireAndManeuver.GameModel.Test
         public void TestPenetratingDamageRollup_Screen2_DRM_Minus_One()
         {
             IDiceUtility roller = this.services.GetService<IDiceUtility>();
-            var rolls = new List<int>();
-            roller.RollFTSuccesses(1, out rolls);
+
+            FullThrustDieRolls.RollFTSuccesses(roller, 1, out IEnumerable<int> rolls);
 
             var units = new List<GameUnit>();
             var f = GameEngineTestUtilities.GenerateTestFormation(1, "Test Formation", ref units);
@@ -60,8 +61,9 @@ namespace FireAndManeuver.GameModel.Test
             Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
-            var damageResult = new DiceNotationUtility()
+            var damageResult = FullThrustDieRolls
             .RollFTDamage(
+                new DiceNotationUtility(),
                 numberOfDice: 20,
                 drm: -1,
                 targetScreenRating: 2,
@@ -90,7 +92,7 @@ namespace FireAndManeuver.GameModel.Test
         public void TestPenetratingDamageRollup_Screen1_DRM_Zero()
         {
             IDiceUtility roller = this.services.GetService<IDiceUtility>();
-            roller.RollFTSuccesses(1, out List<int> rolls);
+            FullThrustDieRolls.RollFTSuccesses(roller, 1, out IEnumerable<int> rolls);
 
             var units = new List<GameUnit>();
             var f = GameEngineTestUtilities.GenerateTestFormation(1, "Test Formation", ref units);
@@ -101,8 +103,9 @@ namespace FireAndManeuver.GameModel.Test
             Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
             Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
-            var damageResult = new DiceNotationUtility()
+            var damageResult = FullThrustDieRolls
             .RollFTDamage(
+                new DiceNotationUtility(),
                 numberOfDice: 20,
                 drm: 0,
                 targetScreenRating: 1,

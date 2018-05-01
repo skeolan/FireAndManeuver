@@ -9,9 +9,14 @@ namespace FireAndManeuver.GameModel
     public class ScreenSystem : DefenseSystem
     {
         public ScreenSystem()
+            : base()
         {
             this.Rating = 1;
             this.SystemName = "Screen System";
+            this.ScreenRating = new ScreenRating(1, false);
         }
+
+        [XmlIgnore]
+        public ScreenRating ScreenRating { get; set; }
     }
 }

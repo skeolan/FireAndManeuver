@@ -34,7 +34,7 @@ namespace FireAndManeuver.Common.ConsoleUtilities
             readout.Add(separator);
 
             readout.Add(string.Format(outputFormat, "Status", myUnit.Status));
-            readout.Add(string.Format(outputFormat, "Screen Rating", myUnit.GetScreenRating()));
+            readout.Add(string.Format(outputFormat, "Screen Rating", myUnit.GetLocalScreenRating()));
             readout.Add(string.Format(outputFormat, "Area Screen Rating", myUnit.GetAreaScreenRating()));
             readout.Add(string.Format(outputFormat, "Armor", myUnit.Armor.ToString()));
             readout.Add(string.Format(outputFormat, "Hull", myUnit.Hull.ToString()));

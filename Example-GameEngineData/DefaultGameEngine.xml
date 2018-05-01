@@ -188,22 +188,22 @@
       </Units>
       <Orders>
         <VolleyOrders volley="1" speed="4" evasion="2">
-          <Maneuver priority="primary" targetId="2" targetName="Zeat 2">Close</Maneuver>          
-          <Maneuver priority="secondary" targetId="3" targetName="Zeat 3">Withdraw</Maneuver>          
+          <Maneuver type="Close" priority="primary" targetId="2" targetName="Zeat 2"/>
+          <Maneuver type="Close" priority="secondary" targetId="3"/>
           <Fire targetId="2" priority="primary" />             <!-- target for all the weapons on each Unit assigned to "Primary" FireCon -->
-          <Fire targetId="-1" priority="B" />                  <!-- no secondary target assigned or no "B" FireCons are available -->
+          <Fire targetId="0" priority="B" />                  <!-- no secondary target assigned or no "B" FireCons are available -->
           <Fire type="PD" targetId="0" priority="pdactive" diceAssigned="2" /> <!-- If Target is nonzero, it needs to be the ID of a Formation containing Fighters. -->
           <Fire type="PD" targetId="0" priority="*" /> <!-- Default PD behavior: extra PD dice not assigned to a particular target are used passively (i.e. evenly spread onto incoming ordnance / fighters)?-->
         </VolleyOrders>
         <VolleyOrders volley="2" speed="3" evasion="3">
-          <Maneuver type="Withdraw" priority="primary" targetId="2" targetName="Zeta 2"/>
+          <Maneuver priority="primary" targetId="2" targetName="Zeta 2">Close</Maneuver>
           <Fire target="2" priority="primary" />
           <!-- no secondary targeting is OK; no PD assignment means all PD fires passively? -->
-        </VolleyOrders>
-        <VolleyOrders volley="2" speed="3" evasion="3">
+        <VolleyOrders volley="3" speed="3" evasion="3">
           <!-- Intentionally no movement orders this Volley -->
           <!-- Maneuvers should be handled smoothly as "Default (Maintain) versus everybody" -->
           <!-- Absent any specific firing orders, all PD-capable weapons run in passive/PD mode, and nothing else fires -->
+        </VolleyOrders>
         </VolleyOrders>
       </Orders>
     </Formation>

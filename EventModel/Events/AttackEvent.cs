@@ -28,8 +28,8 @@ namespace FireAndManeuver.EventModel
             this.Exchange = evt.Exchange;
             this.Volley = evt.Volley;
             this.TargetingData = TargetingData.Clone(evt.TargetingData);
-            this.TargetingData.SourceFormationUnit = sourceUnit;
-            this.TargetingData.TargetFormationUnit = targetUnit;
+            this.TargetingData.Source.UnitActor = sourceUnit;
+            this.TargetingData.Target.UnitActor = targetUnit;
             this.UnitAssignmentPercentile = percentileRoll;
 
             // Just to avoid any confusion
@@ -46,21 +46,32 @@ namespace FireAndManeuver.EventModel
             this.TargetingData.TargetUnitPercentileRoll = percentileRoll;
         }
 
-        public AttackEvent(FireOrder fo, GameFormationActor source, int percentileRoll = PercentileNotRolled, int exchange = 0, int volley = 0)
+        public AttackEvent(FireOrder fo, GameFormationActor source, FormationDistanceGraph distanceGraph, int percentileRoll = PercentileNotRolled, int exchange = 0, int volley = 0)
            : base("Attack Event", exchange, volley)
         {
+            var distance = distanceGraph.GetOrEstablishDistance(source.GetFormationId(), fo.TargetID);
+
             this.Description = "Attack Event";
-            this.TargetingData = new TargetingData(source, fo.TargetID, fo.TargetFormationName, fo.Priority, fo.DiceAssigned, fo.FireType);
+            this.TargetingData = new TargetingData(source, distance, fo.Priority, fo.DiceAssigned, fo.FireType);
             this.UnitAssignmentPercentile = percentileRoll;
 
             // Just to avoid any confusion
             this.TargetingData.TargetUnitPercentileRoll = percentileRoll;
         }
 
-        public AttackEvent(FireOrder fo, GameFormationActor source, GameFormationActor target, int exchange = 0, int volley = 0, int percentileRoll = PercentileNotRolled)
+        public AttackEvent(FireOrder fo, GameFormationActor source, GameFormationActor target, FormationDistanceGraph distanceGraph, int exchange = 0, int volley = 0, int percentileRoll = PercentileNotRolled)
                : base("Attack Event", exchange, volley)
         {
-            this.TargetingData = new TargetingData(source, target, fo.Priority, fo.DiceAssigned, fo.FireType);
+            var distance = distanceGraph.GetOrEstablishDistance(source.GetFormationId(), target.GetFormationId());
+
+            if (target.GetFormationId() != fo.TargetID)
+            {
+                throw new InvalidOperationException(
+                    $"FireOrder specified target formation [{fo.TargetID}]{fo.TargetFormationName} " +
+                    $"but target Formation argument in AttackEvent is [{target.GetFormationId()}]{target.GetFormationName()}");
+            }
+
+            this.TargetingData = new TargetingData(source, target, distance, fo.Priority, fo.DiceAssigned, fo.FireType);
             this.UnitAssignmentPercentile = percentileRoll;
         }
 

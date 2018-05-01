@@ -38,9 +38,6 @@ namespace FireAndManeuver.GameModel
             this.Arcs = arcs;
         }
 
-        [XmlAttribute("rating")]
-        public int Rating { get; set; } = 1;
-
         [XmlAttribute("arcs")]
         public override string Arcs
         {

@@ -16,8 +16,8 @@ namespace FireAndManeuver.EventModel
         {
             this.Weapon = weapon;
             this.DamageType = weapon.GetDamageType();
-            this.AttackProperties = weapon.GetAttackProperties() & specialProperties;
-            this.DieRolls = new List<int>();
+            this.SpecialProperties = specialProperties;
+            this.BonusDice = 0;
             this.TrackRating = weapon.GetTrackRating();
         }
 
@@ -25,9 +25,9 @@ namespace FireAndManeuver.EventModel
 
         public Constants.DamageType DamageType { get; private set; }
 
-        public AttackSpecialProperties AttackProperties { get; private set; }
+        public AttackSpecialProperties SpecialProperties { get; private set; }
 
-        public List<int> DieRolls { get; private set; }
+        public int BonusDice { get; private set; }
 
         public TrackRating TrackRating { get; private set; }
 
@@ -35,8 +35,6 @@ namespace FireAndManeuver.EventModel
         {
             var newInstance = (AttackData)instance.MemberwiseClone();
 
-            newInstance.DieRolls = new List<int>();
-            newInstance.DieRolls.AddRange(instance.DieRolls);
             newInstance.Weapon = instance.Weapon.Clone();
 
             return newInstance;

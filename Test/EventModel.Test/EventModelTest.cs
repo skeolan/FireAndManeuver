@@ -22,6 +22,7 @@ namespace FireAndManeuver.EventModel.Test
         private WeaponAttackEvent attackEvent;
         private TestDummyActor totalDummy;
         private TestDummyPhaseActor phaseDummy;
+        private FormationDistanceGraph distanceGraph;
 
         private EventHandlingEngine engine;
 
@@ -36,13 +37,15 @@ namespace FireAndManeuver.EventModel.Test
             this.weapon = new BeamBatterySystem(3, "(All arcs)");
             this.weaponAllocation = new GameUnitFireAllocation();
 
-            this.phaseEvent = new FiringPhaseEvent(1, 1) as GamePhaseEvent;
-            this.attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData(this.weapon, this.weaponAllocation));
+            this.distanceGraph = new FormationDistanceGraph();
 
             this.totalDummy = new TestDummyActor(this.services);
             this.phaseDummy = new TestDummyPhaseActor(this.services);
 
             this.engine = new EventHandlingEngine();
+
+            this.phaseEvent = new FiringPhaseEvent(1, 1, this.distanceGraph) as GamePhaseEvent;
+            this.attackEvent = new WeaponAttackEvent(new TargetingData(), new AttackData(this.weapon, this.weaponAllocation));
         }
 
         [TestMethod]

@@ -106,9 +106,9 @@ namespace FireAndManeuver.GameModel
             return this.PercentileLowerBound <= unitAssignmentPercentile && this.PercentileUpperBound >= unitAssignmentPercentile;
         }
 
-        internal int GetAreaScreenRating()
+        internal ScreenRating GetAreaScreenRating()
         {
-            int areaScreenRating = 0;
+            ScreenRating areaScreenRating = new ScreenRating();
 
             if (this.unitReference != null)
             {
@@ -118,14 +118,15 @@ namespace FireAndManeuver.GameModel
             return areaScreenRating;
         }
 
-        internal int GetUnitScreenRating()
+        internal ScreenRating GetUnitScreenRating()
         {
-            int unitScreenRating = 0;
-            int formationScreenRating = this.formationReference.GetFormationAreaScreenRating();
+            ScreenRating unitScreenRating = null;
+            ScreenRating formationScreenRating = this.formationReference.GetFormationAreaScreenRating();
 
             if (this.unitReference != null)
             {
-                unitScreenRating = Math.Max(formationScreenRating, this.unitReference.GetScreenRating());
+                // Screens can stack up in cases where a Unit has local screens and the formation has area screens.
+                unitScreenRating = ScreenRating.Combine(formationScreenRating, this.unitReference.GetLocalScreenRating());
             }
 
             return unitScreenRating;

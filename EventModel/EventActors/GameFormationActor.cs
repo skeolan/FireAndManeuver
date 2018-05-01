@@ -81,7 +81,7 @@ namespace FireAndManeuver.EventModel.EventActors
             var fireOrders = this.formation.Orders.Where(o => o.Volley == evt.Volley).Select(o => o.FiringOrders).FirstOrDefault() ?? new List<FireOrder>();
 
             // Don't roll percentile yet, GameUnits roll a percentile for the AttackEvent(s) they produce instead
-            IEnumerable<AttackEvent> attackOrders = fireOrders.Select(fo => new AttackEvent(fo, this, percentileRoll: AttackEvent.PercentileNotRolled, exchange: evt.Exchange, volley: evt.Volley));
+            IEnumerable<AttackEvent> attackOrders = fireOrders.Where(fo => fo.TargetID != 0).Select(fo => new AttackEvent(fo, this, distanceGraph: evt.DistanceGraph, percentileRoll: AttackEvent.PercentileNotRolled, exchange: evt.Exchange, volley: evt.Volley));
 
             StringBuilder statusMsg = new StringBuilder();
 

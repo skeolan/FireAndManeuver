@@ -237,31 +237,40 @@ namespace FireAndManeuver.GameModel
             return $"{this.InstanceName} -- {this.Race} {this.ClassName}-class {this.ShipClass} -- TMF:{this.Mass} / NPV:{this.PointValue}";
         }
 
-        public int GetScreenRating()
+        public ScreenRating GetLocalScreenRating()
         {
-            int screenRating = 0;
+            ScreenRating rating = new ScreenRating(0, false);
 
-            foreach (var def in this.Defenses.Where(d => d is ScreenSystem && d.StatusString == "Operational"))
+            foreach (ScreenSystem def in this.Defenses
+                .Where(d =>
+                    d is ScreenSystem && d.StatusString == "Operational" && !d.SpecialProperties.HasFlag(DefenseSpecialProperties.Area_Defense))
+                .Select(d => (ScreenSystem)d))
             {
-                screenRating = Math.Max(screenRating, def.Rating);
+                rating = ScreenRating.Combine(def.ScreenRating, rating);
             }
 
-            return screenRating;
+            // Combine type and count flags to get total rating
+            return rating;
         }
 
-        public int GetAreaScreenRating()
+        public ScreenRating GetAreaScreenRating()
         {
-            int areaScreenRating = 0;
+            ScreenRating areaRating = new ScreenRating(0, false);
 
-            foreach (var def in this.Defenses.Where(d => d is ScreenSystem && d.StatusString == "Operational"))
+            foreach (ScreenSystem def in this.Defenses
+                .Where(d =>
+                    d is ScreenSystem && d.StatusString == "Operational" && d.SpecialProperties.HasFlag(DefenseSpecialProperties.Area_Defense))
+                .Select(d => (ScreenSystem)d))
             {
-                if (def.SpecialProperties.HasFlag(DefenseSpecialProperties.Area_Defense))
-                {
-                    areaScreenRating = Math.Max(areaScreenRating, def.Rating);
-                }
+                areaRating = ScreenRating.Combine(def.ScreenRating, areaRating);
             }
 
-            return areaScreenRating;
+            return areaRating;
+        }
+
+        public int GetDRMVersusWeaponType(Type type)
+        {
+            return 0; // Stub
         }
 
         internal static GameUnit Clone(GameUnit u)

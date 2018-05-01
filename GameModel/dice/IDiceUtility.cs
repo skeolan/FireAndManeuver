@@ -27,7 +27,7 @@ namespace FireAndManeuver.GameModel
         /// </summary>
         /// <param name="numberOfDice">Number of D6s to be rolled.</param>
         /// <returns>List of integer die-roll values.</returns>
-        List<int> RollStandardDice(int numberOfDice);
+        IEnumerable<int> RollStandardDice(int numberOfDice);
 
         /// <summary>
         /// Accommodates cases where dice "explode" when above a certain value, resulting in rerolls.
@@ -38,12 +38,10 @@ namespace FireAndManeuver.GameModel
         /// <param name="numberOfSides">Number of sides on each die.</param>
         /// <param name="explodeMinimum">Value which must be rolled in order to trigger an additional roll.</param>
         /// <returns>List of integer die-roll results</returns>
-        List<int> RollExplodingDice(int numberOfDice, int numberOfSides = 6, int explodeMinimum = 6);
+        IEnumerable<int> RollExplodingDice(int numberOfDice, int numberOfSides = 6, int explodeMinimum = 6);
 
         int RollPercentile();
 
-        int RollSuccesses(int numberOfDice, int dRM = 0);
-
-        int RollFTSuccesses(int numberOfDice, out List<int> rolls, int dRM = 0, int difficultyLevel = 0);
+        int RollSuccesses(int numberOfDice, int dRM = 0, int targetNumber = 4, int doubleSuccessNumber = 6);
     }
 }

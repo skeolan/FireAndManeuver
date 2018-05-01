@@ -27,10 +27,10 @@ namespace FireAndManeuver.GameModel
         private List<GameFormation> nodes;
         private List<FormationDistance> edges;
 
-        public FormationDistanceGraph(List<GameFormation> formations, List<FormationDistance> distances)
+        public FormationDistanceGraph(List<GameFormation> formations = null, List<FormationDistance> distances = null)
         {
-            this.nodes = formations;
-            this.edges = distances;
+            this.nodes = formations ?? new List<GameFormation>();
+            this.edges = distances ?? new List<FormationDistance>();
         }
 
         public FormationDistance SetDistance(GameFormation nodeA, GameFormation nodeB, int distance)

@@ -9,6 +9,7 @@ namespace FireAndManeuver.GameModel
 
     public static partial class Constants
     {
+#pragma warning disable SA1025 // Code must not contain multiple whitespace in a row
         /// <summary>
         /// Specifies what damage type(s) apply to a particular weapon attack.
         /// </summary>
@@ -16,17 +17,21 @@ namespace FireAndManeuver.GameModel
         [Flags]
         public enum DamageType
         {
+            [Description("Not Specified")]
+            None        = 0b00000,
+
             [Description("Standard Damage")]
-            Standard = 0,
+            Standard    = 0b00001,
 
             [Description("Penetrating Beam ('B*') Damage")]
-            Penetrating = 1,
+            Penetrating = 0b00010,
 
             [Description("Semi-Armor-Piercing Damage")]
-            SAP = 2,
+            SAP         = 0b01000,
 
             [Description("Armor-Piercing Damage")]
-            AP = 4
+            AP          = 0b10000
         }
+#pragma warning restore SA1025 // Code must not contain multiple whitespace in a row
     }
 }

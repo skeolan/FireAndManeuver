@@ -11,6 +11,7 @@ namespace FireAndManeuver.GameModel
     using System.Text;
     using System.Xml.Serialization;
     using FireAndManeuver.Common;
+    using FireAndManeuver.GameModel.GameMechanics;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -80,16 +81,16 @@ namespace FireAndManeuver.GameModel
             return newF;
         }
 
-        public int GetFormationAreaScreenRating()
+        public ScreenRating GetFormationAreaScreenRating()
         {
-            if (this.Units.Count > 0)
+            ScreenRating formationScreen = new ScreenRating();
+
+            foreach (var u in this.Units)
             {
-                return this.Units.Max(unitFormationInfo => unitFormationInfo.GetAreaScreenRating());
+                formationScreen = ScreenRating.Combine(formationScreen, u.GetAreaScreenRating());
             }
-            else
-            {
-                return 0;
-            }
+
+            return formationScreen;
         }
 
         public int GetTotalMass()
@@ -147,20 +148,24 @@ namespace FireAndManeuver.GameModel
         {
             var logger = services.GetLogger();
             var roller = services.GetService<IDiceUtility>();
-            var rolls = new List<int>();
             var builder = new StringBuilder();
 
             builder.Append($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.SpeedDice}D for Speed: ");
-            formationOrders.SpeedSuccesses = roller.RollFTSuccesses(formationOrders.SpeedDice, out rolls);
-            builder.AppendLine($" -- {formationOrders.SpeedSuccesses}s ({string.Join(", ", rolls)})");
+            formationOrders.SpeedSuccesses = FullThrustDieRolls.RollFTSuccesses(roller, formationOrders.SpeedDice, out IEnumerable<int> speedRolls);
+            builder.AppendLine($" -- {formationOrders.SpeedSuccesses}s ({string.Join(", ", speedRolls)})");
 
             builder.Append($" -- [{this.FormationId}]{this.FormationName} rolls {formationOrders.EvasionDice}D for Evasion: ");
-            formationOrders.EvasionSuccesses = roller.RollFTSuccesses(formationOrders.EvasionDice, out rolls);
-            builder.AppendLine($" -- {formationOrders.EvasionSuccesses}s ({string.Join(", ", rolls)})");
+            formationOrders.EvasionSuccesses = FullThrustDieRolls.RollFTSuccesses(roller, formationOrders.EvasionDice, out IEnumerable<int> evasionRolls);
+            builder.AppendLine($" -- {formationOrders.EvasionSuccesses}s ({string.Join(", ", evasionRolls)})");
 
             logger.LogInformation(builder.ToString());
 
             return new ManeuverSuccessSet() { FormationId = formationId, Volley = currentVolley, SpeedSuccesses = formationOrders.SpeedSuccesses, EvasionSuccesses = formationOrders.EvasionSuccesses };
+        }
+
+        public int GetDRMVersusWeaponType(Type type)
+        {
+            return 0; // Stub
         }
 
         public VolleyOrders GetOrdersForVolley(int currentVolley)

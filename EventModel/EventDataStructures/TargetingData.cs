@@ -19,39 +19,23 @@ namespace FireAndManeuver.EventModel
             // defaults!
         }
 
-        public TargetingData(GameFormationActor source, int targetId, string targetName, string priority, int diceAssigned, string fireType)
+        public TargetingData(GameFormationActor source, FormationDistance distance, string priority, int diceAssigned, string fireType)
         {
             this.FireDiceAssigned = diceAssigned;
             this.FirePriority = priority;
             this.FireType = fireType;
 
-            this.Source = source;
-            this.SourceFormationUnit = null; // Can't be resolved yet.
-            this.SourceId = source.GetFormationId();
-            this.SourceName = source.GetFormationName();
+            this.Source = new TargetingProfile(source);
 
-            this.Target = null; // Can't be resolved yet.
-            this.TargetFormationUnit = null; // Can't be resolved yet.
-            this.TargetId = targetId;
-            this.TargetName = targetName;
-            this.TargetFormationUnitId = -1;
+            this.Target = new TargetingProfile(distance.TargetFormationId, distance.TargetFormationName);
+
+            this.FormationRange = distance.Value;
         }
 
-        public TargetingData(GameFormationActor source, GameFormationActor target, string priority, int diceAssigned, string fireType)
+        public TargetingData(GameFormationActor source, GameFormationActor target, FormationDistance distance, string priority, int diceAssigned, string fireType)
+            : this(source, distance, priority, diceAssigned, fireType)
         {
-            this.FireDiceAssigned = diceAssigned;
-            this.FirePriority = priority;
-            this.FireType = fireType;
-
-            this.Source = source;
-            this.SourceFormationUnit = null; // Can't be resolved yet
-            this.SourceId = source.GetFormationId();
-            this.SourceName = source.GetFormationName();
-
-            this.Target = target;
-            this.TargetFormationUnit = null; // Can't be resolved yet
-            this.TargetId = target.GetFormationId();
-            this.TargetName = target.GetFormationName();
+            this.Target.FormationActor = target;
         }
 
         public int FireDiceAssigned { get; internal set; } = 0;
@@ -60,42 +44,30 @@ namespace FireAndManeuver.EventModel
 
         public string FireType { get; internal set; } = TargetingData.DefaultFireType;
 
-        public GameFormationActor Source { get; internal set; } // Typically a Formation
+        public TargetingProfile Source { get; set; }
 
-        public GameUnitFormationActor SourceFormationUnit { get; internal set; } = null;
-
-        public int SourceId { get; internal set; } = 0;
-
-        public string SourceName { get; internal set; } = null;
-
-        public GameFormationActor Target { get; internal set; } // Typically a Formation
-
-        public GameUnitFormationActor TargetFormationUnit { get; internal set; } = null;
-
-        public int TargetFormationUnitId { get; internal set; }
-
-        public string TargetName { get; internal set; } = null;
-
-        public int TargetId { get; internal set; } = 0;
+        public TargetingProfile Target { get; set; }
 
         public int TargetUnitPercentileRoll { get; internal set; } = AttackEvent.PercentileNotRolled;
 
+        public int FormationRange { get; internal set; } = Constants.DefaultStartingRange;
+
         public override string ToString()
         {
-            string sourceStr = $"[{this.SourceId}]{this.SourceName}";
-            string targetStr = $"[{this.TargetId}]{this.TargetName}";
+            string sourceStr = $"[{this.Source.FormationId}]{this.Source.FormationName}";
+            string targetStr = $"[{this.Target.FormationId}]{this.Target.FormationName}";
             string diceStr = this.FireDiceAssigned == 0 ? string.Empty : $" ({this.FireDiceAssigned}D)";
             string percentileStr = this.TargetUnitPercentileRoll == -1 ? string.Empty : $" -- Rolled {this.TargetUnitPercentileRoll} to hit";
 
-            if (this.SourceFormationUnit != null)
+            if (this.Source.UnitActor != null)
             {
-                var sfu = this.SourceFormationUnit as GameUnitFormationActor;
+                var sfu = this.Source.UnitActor;
                 sourceStr += $":[{sfu.UnitId}]{sfu.UnitName}";
             }
 
-            if (this.TargetFormationUnit != null)
+            if (this.Target.UnitActor != null)
             {
-                var tfu = this.TargetFormationUnit as GameUnitFormationActor;
+                var tfu = this.Target.UnitActor;
                 targetStr += $":[{tfu.UnitId}]{tfu.UnitName}";
             }
 
@@ -106,10 +78,8 @@ namespace FireAndManeuver.EventModel
         {
             var newTD = (TargetingData)td.MemberwiseClone();
 
-            newTD.Source = td.Source;
-            newTD.SourceFormationUnit = td.SourceFormationUnit;
-            newTD.Target = td.Target;
-            newTD.TargetFormationUnit = td.TargetFormationUnit;
+            newTD.Source = TargetingProfile.Clone(td.Source);
+            newTD.Target = TargetingProfile.Clone(td.Target);
 
             return newTD;
         }
