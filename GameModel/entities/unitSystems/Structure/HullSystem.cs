@@ -11,8 +11,8 @@ namespace FireAndManeuver.GameModel
 
     public class HullSystem : DefenseSystem
     {
-        private int totalHull = -1;
-        private int remainingHull = -1;
+        private int totalHull = 0;
+        private int remainingHull = 0;
 
         public HullSystem()
         {
@@ -38,7 +38,7 @@ namespace FireAndManeuver.GameModel
             get
             {
                 // if (type == HullTypeLookup.Custom) return _totalHullBoxes;
-                if (this.totalHull != -1)
+                if (this.totalHull != 0)
                 {
                     return this.totalHull;
                 }
@@ -60,7 +60,7 @@ namespace FireAndManeuver.GameModel
         {
             get
             {
-                if (this.remainingHull != -1)
+                if (this.remainingHull != 0)
                 {
                     return this.remainingHull;
                 }

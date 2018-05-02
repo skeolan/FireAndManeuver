@@ -73,7 +73,7 @@ namespace FireAndManeuver.GameModel
 
         public IOrderedEnumerable<ManeuverOrder> GetSortedManeuveringOrders()
         {
-            Console.WriteLine($"({this.ManeuveringOrders.Count}) Maneuvers -- Speed {this.SpeedSuccesses}, Evasion {this.EvasionSuccesses}");
+            // Console.WriteLine($"({this.ManeuveringOrders.Count}) Maneuvers -- Speed {this.SpeedSuccesses}, Evasion {this.EvasionSuccesses}");
 
             // Orders should get evaluated in priority order: Primary, then non-default non-primary, then default
             var sortedOrders = this.ManeuveringOrders.OrderByDescending(o => o.Priority.ToLowerInvariant() == Constants.PrimaryManeuverPriority.ToLowerInvariant() && o.Priority.ToLowerInvariant() != Constants.DefaultManeuverPriority.ToLowerInvariant());

@@ -17,7 +17,7 @@ namespace FireAndManeuver.GameModel
         public string SystemName { get; protected set; } = "Abstract base Unit System";
 
         [XmlAttribute("id")]
-        public int Id { get; set; } = -1;
+        public int Id { get; set; } = 0;
 
         [XmlAttribute("xSSD")]
         public int SSDXCoordinate { get; set; }
@@ -37,7 +37,7 @@ namespace FireAndManeuver.GameModel
 
         public override string ToString()
         {
-            string idStr = this.Id == -1 ? string.Empty : string.Format("[{0:00}]", this.Id);
+            string idStr = this.Id == 0 ? string.Empty : string.Format("[{0:00}]", this.Id);
             return $"{idStr, 2} - {this.SystemName, -30} - {this.StatusString, -12}";
         }
 

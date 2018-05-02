@@ -13,8 +13,8 @@ namespace FireAndManeuver.GameModel
     {
         public GameUnitRecord()
         {
-            this.Turn = -1;
-            this.Volley = -1;
+            this.Turn = 0;
+            this.Volley = 0;
             this.Exchange = 1;
             this.Event = "Info";
             this.Priority = "Low";
@@ -38,7 +38,7 @@ namespace FireAndManeuver.GameModel
         {
             get
             {
-                if (this.VolleyInternal == -1 && this.Turn > 0)
+                if (this.VolleyInternal == 0 && this.Turn > 0)
                 {
                     this.VolleyInternal = this.Turn;
                 }

@@ -38,15 +38,8 @@ namespace FireAndManeuver.EventModel.EventActors
             // Unit can act if:
             // a) Attack is assigned to this Unit's Formation
             // b) Attack has a valid reference to a target Formation
-            if (evt.TargetingData == null)
+            if (evt.TargetingData == null || evt.TargetingData.Source.FormationId != this.unitFormationInfo.FormationId)
             {
-                this.Logger.LogInformation($"[{this.UnitId}]{this.UnitName} unable to act on AttackEvent with incomplete TargetingData.");
-                return null;
-            }
-
-            if (evt.TargetingData.Source.FormationId != this.unitFormationInfo.FormationId)
-            {
-                this.Logger.LogInformation($"[{this.UnitId}]{this.UnitName} is not part of this AttackEvent's SourceFormation.");
                 return null;
             }
 
@@ -69,8 +62,22 @@ namespace FireAndManeuver.EventModel.EventActors
                 {
                     var allocatedFireCon = unit.Electronics.Where(s => s.Id == allocation.FireConId).FirstOrDefault()
                         ?? throw new InvalidOperationException("FireAllocation instance has an invalid System ID assigned for its Fire Control");
+
                     if (allocatedFireCon.Status != UnitSystemStatus.Operational)
                     {
+                        var statusMsg = $"[{this.UnitId}]{this.UnitName} fire allocation {allocation.ToString()} has no effect -- "
+                                    + $"fire control [{allocatedFireCon.Id}]{allocatedFireCon.SystemName} is {allocatedFireCon.Status.ToString()}";
+
+                        this.Logger.LogInformation(statusMsg);
+
+                        result.Add(new UnitStatusEvent()
+                        {
+                            Description = $"UnitStatus: [{this.UnitId}]{this.UnitName}",
+                            Message = statusMsg,
+                            Exchange = evt.Exchange,
+                            Volley = evt.Volley
+                        });
+
                         continue;
                     }
                 }
@@ -109,16 +116,20 @@ namespace FireAndManeuver.EventModel.EventActors
             if (evt.TargetingData.Target.FormationId == this.unitFormationInfo.FormationId
                 && this.unitFormationInfo.CoversPercentile(evt.UnitAssignmentPercentile))
             {
-                GameFormation targetFormation = this.unitFormationInfo.GetFormationReference();
-                GameUnit targetUnit = this.unitFormationInfo.GetUnitReference();
+                var target = evt.TargetingData.Target.UnitActor.unitFormationInfo;
+                GameFormation targetFormation = target.GetFormationReference();
+                GameUnit targetUnit = target.GetUnitReference();
 
-                GameFormation attackerFormation = evt.TargetingData.Source.FormationActor.GetFormation();
+                GameFormation attackerFormation = this.unitFormationInfo.GetFormationReference();
                 GameUnit attackerUnit = this.unitFormationInfo.GetUnitReference();
                 int firingRange = evt.TargetingData.FormationRange;
 
                 result.Add(new UnitStatusEvent()
                 {
-                    Description = $"[{targetFormation.FormationId}]{targetFormation.FormationName}:[{targetUnit.IdNumeric}]{targetUnit.Name} covers percentile range {this.unitFormationInfo.PercentileLowerBound}-{this.unitFormationInfo.PercentileUpperBound}, so incoming attack with percentile roll {evt.UnitAssignmentPercentile} targets it.",
+                    Description = $"UnitStatus: [{this.UnitId}]{this.UnitName}",
+                    Message = $"[{targetFormation.FormationId}]{targetFormation.FormationName}:[{targetUnit.IdNumeric}]{targetUnit.Name}"
+                    + $" covers percentile range {this.unitFormationInfo.PercentileLowerBound}-{this.unitFormationInfo.PercentileUpperBound},"
+                    + $" so incoming attack with percentile roll {evt.UnitAssignmentPercentile} targets it.",
                     Exchange = evt.Exchange,
                     Volley = evt.Volley
                 });
@@ -140,7 +151,7 @@ namespace FireAndManeuver.EventModel.EventActors
 
                 DamageResult weaponAttackResult = this.ResolveWeaponAttack(weapon, firingRange, totalScreenRating, evasionDRM, otherDRM);
 
-                var descr = $"[{attackerUnit.IdNumeric}]{attackerUnit.Name} fires {weapon.SystemName} at [{targetUnit.IdNumeric}]{targetUnit.FullID}"
+                var statusMsg = $"[{attackerUnit.IdNumeric}]{attackerUnit.Name} fires [{weapon.Id}]{weapon.SystemName} at [{targetUnit.IdNumeric}]{targetUnit.Name}"
                     + $"\n\t\t -- Net modifiers: Range {firingRange}"
                     + $", Screen {weapon.FinalizeScreenValue(totalScreenRating)}"
                     + $", Evasion DRM {weapon.FinalizeEvasionDRM(evasionDRM)}"
@@ -150,9 +161,10 @@ namespace FireAndManeuver.EventModel.EventActors
 
                 result.Add(new UnitStatusEvent()
                 {
+                    Description = $"UnitStatus: [{this.UnitId}]{this.UnitName}",
+                    Message = statusMsg,
                     Exchange = evt.Exchange,
-                    Volley = evt.Volley,
-                    Description = descr
+                    Volley = evt.Volley
                 });
             }
 
@@ -172,7 +184,7 @@ namespace FireAndManeuver.EventModel.EventActors
             Constants.DamageType effectiveDamageType = weapon.FinalizeDamageType(weapon.GetDamageType(), damageTypeModifier, effectiveAttackProperties.HasFlag(AttackSpecialProperties.Overrides_Weapon_DamageType));
 
             // Roll dice here
-            Console.WriteLine($"Attack roll! {weapon.SystemName} -- range {range} | screen {screenRating.ToString()} | net DRM {totalDRM} | {effectiveDamageType.ToString()}-type damage | rating {weapon.Rating}");
+            this.Logger.LogInformation($"Attack roll! {weapon.SystemName} -- range {range} | screen {screenRating.ToString()} | net DRM {totalDRM} | {effectiveDamageType.ToString()}-type damage | rating {weapon.Rating}");
 
             /* "Basic" weapon behavior is to shoot like a non-penetrating beam:
              * 1D per Rating, diminishing with range

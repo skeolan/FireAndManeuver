@@ -57,7 +57,7 @@ namespace FireAndManeuver.EventModel
             string sourceStr = $"[{this.Source.FormationId}]{this.Source.FormationName}";
             string targetStr = $"[{this.Target.FormationId}]{this.Target.FormationName}";
             string diceStr = this.FireDiceAssigned == 0 ? string.Empty : $" ({this.FireDiceAssigned}D)";
-            string percentileStr = this.TargetUnitPercentileRoll == -1 ? string.Empty : $" -- Rolled {this.TargetUnitPercentileRoll} to hit";
+            string percentileStr = this.TargetUnitPercentileRoll == AttackEvent.PercentileNotRolled ? string.Empty : $" -- Rolled {this.TargetUnitPercentileRoll} to hit";
 
             if (this.Source.UnitActor != null)
             {

@@ -64,10 +64,10 @@
           <FireAllocation Volley="0" FireConId="0" WeaponIDs="13,14" FireMode="PD" Priority="pdactive" />
           <!-- "Priority" is what binds these allocations to the Formation's designated target by string-match -->
           <FireAllocation Volley="1" FireConId="5" WeaponIDs="8,9,10,11,12" Priority="Primary"/>
-          <FireAllocation Volley="2" FireConId="6" WeaponIDs="8,9,10,11,12" Priority="Primary"/>
-          <FireAllocation Volley="3" FireConID="5" WeaponIDs="8,9,10" Priority="Primary"/>
+          <FireAllocation Volley="2" FireConId="5" WeaponIDs="8,9,10" Priority="Primary"/>
           <!-- Firing with a damaged FireCon should result in no shots fired-->
-          <FireAllocation Volley="3" FireConID="6" WeaponIDs="11,12" Priority="Secondary"/>
+          <FireAllocation Volley="2" FireConId="6" WeaponIDs="11,12" Priority="NonPrimary"/>
+          <FireAllocation Volley="3" FireConID="5" WeaponIDs="8,9,10" Priority="Primary"/>
       </FM.FireAllocations>
       <DamageControl/>
       <Position x="12.0" y="15.0" pastX="6.0" pastY="15.0" />
@@ -121,6 +121,17 @@
       <Name>Bandit 1</Name>
       <IconFamily value="Generic\Alpha"/>
       <Status>Ok</Status>
+      <FM.FireAllocations>
+          <!-- "Volley 0" allocations apply in all volleys except where overridden -->
+          <!-- "FireCon 0" is for weapons that don't actually require FireCons, e.g. PDS and B-1s firing in PD mode -->
+          <FireAllocation Volley="0" FireConId="0" WeaponIDs="23,24" FireMode="PD" Priority="pdactive" />
+          <!-- "Priority" is what binds these allocations to the Formation's designated target by string-match -->
+          <FireAllocation Volley="1" FireConId="5" WeaponIDs="18,19,20" Priority="Primary"/>
+          <FireAllocation Volley="2" FireConId="6" WeaponIDs="21,22" Priority="Primary"/>
+          <FireAllocation Volley="3" FireConID="5" WeaponIDs="18,19,20" Priority="Primary"/>
+          <!-- Firing with a damaged FireCon should result in no shots fired-->
+          <FireAllocation Volley="3" FireConID="6" WeaponIDs="21,22" Priority="Secondary"/>
+      </FM.FireAllocations>
       <Orders>Z1+4</Orders>
       <DamageControl/>
       <Position x="33.1" y="21.0" pastX="48.0" pastY="25.0" />
@@ -187,17 +198,18 @@
         <Unit id="1" mass="80" hitModifier="0" extraEvasion="0" maxThrust="99" flag="true">UNS Glorry</Unit>
       </Units>
       <Orders>
-        <VolleyOrders volley="1" speed="4" evasion="2">
+        <VolleyOrders volley="1" speed="3" evasion="3">
           <Maneuver type="Close" priority="primary" targetId="2" targetName="Zeat 2"/>
           <Maneuver type="Close" priority="secondary" targetId="3"/>
           <Fire targetId="2" priority="primary" />             <!-- target for all the weapons on each Unit assigned to "Primary" FireCon -->
-          <Fire targetId="0" priority="B" />                  <!-- no secondary target assigned or no "B" FireCons are available -->
+          <Fire targetId="3" priority="B" />
           <Fire type="PD" targetId="0" priority="pdactive" diceAssigned="2" /> <!-- If Target is nonzero, it needs to be the ID of a Formation containing Fighters. -->
           <Fire type="PD" targetId="0" priority="*" /> <!-- Default PD behavior: extra PD dice not assigned to a particular target are used passively (i.e. evenly spread onto incoming ordnance / fighters)?-->
         </VolleyOrders>
         <VolleyOrders volley="2" speed="3" evasion="3">
           <Maneuver priority="primary" targetId="2" targetName="Zeta 2">Close</Maneuver>
-          <Fire target="2" priority="primary" />
+          <Fire targetId="2" priority="primary" />             <!-- target for all the weapons on each Unit assigned to "Primary" FireCon -->
+          <Fire targetId="3" priority="NonPrimary" />
           <!-- no secondary targeting is OK; no PD assignment means all PD fires passively? -->
         <VolleyOrders volley="3" speed="3" evasion="3">
           <!-- Intentionally no movement orders this Volley -->
@@ -224,6 +236,7 @@
         <VolleyOrders volley="3" speed="4" evasion="2">
           <Maneuver type="Close" priority="Primary" targetId="1" targetName="Alpha 1"/>
           <Fire type="Fire" priority="Primary" targetId="1" targetName="Alpha 1"/>
+          <Fire type="Fire" priority="Secondary" targetId="3" targetName="BEEK"/>
         </VolleyOrders>
       </Orders>
     </Formation>

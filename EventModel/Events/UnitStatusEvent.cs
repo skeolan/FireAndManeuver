@@ -11,6 +11,11 @@ namespace FireAndManeuver.EventModel
 
     public class UnitStatusEvent : GameEvent
     {
-        // TODO: Implementation
+        public string Message { get; set; }
+
+        public override string ToString()
+        {
+            return $"E{this.Exchange}.V{this.Volley} -- {this.Message}";
+        }
     }
 }

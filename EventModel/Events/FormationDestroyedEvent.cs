@@ -14,7 +14,7 @@ namespace FireAndManeuver.EventModel
             : base(
                   formationId: formationId,
                   formationName: formationName,
-                  descr: $"Formation [{formationId}]{formationName} destroyed!")
+                  message: $"Formation [{formationId}]{formationName} destroyed!")
         {
             // All about that base
         }

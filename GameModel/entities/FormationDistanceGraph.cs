@@ -95,8 +95,8 @@ namespace FireAndManeuver.GameModel
         {
             (var rangeBetweenFormations, var rangeReciprocal) = this.UpdateDistance(source.FormationId, target.FormationId, rangeShift);
 
-            var consoleTail = $"{Math.Abs(rangeShift)} [{rangeBetweenFormations.Value - rangeShift} >> {rangeBetweenFormations.Value}]";
-            Console.WriteLine($"-- Range {(rangeShift == 0 ? "unchanged" : (rangeShift < 0 ? "decreases by " : "increases by ") + consoleTail)}");
+            // var consoleTail = $"{Math.Abs(rangeShift)} [{rangeBetweenFormations.Value - rangeShift} >> {rangeBetweenFormations.Value}]";
+            // Console.WriteLine($"-- Range {(rangeShift == 0 ? "unchanged" : (rangeShift < 0 ? "decreases by " : "increases by ") + consoleTail)}");
         }
 
         public Tuple<FormationDistance, FormationDistance> UpdateDistance(int sourceFormationId, int targetFormationId, int valueChange)

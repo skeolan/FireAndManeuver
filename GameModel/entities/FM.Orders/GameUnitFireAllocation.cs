@@ -44,7 +44,7 @@ namespace FireAndManeuver.GameModel
         public int Volley { get; set; } = 0;
 
         [XmlAttribute]
-        public int FireConId { get; set; } = 0;
+        public int FireConId { get; set; }
 
         [XmlIgnore]
         public List<int> WeaponIDs

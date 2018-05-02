@@ -214,7 +214,7 @@ namespace FireAndManeuver.GameModel
                 nextID = Math.Max(allSystems.Max(x => x.Id), 0) + 1;
             }
 
-            allSystems.Where(x => x.Id == -1).ToList().ForEach(x => x.Id = nextID++);
+            allSystems.Where(x => x.Id == 0).ToList().ForEach(x => x.Id = nextID++);
 
             return myNewUnit;
         }

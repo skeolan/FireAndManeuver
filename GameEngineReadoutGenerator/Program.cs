@@ -38,7 +38,7 @@ namespace FireAndManeuver.Clients
 
             GameState gameState = GameStateStreamUtilities.LoadFromXml(defaultEngineXML);
             Console.WriteLine($"GameEngine [{gameState.Id}] from {gameState.SourceFile} loaded successfully.");
-            Console.WriteLine(string.Empty);
+            Console.WriteLine();
             ConsoleReadoutUtilities.GenerateGameEngineReadout(gameState).ForEach(l => Console.WriteLine(l));
         }
     }

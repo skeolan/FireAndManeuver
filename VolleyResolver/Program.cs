@@ -119,6 +119,12 @@ namespace FireAndManeuver.Clients
 
             gameState.ClearOrders();
             gameState.SourceFile = newFile.FullName;
+
+            // Dispose the serviceCollection to cause all included services to dispose;
+            // Among other possible finalization effects, this *should* flush the logger.
+            // (Does this need to be done BEFORE SaveToFile() is done?
+            (services as IDisposable)?.Dispose();
+
             GameStateStreamUtilities.SaveToFile(newFile.FullName, gameState);
         }
 

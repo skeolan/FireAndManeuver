@@ -45,10 +45,10 @@ namespace FireAndManeuver.Common.ConsoleUtilities
             var fileComparer = new FileInfoFullNameComparer();
             var unitXMLFiles = new HashSet<FileInfo>(fileComparer);
 
-            Console.WriteLine("{0} args, {1} files, {2} dirs", args.Length, fileSet.Length, dirSet.Length);
+            // Console.WriteLine("{0} args, {1} files, {2} dirs", args.Length, fileSet.Length, dirSet.Length);
             if (args.Length + fileSet.Length + dirSet.Length == 0)
             {
-                Console.WriteLine("Defaulting to {0}", defaultXml);
+                // Console.WriteLine("Defaulting to {0}", defaultXml);
                 args = new string[] { defaultXml };
             }
 
@@ -59,7 +59,7 @@ namespace FireAndManeuver.Common.ConsoleUtilities
             // quietly drop any non-xml files from fileArgSet
             foreach (var x in fileArgSet.Where(x => x.EndsWith("xml")))
             {
-                Console.WriteLine("xml: [\"{0}\"]", x);
+                // Console.WriteLine("xml: [\"{0}\"]", x);
                 if (!string.IsNullOrEmpty(x))
                 {
                     AddXmlToSet(unitXMLFiles, new FileInfo(x));
@@ -72,8 +72,8 @@ namespace FireAndManeuver.Common.ConsoleUtilities
                 if (!string.IsNullOrEmpty(d))
                 {
                     DirectoryInfo dir = new DirectoryInfo(d);
-                    Console.WriteLine("dir: [\"{0}\\*\"]", dir.FullName);
 
+                    // Console.WriteLine("dir: [\"{0}\\*\"]", dir.FullName);
                     // specified dir...
                     foreach (var x in dir.EnumerateFiles("*.xml", SearchOption.TopDirectoryOnly))
                     {

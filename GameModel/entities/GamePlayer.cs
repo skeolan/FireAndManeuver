@@ -19,7 +19,7 @@ namespace FireAndManeuver.GameModel
         }
 
         [XmlAttribute("id")]
-        public string Id { get; set; } = "-1";
+        public string Id { get; set; } = "0";
 
         [XmlAttribute("name")]
         public string Name { get; set; } = "Anonymous Coward";
@@ -31,7 +31,7 @@ namespace FireAndManeuver.GameModel
         public string Team { get; set; } = "none";
 
         [XmlAttribute("key")]
-        public int Key { get; set; } = -1;
+        public int Key { get; set; } = 0;
 
         public string Objectives { get; set; } = string.Empty;
 

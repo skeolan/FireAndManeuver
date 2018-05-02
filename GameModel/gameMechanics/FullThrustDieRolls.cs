@@ -19,11 +19,12 @@ using System.Text;
 
             var diceRolled = roller.RollStandardDice(numberOfDice);
             var rolls = diceRolled.ToList().OrderByDescending(v => v);
-
-            Console.Write($"{indent}[Rolled {numberOfDice}] dice");
-            Console.Write($" with DRM {drm}, screen {targetScreenRating}{(dealPenetrating ? ", penetrating" : ", non-penetrating")}");
-            Console.WriteLine($": {string.Join(",", rolls)}");
-
+/*
+            Console.WriteLine(
+$@"{indent}[Rolled {numberOfDice}] dice
+ with DRM {drm}, screen {targetScreenRating}{(dealPenetrating ? ", penetrating" : ", non-penetrating")}
+: {string.Join(",", rolls)}");
+*/
             foreach (var roll in rolls)
             {
                 var dieDamage = CountSuccessesOnRoll(roll, drm, targetScreenRating);
@@ -31,16 +32,13 @@ using System.Text;
 
                 if (dieDamage > 0)
                 {
-                    Console.Write($"{indent}Roll of {roll} deals {dieDamage} damage");
-
+                    // Console.WriteLine($"{indent}Roll of {roll} deals {dieDamage} damage");
                     damageResult.Standard += dieDamage;
 
                     if (roll >= Constants.MinRollForDoubleSuccess && dealPenetrating)
                     {
                         penetrationCount++;
                     }
-
-                    Console.WriteLine();
                 }
 
                 // Exit early if dieDamage == 0, since dice are sorted in descending order?
@@ -48,11 +46,10 @@ using System.Text;
 
             if (penetrationCount > 0)
             {
-                Console.WriteLine($"{indent}Rolling {penetrationCount} penetrating dice: [");
+                // Console.WriteLine($"{indent}Rolling {penetrationCount} penetrating dice: [");
 
                 // On a "natural" max roll, deal recursive, shield-ignoring, DRM-ignoring, penetrating followup damage
                 var penetrationFollowup = FullThrustDieRolls.RollFTDamage(roller, penetrationCount, 0, 0, true, recursionDepth + 1);
-                Console.WriteLine($"{indent}]");
                 damageResult.Penetrating += penetrationFollowup.Standard;
 
                 // Penetrating damage could ITSELF penetrate, but it all rolls up to just one count of penetrating damage

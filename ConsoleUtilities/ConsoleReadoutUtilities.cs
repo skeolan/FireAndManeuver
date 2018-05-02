@@ -287,7 +287,9 @@ namespace FireAndManeuver.Common.ConsoleUtilities
                             foreach (var allocation in unitOrderFireAllocations)
                             {
                                 var fc = unitForOrder.AllSystems.FirstOrDefault(afc => afc.Id == allocation.FireConId) ?? new FireControlSystem() { Status = UnitSystemStatus.Operational };
-                                var line = new List<string>() { $">     {unit.UnitName} -- FC({fc.StatusString})" };
+
+                                // TODO: BUG: reporting "Operational" even for damaged FireCon sometimes, see default XML: ANS Glory, Volley 2, Secondary / FireCon ID 6 should be Damaged
+                                var line = new List<string>() { $">     {unit.UnitName} -- FC{fc.Id}({fc.StatusString})" };
                                 foreach (var w in allocation.WeaponIDs)
                                 {
                                     var wep = unitForOrder.Weapons.First(uw => uw.Id == w);

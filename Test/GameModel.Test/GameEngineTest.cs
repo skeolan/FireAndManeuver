@@ -58,9 +58,9 @@ namespace FireAndManeuver.GameModel.Test
             var u = units[0];
 
             var result = f.RollManeuverSpeedAndEvasion(services: this.services, formationOrders: f.Orders.First(), currentVolley: 1, formationId: f.FormationId, speedDRM: 0, evasionDRM: 0);
-            Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
-            Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
+            // Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
+            // Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
             var damageResult = FullThrustDieRolls
             .RollFTDamage(
                 new DiceNotationUtility(),
@@ -68,8 +68,8 @@ namespace FireAndManeuver.GameModel.Test
                 drm: -1,
                 targetScreenRating: 2,
                 dealPenetrating: true);
-            Console.WriteLine($"Dealt a total of {damageResult.Standard} standard damage and {damageResult.Penetrating} penetrating damage.");
 
+            // Console.WriteLine($"Dealt a total of {damageResult.Standard} standard damage and {damageResult.Penetrating} penetrating damage.");
             Assert.IsNotNull(damageResult);
 
             // Since ScreenRating is 2 and DRM is -1, only 6's hit (and they all penetrate).
@@ -100,9 +100,9 @@ namespace FireAndManeuver.GameModel.Test
             var u = units[0];
 
             var result = f.RollManeuverSpeedAndEvasion(this.services, f.Orders.First(), f.FormationId, 1, speedDRM: 0, evasionDRM: 0);
-            Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
 
-            Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
+            // Console.WriteLine($"{u.Name} rolls {result.SpeedSuccesses} for Speed and {result.EvasionSuccesses} for Evasion.");
+            // Console.WriteLine("Testing penetrating damage versus Screen Rating 2...");
             var damageResult = FullThrustDieRolls
             .RollFTDamage(
                 new DiceNotationUtility(),
@@ -110,8 +110,8 @@ namespace FireAndManeuver.GameModel.Test
                 drm: 0,
                 targetScreenRating: 1,
                 dealPenetrating: true);
-            Console.WriteLine($"Dealt a total of {damageResult.Standard} standard damage and {damageResult.Penetrating} penetrating damage.");
 
+            // Console.WriteLine($"Dealt a total of {damageResult.Standard} standard damage and {damageResult.Penetrating} penetrating damage.");
             Assert.IsNotNull(damageResult);
 
             int natural6sOnInitialRoll = damageResult.StandardRolls.Count(r => r == 6);
